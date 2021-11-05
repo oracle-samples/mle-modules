@@ -1,0 +1,362 @@
+<!DOCTYPE html><html class="default no-js"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>MLE SQL Driver (mle-js-oracledb)</title><meta name="description" content="Documentation for MLE SQL Driver (mle-js-oracledb)"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">MLE SQL Driver (mle-js-oracledb)</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1> MLE SQL Driver (mle-js-oracledb)</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
+<a href="#executing-sql-in-javascript" id="executing-sql-in-javascript" style="color: inherit; text-decoration: none;">
+  <h1>Executing SQL in JavaScript</h1>
+</a>
+<p>Oracle Database allows executing user-provided JavaScript code since version 21c by using the Multilingual Engine (MLE).
+This documentation describes the JavaScript module <code>mle-js-oracledb</code> that ships with the database.</p>
+<p>If JavaScript is executed inside the database, SQL statements can be executed using an easy to use SQL driver.
+This driver is built-in into the JavaScript engine in the database.
+Because JavaScript is executed within the database, there is no need to establish a specific connection and the default connection object must be used.
+All SQL statements in the function are executed as <code>CURRENT_USER</code>.</p>
+
+<a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
+  <h2>Getting Started</h2>
+</a>
+<p>In order to use the driver, it needs to be imported using the <code>require</code> function.</p>
+<pre><code class="language-JavaScript"><span class="hl-0">let</span><span class="hl-1"> </span><span class="hl-2">oracledb</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;mle-js-oracledb&#39;</span><span class="hl-1">);</span>
+</code></pre>
+<p>Executing a SQL query and iterating over the resulting rows is as simple as</p>
+<pre><code class="language-JavaScript"><span class="hl-1">  </span><span class="hl-0">let</span><span class="hl-1"> </span><span class="hl-2">conn</span><span class="hl-1"> = </span><span class="hl-2">oracledb</span><span class="hl-1">.</span><span class="hl-3">defaultConnection</span><span class="hl-1">();</span><br/><span class="hl-1">  </span><span class="hl-5">for</span><span class="hl-1"> (</span><span class="hl-0">var</span><span class="hl-1"> </span><span class="hl-2">row</span><span class="hl-1"> </span><span class="hl-0">of</span><span class="hl-1"> </span><span class="hl-2">conn</span><span class="hl-1">.</span><span class="hl-3">execute</span><span class="hl-1">(</span><span class="hl-4">&quot;SELECT EMPNO, ENAME FROM EMP&quot;</span><span class="hl-1">).</span><span class="hl-2">rows</span><span class="hl-1">) {</span><br/><span class="hl-1">    </span><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-6">empno</span><span class="hl-1"> = </span><span class="hl-2">row</span><span class="hl-1">[</span><span class="hl-7">0</span><span class="hl-1">];</span><br/><span class="hl-1">    </span><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-6">ename</span><span class="hl-1"> = </span><span class="hl-2">row</span><span class="hl-1">[</span><span class="hl-7">1</span><span class="hl-1">];</span><br/><span class="hl-1">    </span><span class="hl-8">// ...</span><br/><span class="hl-1">  }</span>
+</code></pre>
+<p>The <a href="interfaces/api.IConnection.html#execute">execute</a> function returns an <a href="interfaces/api.IExecuteReturn.html">IExecuteReturn</a> object with the field <a href="interfaces/api.IExecuteReturn.html#rows">rows</a> which is an array.
+Since <code>rows</code> is an array, we can use the JavaScript <code>for..of</code> syntax.</p>
+<p>By default, each row is represented as an <code>Array</code>.</p>
+
+<a href="#object-output-format" id="object-output-format" style="color: inherit; text-decoration: none;">
+  <h2>Object Output Format</h2>
+</a>
+<p>A query result can be configured to return an <code>Object</code> representation (<a href="modules/api.html#OBJECT">OBJECT</a>) for each row.</p>
+<pre><code class="language-JavaScript"><span class="hl-5">for</span><span class="hl-1"> (</span><span class="hl-0">var</span><span class="hl-1"> </span><span class="hl-2">row</span><span class="hl-1"> </span><span class="hl-0">of</span><span class="hl-1"> </span><span class="hl-2">conn</span><span class="hl-1">.</span><span class="hl-3">execute</span><span class="hl-1">(</span><span class="hl-4">&quot;SELECT EMPNO, ENAME FROM EMP&quot;</span><span class="hl-1">, [], {</span><br/><span class="hl-1">  </span><span class="hl-2">outFormat :</span><span class="hl-1"> </span><span class="hl-2">oracledb</span><span class="hl-1">.</span><span class="hl-6">OBJECT</span><br/><span class="hl-1">}).</span><span class="hl-2">rows</span><span class="hl-1">) {</span><br/><span class="hl-1">  </span><span class="hl-0">var</span><span class="hl-1"> </span><span class="hl-2">empno</span><span class="hl-1"> = </span><span class="hl-2">row</span><span class="hl-1">.</span><span class="hl-6">EMPNO</span><span class="hl-1">;</span><br/><span class="hl-1">  </span><span class="hl-0">var</span><span class="hl-1"> </span><span class="hl-2">ename</span><span class="hl-1"> = </span><span class="hl-2">row</span><span class="hl-1">.</span><span class="hl-6">ENAME</span><span class="hl-1">;</span><br/><span class="hl-1">  </span><span class="hl-8">// ...</span><br/><span class="hl-1">}</span>
+</code></pre>
+<p>The property names of such result row objects follow Oracle&#39;s standard name-casing rules.
+It will commonly be uppercase, since most applications create tables using unquoted, case-insensitive names.</p>
+
+<a href="#in-binds" id="in-binds" style="color: inherit; text-decoration: none;">
+  <h2>IN Binds</h2>
+</a>
+<p>SQL and PL/SQL statements may contain bind parameters, indicated by colon-prefixed identifiers or numerals.
+These indicate where separately-specified values are substituted when the statement is executed.
+Bind variables can be used to substitute data, but not the text of the statement.</p>
+<p>With IN binds, the bound data value, or current value of a JavaScript variable, is used during execution of the SQL statement.</p>
+<pre><code class="language-JavaScript"><span class="hl-0">var</span><span class="hl-1"> </span><span class="hl-2">result</span><span class="hl-1"> = </span><span class="hl-2">conn</span><span class="hl-1">.</span><span class="hl-3">execute</span><span class="hl-1">(</span><span class="hl-4">&quot;SELECT :bind1, :bind2, :bind3 FROM DUAL&quot;</span><span class="hl-1">, [</span><span class="hl-7">42</span><span class="hl-1">, </span><span class="hl-4">&quot;foo&quot;</span><span class="hl-1">, </span><span class="hl-0">true</span><span class="hl-1">]).</span><span class="hl-2">rows</span><span class="hl-1">;</span>
+</code></pre>
+<p>The position of the array values corresponds to the position of the SQL bind variables as they occur in the statement, regardless of their names.</p>
+<p>Instead of binding by array, an object that names each bind value can be used.
+The attributes can be in any order, but their names must match the SQL bind parameter names.
+This is typically called &quot;bind by name&quot;:</p>
+<pre><code class="language-JavaScript"><span class="hl-0">var</span><span class="hl-1"> </span><span class="hl-2">result</span><span class="hl-1"> = </span><span class="hl-2">conn</span><span class="hl-1">.</span><span class="hl-3">execute</span><span class="hl-1">(</span><span class="hl-4">&quot;SELECT :foo, :bar, FROM DUAL&quot;</span><span class="hl-1">, {</span><br/><span class="hl-1">    </span><span class="hl-2">foo :</span><span class="hl-1"> </span><span class="hl-7">42</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-2">bar :</span><span class="hl-1"> </span><span class="hl-4">&quot;foo&quot;</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">);</span>
+</code></pre>
+<p>If needed, each IN bind parameter can be described by an object having explicit attributes for the bind direction (dir), the JavaScript type which should be used for binding (type) and the value itself (val):</p>
+<pre><code class="language-JavaScript"><span class="hl-0">var</span><span class="hl-1"> </span><span class="hl-2">result</span><span class="hl-1"> = </span><span class="hl-2">conn</span><span class="hl-1">.</span><span class="hl-3">execute</span><span class="hl-1">(</span><span class="hl-4">&quot;SELECT :foo FROM DUAL&quot;</span><span class="hl-1">, {</span><br/><span class="hl-1">    </span><span class="hl-2">foo :</span><span class="hl-1"> {</span><br/><span class="hl-1">      </span><span class="hl-2">val :</span><span class="hl-1"> </span><span class="hl-7">42</span><span class="hl-1">,</span><br/><span class="hl-1">      </span><span class="hl-2">dir :</span><span class="hl-1"> </span><span class="hl-2">oracledb</span><span class="hl-1">.</span><span class="hl-6">BIND_IN</span><span class="hl-1">,</span><br/><span class="hl-1">      </span><span class="hl-2">type :</span><span class="hl-1"> </span><span class="hl-2">oracledb</span><span class="hl-1">.</span><span class="hl-6">NUMBER</span><br/><span class="hl-1">    }</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">);</span>
+</code></pre>
+
+<a href="#out-binds" id="out-binds" style="color: inherit; text-decoration: none;">
+  <h2>OUT Binds</h2>
+</a>
+<p>PL/SQL functions and procedures can return values through so-called OUT parameters.
+In order to retrieve such values, OUT binds can be specified when executing the statement.</p>
+<pre><code class="language-JavaScript"><span class="hl-0">var</span><span class="hl-1"> </span><span class="hl-2">result</span><span class="hl-1"> = </span><span class="hl-2">conn</span><span class="hl-1">.</span><span class="hl-3">execute</span><span class="hl-1">(</span><span class="hl-4">&quot;BEGIN :a := &#39;foo&#39;; :b := 42; END;&quot;</span><span class="hl-1">, {</span><br/><span class="hl-1">    </span><span class="hl-2">a:</span><span class="hl-1"> { </span><span class="hl-2">dir:</span><span class="hl-1"> </span><span class="hl-2">oracledb</span><span class="hl-1">.</span><span class="hl-6">BIND_OUT</span><span class="hl-1">, </span><span class="hl-2">type:</span><span class="hl-1"> </span><span class="hl-2">oracledb</span><span class="hl-1">.</span><span class="hl-6">STRING</span><span class="hl-1"> },</span><br/><span class="hl-1">    </span><span class="hl-2">b:</span><span class="hl-1"> { </span><span class="hl-2">dir:</span><span class="hl-1"> </span><span class="hl-2">oracledb</span><span class="hl-1">.</span><span class="hl-6">BIND_OUT</span><span class="hl-1">, </span><span class="hl-2">type:</span><span class="hl-1"> </span><span class="hl-2">oracledb</span><span class="hl-1">.</span><span class="hl-6">NUMBER</span><span class="hl-1"> }</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">);</span>
+</code></pre>
+<p>In this example, <code>:a</code> and <code>:b</code> are OUT binds.
+<code>result.outBinds</code> is an object containing a property for each OUT bind that was returned.</p>
+<p><code>result.outBinds</code> will appear as undefined if the statement doesn&#39;t return any bind values.</p>
+
+<a href="#mapping-between-javascript-and-oracle-types" id="mapping-between-javascript-and-oracle-types" style="color: inherit; text-decoration: none;">
+  <h2>Mapping between JavaScript and Oracle types</h2>
+</a>
+<p>By default Oracle character, number and date columns are selected directly into JavaScript strings, numbers, and Date.</p>
+<p>The default mapping for NUMBER and DATE types can be changed using the <a href="interfaces/api.IExecuteOptions.html#fetchInfo">fetchInfo</a> property.
+Specifically, it allows for returning NUMBER and DATE types as string.</p>
+<pre><code class="language-JavaScript"><span class="hl-0">var</span><span class="hl-1"> </span><span class="hl-2">result</span><span class="hl-1"> = </span><span class="hl-2">conn</span><span class="hl-1">.</span><span class="hl-3">execute</span><span class="hl-1">(</span><span class="hl-4">&quot;SELECT EMPNO, HIREDATE FROM EMP&quot;</span><span class="hl-1">, [],  {</span><br/><span class="hl-1">    </span><span class="hl-2">fetchInfo :</span><span class="hl-1"> {</span><br/><span class="hl-1">      </span><span class="hl-4">&quot;EMPNO&quot;</span><span class="hl-2"> :</span><span class="hl-1"> { </span><span class="hl-2">type :</span><span class="hl-1"> </span><span class="hl-2">oracledb</span><span class="hl-1">.</span><span class="hl-6">STRING</span><span class="hl-1">},    </span><span class="hl-8">// return the number as a string</span><br/><span class="hl-1">      </span><span class="hl-4">&quot;HIREDATE&quot;</span><span class="hl-2"> :</span><span class="hl-1"> { </span><span class="hl-2">type :</span><span class="hl-1"> </span><span class="hl-2">oracledb</span><span class="hl-1">.</span><span class="hl-6">STRING</span><span class="hl-1"> } </span><span class="hl-8">// return the date as a string</span><br/><span class="hl-1">    }</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">);</span>
+</code></pre>
+<p>For NUMBER types, this property helps avoid situations where using JavaScript types can lead to a loss of precision.</p>
+
+<a href="#available-type-conversions" id="available-type-conversions" style="color: inherit; text-decoration: none;">
+  <h3>Available Type Conversions</h3>
+</a>
+<p>The following two tables show the available conversion paths between PL/SQL types and JavaScript types in both directions as well as the default conversion in case no specific type is specified.
+These (default) conversion rules apply to columns in SELECT statements as well as IN / INOUT / OUT binds and bind values imported from/to PL/SQL (see mle-js-bindings).</p>
+
+<a href="#mapping-plsql-type-to-javascript-types" id="mapping-plsql-type-to-javascript-types" style="color: inherit; text-decoration: none;">
+  <h4>Mapping PL/SQL Type to JavaScript Types</h4>
+</a>
+<p>default mappings in bold</p>
+<table>
+<thead>
+<tr>
+<th>PL/SQL Type</th>
+<th>JavaScript Types</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NUMBER</td>
+<td><strong>number</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>OracleNumber</td>
+</tr>
+<tr>
+<td>BOOLEAN</td>
+<td><strong>boolean</strong></td>
+</tr>
+<tr>
+<td>VARCHAR2</td>
+<td><strong>string</strong></td>
+</tr>
+<tr>
+<td>NVARCHAR2</td>
+<td><strong>string</strong></td>
+</tr>
+<tr>
+<td>CHAR</td>
+<td><strong>string</strong></td>
+</tr>
+<tr>
+<td>NCHAR</td>
+<td><strong>string</strong></td>
+</tr>
+<tr>
+<td>CLOB</td>
+<td><strong>OracleClob</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>string</td>
+</tr>
+<tr>
+<td>NCLOB</td>
+<td><strong>OracleClob</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>string</td>
+</tr>
+<tr>
+<td>BLOB</td>
+<td><strong>OracleBlob</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>Uint8Array</td>
+</tr>
+<tr>
+<td>RAW</td>
+<td><strong>Uint8Array</strong></td>
+</tr>
+<tr>
+<td>DATE</td>
+<td><strong>Date</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>OracleDate</td>
+</tr>
+<tr>
+<td>TIMESTAMP</td>
+<td><strong>Date</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>OracleTimestamp</td>
+</tr>
+<tr>
+<td>TIMESTAMP WITH TIMEZONE</td>
+<td><strong>Date</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>OracleTimestampTZ</td>
+</tr>
+<tr>
+<td>TIMESTAMP WITH LOCAL TIMEZONE</td>
+<td><strong>Date</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>OracleTimestampTZ</td>
+</tr>
+<tr>
+<td>INTERVAL YEAR TO MONTH</td>
+<td><strong>OracleIntervalYearToMonth</strong></td>
+</tr>
+<tr>
+<td>INTERVAL DAY TO SECOND</td>
+<td><strong>OracleIntervalDayToSecond</strong></td>
+</tr>
+<tr>
+<td>NULL</td>
+<td><strong>null</strong></td>
+</tr>
+</tbody></table>
+<p>&nbsp;</p>
+
+
+<a href="#mapping-javascript-type-to-plsql-types" id="mapping-javascript-type-to-plsql-types" style="color: inherit; text-decoration: none;">
+  <h4>Mapping JavaScript Type to PL/SQL Types</h4>
+</a>
+<p>default mappings in bold</p>
+<table>
+<thead>
+<tr>
+<th>JavaScript Types</th>
+<th>PL/SQL Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>number</td>
+<td><strong>NUMBER</strong></td>
+</tr>
+<tr>
+<td>boolean</td>
+<td><strong>NUMBER</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>BOOLEAN</td>
+</tr>
+<tr>
+<td>string</td>
+<td><strong>VARCHAR2</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>CHAR</td>
+</tr>
+<tr>
+<td></td>
+<td>NCHAR</td>
+</tr>
+<tr>
+<td></td>
+<td>NCHAR2</td>
+</tr>
+<tr>
+<td></td>
+<td>CLOB</td>
+</tr>
+<tr>
+<td></td>
+<td>NCLOB</td>
+</tr>
+<tr>
+<td>OracleClob</td>
+<td><strong>CLOB</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>NCLOB</td>
+</tr>
+<tr>
+<td>OracleBlob</td>
+<td><strong>BLOB</strong></td>
+</tr>
+<tr>
+<td>Uint8Array</td>
+<td><strong>RAW</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>BLOB</td>
+</tr>
+<tr>
+<td>Date</td>
+<td><strong>DATE</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>TIMESTAMP</td>
+</tr>
+<tr>
+<td></td>
+<td>TIMESTAMP WITH TIMEZONE</td>
+</tr>
+<tr>
+<td></td>
+<td>TIMESTAMP WITH LOCAL TIMEZONE</td>
+</tr>
+<tr>
+<td>OracleDate</td>
+<td><strong>DATE</strong></td>
+</tr>
+<tr>
+<td>OracleTimestamp</td>
+<td><strong>TIMESTAMP</strong></td>
+</tr>
+<tr>
+<td>OracleTimestampTZ</td>
+<td><strong>TIMESTAMP WITH TIMEZONE</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>TIMESTAMP WITH LOCAL TIMEZONE</td>
+</tr>
+<tr>
+<td>OracleIntervalYearToMonth</td>
+<td><strong>INTERVAL YEAR TO MONTH</strong></td>
+</tr>
+<tr>
+<td>OracleIntervalDayToSecond</td>
+<td><strong>INTERVAL DAY TO SECOND</strong></td>
+</tr>
+<tr>
+<td>null</td>
+<td><strong>NULL</strong></td>
+</tr>
+<tr>
+<td>undefined</td>
+<td><strong>NULL</strong></td>
+</tr>
+</tbody></table>
+<p>&nbsp;</p>
+
+
+<a href="#metadata" id="metadata" style="color: inherit; text-decoration: none;">
+  <h2>Metadata</h2>
+</a>
+<p>For SELECT statements, the <a href="interfaces/api.IResultSet.html#metaData">IResultSet.metaData</a> function returns an array of objects describing details of columns for the select list.</p>
+<pre><code class="language-JavaScript"><span class="hl-0">var</span><span class="hl-1"> </span><span class="hl-2">rs</span><span class="hl-1"> = </span><span class="hl-2">conn</span><span class="hl-1">.</span><span class="hl-3">execute</span><span class="hl-1">(</span><span class="hl-4">&quot;SELECT * FROM EMP&quot;</span><span class="hl-1">);</span><br/><span class="hl-5">for</span><span class="hl-1"> (</span><span class="hl-0">var</span><span class="hl-1"> </span><span class="hl-2">md</span><span class="hl-1"> </span><span class="hl-0">of</span><span class="hl-1"> </span><span class="hl-2">rs</span><span class="hl-1">.</span><span class="hl-2">metaData</span><span class="hl-1">) {</span><br/><span class="hl-1">   </span><span class="hl-0">var</span><span class="hl-1"> </span><span class="hl-2">columnName</span><span class="hl-1"> = </span><span class="hl-2">md</span><span class="hl-1">.</span><span class="hl-2">name</span><span class="hl-1">;</span><br/><span class="hl-1">   </span><span class="hl-0">var</span><span class="hl-1"> </span><span class="hl-2">columnDBType</span><span class="hl-1"> = </span><span class="hl-2">md</span><span class="hl-1">.</span><span class="hl-2">dbType</span><span class="hl-1">; </span><span class="hl-8">// ORACLE Database Type, e.g. oracledb.DB_TYPE_NUMBER</span><br/><span class="hl-1">   </span><span class="hl-0">var</span><span class="hl-1"> </span><span class="hl-2">columnFetchType</span><span class="hl-1"> = </span><span class="hl-2">md</span><span class="hl-1">.</span><span class="hl-2">fetchType</span><span class="hl-1"> </span><span class="hl-8">// JavaScript Type which will be fetched, e.g. oracledb.STRING</span><br/><span class="hl-1">   </span><span class="hl-0">var</span><span class="hl-1"> </span><span class="hl-2">isNullable</span><span class="hl-1"> = </span><span class="hl-2">md</span><span class="hl-1">.</span><span class="hl-2">nullable</span><span class="hl-1">;</span><br/><span class="hl-1">   </span><span class="hl-8">// ...</span><br/><span class="hl-1">}</span>
+</code></pre>
+<p>The <code>name</code>, <code>dbType</code>, <code>fetchType</code> and <code>nullable</code> properties are always available.
+Additionally, the following properties are available for some data types:</p>
+<ul>
+<li><code>byteSize</code> for Oracle character types,</li>
+<li><code>precision</code> for NUMBER and TIMESTAMP types, and</li>
+<li><code>scale</code> for the NUMBER type.</li>
+</ul>
+
+<a href="#errors" id="errors" style="color: inherit; text-decoration: none;">
+  <h2>Errors</h2>
+</a>
+<p>Functions communicate errors by throwing an exception object of type <a href="interfaces/api.IError.html">IError</a>.
+Those exceptions can be handled using the try-catch statement.</p>
+<pre><code><span class="hl-5">try</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-5">for</span><span class="hl-1"> (</span><span class="hl-0">let</span><span class="hl-1"> </span><span class="hl-2">row</span><span class="hl-1"> </span><span class="hl-0">of</span><span class="hl-1"> </span><span class="hl-2">sql</span><span class="hl-1">.</span><span class="hl-3">execute</span><span class="hl-1">(</span><span class="hl-4">&quot;SELECT * FROM&quot;</span><span class="hl-1">).</span><span class="hl-2">rows</span><span class="hl-1">) {</span><br/><span class="hl-1">        </span><span class="hl-8">// never reached</span><br/><span class="hl-1">        ...</span><br/><span class="hl-1">    }</span><br/><span class="hl-1">    ...</span><br/><span class="hl-1">} </span><span class="hl-5">catch</span><span class="hl-1"> (</span><span class="hl-2">err</span><span class="hl-1">) {</span><br/><span class="hl-1">    </span><span class="hl-5">return</span><span class="hl-1"> </span><span class="hl-2">err</span><span class="hl-1">.</span><span class="hl-2">errorNum</span><span class="hl-1"> + </span><span class="hl-4">&quot; &quot;</span><span class="hl-1"> + </span><span class="hl-2">err</span><span class="hl-1">.</span><span class="hl-2">message</span><span class="hl-1">;</span><br/><span class="hl-1">}</span>
+</code></pre>
+<p>The <a href="interfaces/api.IError.html">IError</a> object contains a message property (<a href="interfaces/api.IError.html#message">IError.message</a>) and an error code (<a href="interfaces/api.IError.html#errorNum">IError.errorNum</a>).</p>
+<p>If <code>errorNum</code> exists, this is a standard Oracle Database error.
+If not, it is an error specific to this driver (mle-js-oracledb error).</p>
+<p>Database Error messages may look like this:</p>
+<pre><code><span class="hl-6">ORA</span><span class="hl-1">-</span><span class="hl-7">06502</span><span class="hl-1">: </span><span class="hl-6">PL</span><span class="hl-1">/</span><span class="hl-9">SQL</span><span class="hl-1">: </span><span class="hl-2">numeric</span><span class="hl-1"> </span><span class="hl-2">or</span><span class="hl-1"> </span><span class="hl-2">value</span><span class="hl-1"> </span><span class="hl-9">error</span><span class="hl-1">: </span><span class="hl-2">character</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">number</span><span class="hl-1"> </span><span class="hl-2">conversion</span><span class="hl-1"> </span><span class="hl-2">error</span>
+</code></pre>
+<p>mle-js-oracledb error messages may look like this:</p>
+<pre><code><span class="hl-6">NJS</span><span class="hl-1">-</span><span class="hl-7">004</span><span class="hl-1">: </span><span class="hl-2">invalid</span><span class="hl-1"> </span><span class="hl-2">value</span><span class="hl-1"> </span><span class="hl-2">for</span><span class="hl-1"> </span><span class="hl-2">property</span><span class="hl-1"> </span><span class="hl-2">outFormat</span>
+</code></pre>
+
+<a href="#executing-non-select-statements" id="executing-non-select-statements" style="color: inherit; text-decoration: none;">
+  <h2>Executing non-SELECT Statements</h2>
+</a>
+<p>Non-SELECT statements can be executed the same way as SELECT statements.</p>
+<pre><code><span class="hl-0">var</span><span class="hl-1"> </span><span class="hl-2">result</span><span class="hl-1"> = </span><span class="hl-2">conn</span><span class="hl-1">.</span><span class="hl-3">execute</span><span class="hl-1">(</span><span class="hl-4">&quot;insert into emp values (7999, &#39;Hello&#39;, &#39;World&#39;, 7839, &#39;18-DEC-85&#39;, 2500, 0, 30)&quot;</span><span class="hl-1">);</span><br/><span class="hl-0">var</span><span class="hl-1"> </span><span class="hl-2">rowsInserted</span><span class="hl-1"> = </span><span class="hl-2">result</span><span class="hl-1">.</span><span class="hl-2">rowsAffected</span><span class="hl-1">;</span>
+</code></pre>
+<p>For DML statements, <code>rowsAffected</code> contains the number of rows affected, for example the number of rows inserted.
+For non-DML statements, <code>rowsAffected</code> will appear as undefined.
+Also, <code>rows</code> will appear as undefined for any non-SELECT statement.</p>
+
+<a href="#managing-transactions" id="managing-transactions" style="color: inherit; text-decoration: none;">
+  <h3>Managing Transactions</h3>
+</a>
+<p>Note that, compared to <code>node-oracledb</code>, the (default) connection object in <code>mle-js-oracledb</code> cannot be closed.
+This means that <code>mle-js-oracledb</code> does not perform any implicit commit or rollback of transactions and explicit calls to <a href="interfaces/api.IConnection.html#commit">commit</a> or <a href="interfaces/api.IConnection.html#rollback">rollback</a> need to be made instead.
+This is because the code in <code>mle-js-oracledb</code> executes in the scope of the transaction that called into MLE in the first place.
+Similarly, <code>mle-js-oracledb</code> does not support <code>auto-commit</code>, neither as a connection property nor as an option in <a href="interfaces/api.IConnection.html#execute">execute</a>.</p>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Modules</a></li><li class=" tsd-kind-module"><a href="modules/api.html">api</a></li><li class=" tsd-kind-module"><a href="modules/index.html">index</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li><li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li><li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>

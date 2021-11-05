@@ -1,0 +1,8 @@
+{
+  "name": "mle-js-bindings",
+  "version": "21.3.0",
+  "description": "MLE Bindings for Oracle Database DBMS_MLE",
+  "license": "UPL-1.0",
+  "types": "mle-js-bindings.d.ts",
+  "author": "Oracle"
+}
