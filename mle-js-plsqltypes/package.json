@@ -1,9 +1,0 @@
-{
-  "name": "mle-js-plsqltypes",
-  "version": "21.3.0",
-  "description": "MLE PL/SQL Types",
-  "license": "UPL-1.0",
-  "main": "mle-js-plsqltypes.js",
-  "types": "mle-js-plsqltypes.d.ts",
-  "author": "Oracle"
-}

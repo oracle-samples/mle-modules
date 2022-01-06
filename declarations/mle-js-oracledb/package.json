@@ -1,0 +1,14 @@
+{
+  "name": "mle-js-oracledb",
+  "version": "21.3.0",
+  "description": "MLE SQL Driver",
+  "types": "index.d.ts",
+  "author": "Oracle",
+  "license": "UPL-1.0",
+  "homepage": "https://github.com/oracle-samples/mle-modules",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/oracle-samples/mle-modules"
+  },
+  "bugs": "https://github.com/oracle-samples/mle-modules/issues"
+}

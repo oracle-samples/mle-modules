@@ -1,8 +1,0 @@
-{
-  "name": "mle-js-oracledb",
-  "version": "21.3.0",
-  "description": "MLE SQL Driver",
-  "license": "UPL-1.0",
-  "types": "index.d.ts",
-  "author": "Oracle"
-}
