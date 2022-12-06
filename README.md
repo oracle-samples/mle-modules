@@ -14,13 +14,19 @@ The following JavaScript modules are currently available:
 You need an Oracle Database to make use of the JavaScript modules provided in the Oracle Database Multilingual Engine (MLE).
 A very convenient way of getting an Oracle Database instance is to create an always-free Oracle Cloud account and set up a free autonomous database instance there as our [blog article][2] explains in great detail.
 
-The declaration files can be installed into your project directory using NPM:
+The declaration files can conveniently be installed into your project directory using NPM:
 
 ```
-git clone git@github.com:oracle-samples/mle-modules.git
-npm install mle-modules/declarations/mle-js-oracledb
-npm install mle-modules/declarations/mle-js-bindings
-npm install mle-modules/declarations/mle-js-plsqltypes
+npm install mle-js-oracledb
+npm install mle-js-bindings
+npm install mle-js-plsqltypes
+```
+
+Alternatively, you can also download `mle-js` which is a single bundled ambient file for all these module declarations in one.
+You can conveniently install it from NPM and then reference it in the beginning of your JavaScript code using the `<reference>` tag:
+```
+npm install mle-js
+/// <reference types="./node_modules/mle-js/mle-js.d.ts" />
 ```
 
 ## Documentation
