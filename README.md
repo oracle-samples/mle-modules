@@ -26,7 +26,7 @@ Alternatively, you can also download `mle-js` which is a single bundled ambient 
 You can conveniently install it from NPM and then reference it in the beginning of your JavaScript code using the `<reference>` tag:
 ```
 npm install mle-js
-/// <reference types="./node_modules/mle-js/mle-js.d.ts" />
+/// <reference types="mle-js" />
 ```
 
 ## Documentation
