@@ -1,0 +1,14 @@
+{
+  "name": "mle-js",
+  "version": "21.3.0",
+  "description": "Bundle of all declarations of pre-defined JavaScript modules that ship with Oracle Database",
+  "types": "mle-js.d.ts",
+  "author": "Oracle",
+  "license": "UPL-1.0",
+  "homepage": "https://oracle-samples.github.io/mle-modules",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/oracle-samples/mle-modules"
+  },
+  "bugs": "https://github.com/oracle-samples/mle-modules/issues"
+}
