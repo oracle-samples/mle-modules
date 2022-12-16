@@ -23,6 +23,7 @@ npm install mle-js-plsqltypes
 ```
 
 Alternatively, you can also download `mle-js` which is a single bundled ambient file for all these module declarations in one.
+In addition, this bundle also contains declarations for GraalVM JavaScript builtins, concretely `Polyglot` and `console`.
 You can conveniently install it from NPM and then reference it in the beginning of your JavaScript code using the `<reference>` tag:
 ```
 npm install mle-js

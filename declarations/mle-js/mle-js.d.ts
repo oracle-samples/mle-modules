@@ -2149,3 +2149,196 @@ export class IOracleDate {
     isValid(): boolean;
 }
 }
+
+/* Copyright (c) 2022, 2022, Oracle and/or its affiliates. */
+
+/*
+ * TypeScript declarations for JavaScript builtins in Oracle Database
+ * Multilingual Engine, see the following links for more information:
+ * - https://www.graalvm.org/latest/reference-manual/js/JavaScriptCompatibility
+ * - https://oracle-samples.github.io/mle-modules
+ */
+
+/**
+ * Type for programming languages that can be evaluated. Currently, it's
+ * JavaScript only.
+ */
+type Language = 'js';
+
+/**
+ * Interface for Polyglot object. The functions of the Polyglot object allow to
+ * interact with values from other polyglot languages.
+ */
+interface IPolyglot {
+
+    /**
+     * Exports the JavaScript value under the given key to the polyglot bindings.
+     * If the polyglot bindings already had a value identified by key, it is
+     * overwritten with the new value. The value may be any valid Polyglot
+     * value.
+     *
+     * @param key identifier of polyglot binding that should be written.
+     * @param value content of polyglot binding that should be written.
+     * @throws TypeError if key is not a String.
+     */
+    export(key: string, value: any): undefined;
+
+    /**
+     * Imports the value identified by key from the polyglot bindings and
+     * returns it. If no language has exported a value identified by key,
+     * undefined is returned.
+     *
+     * @param key identifier of polyglot binding that should be read.
+     * @returns the value of the polyglot binding or undefinied if it does not
+     * exist.
+     * @throws TypeError if key is not a String.
+     */
+    import(key: string): any;
+
+    /**
+     * Parses and evaluates sourceCode with the interpreter identified by
+     * languageId. The value of sourceCode is expected to be a String (or
+     * convertable to one). Returns the evaluation result.
+     *
+     * @param languageId identifies the language.
+     * @param sourceCode contains the source code to be evaluated.
+     * @returns the evaluation result, depending on the sourceCode and/or the
+     * semantics of the language evaluated.
+     * @throws Exceptions can occur when an invalid languageId is passed, when
+     * sourceCode cannot be evaluated by the language, or when the executed
+     * program throws an exception itself.
+     */
+    eval(languageId: Language, sourceCode: string): any;
+}
+declare const Polyglot: IPolyglot;
+
+/**
+ * Interface for console object.
+ */
+interface IConsole {
+
+    /**
+     * Prints the arguments to stdout, providing a best-effort human readable
+     * output. By default, stdout is redirected to DBMS_OUTPUT and can be
+     * redirected using the appropriate procedures in DBMS_MLE.
+     *
+     * @param args  arguments to be printed to stdout.
+     */
+    log(...args: any[] ): undefined;
+
+    /**
+     * Alias of {@link log}:
+     * Prints the arguments to stdout, providing a best-effort human readable
+     * output. By default, stdout is redirected to DBMS_OUTPUT and can be
+     * redirected using the appropriate procedures in DBMS_MLE.
+     *
+     * @param args  arguments to be printed to stdout.
+     */
+    info(...args: any[] ): undefined;
+
+    /**
+     * Alias of {@link log}:
+     * Prints the arguments to stdout, providing a best-effort human readable
+     * output. By default, stdout is redirected to DBMS_OUTPUT and can be
+     * redirected using the appropriate procedures in DBMS_MLE.
+     *
+     * @param args  arguments to be printed to stdout.
+     */
+    debug(...args: any[] ): undefined;
+
+    /**
+     * Prints the arguments to stderr, providing a best-effort human readable
+     * output. By default, stderr is redirected to DBMS_OUTPUT and can be
+     * redirected using the appropriate procedures in DBMS_MLE.
+     *
+     * @param args  arguments to be printed to stderr.
+     */
+    error(...args: any[] ): undefined;
+
+    /**
+     * Alias of {@link error}:
+     * Prints the arguments to stderr, providing a best-effort human readable
+     * output. By default, stderr is redirected to DBMS_OUTPUT and can be
+     * redirected using the appropriate procedures in DBMS_MLE.
+     *
+     * @param args  arguments to be printed to stderr.
+     */
+    warn(...args: any[] ): undefined;
+
+    /**
+     * Prints message when check is falsy.
+     *
+     * @param check boolean condition that should be checked.
+     * @param message message that should be printed if check fails.
+     */
+    asserts(check: boolean, message: string): undefined;
+
+    /**
+     * Clears the console window if possible. In Oracle Database, this function
+     * does not do anything useful, but prints some additional special
+     * characters.
+     */
+    clear(): undefined;
+
+    /**
+     * Increases the given counter and prints how many times it has been called.
+     * The counter is identified by its label.
+     *
+     * @param label name of the counter to be increased. If no name is
+     * provided, the default counter is used.
+     */
+    count(label?: string): undefined;
+
+    /**
+     * Resets the given counter to 0. The counter is identified by its label.
+     *
+     * @param label name of the counter to be reset. If no name is
+     * provided, the default counter is used.
+     */
+    countReset(label?: string): undefined;
+
+    /**
+     * Increases the indentation for succeeding outputs to the console until
+     * {@link groupEnd} is called.
+     *
+     * @param labels if provided, the labels get printed before the indentation
+     * is increased.
+     */
+    group(...labels: string[]): undefined;
+
+    /**
+     * Decreases the indentation for succeeding outputs to the console that was
+     * prevsiously increased with {@link group}. If identation is already at the
+     * lowest (outermost) level, this has no effect.
+     */
+    groupEnd(): undefined;
+
+    /**
+     * Starts a timer. The timer is identified by its label.
+     *
+     * @param label name of the timer to be started. If no name is
+     * provided, the default timer is used.
+     */
+    time(label?: string): undefined;
+
+    /**
+     * Logs, i.e. prints the duration of a timer (in milliseconds). The timer is
+     * identified by its label. If the timer has already been stopped, this has
+     * no effect.
+     *
+     * @param label name of the timer to be logged. If no name is
+     * provided, the default timer is used.
+     */
+    timeLog(label?: string): undefined;
+
+    /**
+     * Stops the timer and prints its duration (in milliseconds). The timer is
+     * identified by its label. After this call, further calls to this function
+     * or to {@link timeLog} have no effect.
+     *
+     * @param label name of the timer to be stopped. If no name is
+     * provided, the default timer is used.
+     */
+    timeEnd(label?: string): undefined;
+}
+declare const console: IConsole;
