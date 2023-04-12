@@ -1,4 +1,5 @@
-Copyright (c) 2017, 2023, Oracle and/or its affiliates.
+/**
+Copyright (c) 2022, 2023, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -33,4 +34,37 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
+*/
+export declare class Body {
+    #private;
+    /**
+     * Check if the contents of the body have been consumed.
+     */
+    get bodyUsed(): boolean;
+    /**
+     * Retrieve the contents of the body.
+     */
+    get body(): string | null;
+    constructor(body?: string | Body | null);
+    /**
+     * Consume the contents of the body as JSON.
+     */
+    json(): Promise<any>;
+    /**
+     * Consume the contents of the body as text.
+     */
+    text(): Promise<string>;
+    /**
+     * Unsupported operation.
+     */
+    arrayBuffer(): void;
+    /**
+     * Unsupported operation.
+     */
+    blob(): void;
+    /**
+     * Unsupported operation.
+     */
+    formData(): void;
+    protected _cloneBodyContent(): string | null;
+}

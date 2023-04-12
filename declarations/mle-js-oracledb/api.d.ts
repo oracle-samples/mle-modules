@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2019, 2021, Oracle and/or its affiliates.
+Copyright (c) 2019, 2023, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -35,18 +35,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+import { ISodaDatabase } from './soda-api';
 /**
- * Interface for errors thrown by {@link execute}() or {@link executeMany}().
+ * Custom class for errors thrown by {@link execute}() or {@link executeMany}().
  */
-export interface IError {
+export interface IError extends Error {
     /**
      * The Oracle error number. This value is undefined for non-Oracle errors.
      */
     errorNum?: number;
-    /**
-     * The text of the error message.
-     */
-    message: string;
     /**
      * The character offset into the SQL text that resulted in the Oracle
      * error. The value may be 0 in non-SQL contexts. This value is undefined
@@ -61,8 +58,8 @@ export interface IError {
 */
 export interface IFetchInfoColumnSpec {
     /**
-     * The JavaScript data type to be fetched. One of the
-     * mle-js-oracledb JS Type Constants, see {@link javaScriptType}.
+     * The JavaScript data type to be fetched. One of the mle-js-oracledb JS
+     * Type Constants.
      */
     type: JsType;
 }
@@ -127,8 +124,8 @@ export interface IBindDef {
      */
     maxSize?: number;
     /**
-     * The JavaScript data type to be bound. One of the
-     * mle-js-oracledb JS Type Constants, see {@link javaScriptType}.
+     * The JavaScript data type to be bound. One of the mle-js-oracledb JS Type
+     * Constants.
      */
     type: JsType;
 }
@@ -145,7 +142,7 @@ export declare type ArrayBindDefs = IBindDef[];
 /**
  * Interface for BindDefs which are either Array- or Object BindDefs.
  */
-export declare type BindDefs = IObjectBindDefs | ArrayBindDefs;
+export declare type ExecuteManyBindDefs = IObjectBindDefs | ArrayBindDefs;
 /**
  * Interface for the options used in {@link executeMany}().
  */
@@ -163,7 +160,8 @@ export interface IExecuteManyOptions {
      * the keys dir, maxSize, and type for each bind variable, similar to how
      * {@link execute} bind parameters are defined (see {@link IBindDef}).
      */
-    bindDefs?: BindDefs;
+    bindDefs?: ExecuteManyBindDefs;
+    dmlRowCounts?: boolean;
 }
 /**
  * Interface representing meta data as used in {@link IResultSet}s and statement info.
@@ -175,7 +173,7 @@ export interface IMetaData {
      */
     name: string;
     /**
-     * One of the mle-js-oracledb JS Type Constants, see {@link javaScriptType}.
+     * One of the mle-js-oracledb JS Type Constants.
      */
     fetchType?: JsType;
     /**
@@ -200,11 +198,15 @@ export interface IMetaData {
      * Indicates whether NULL values are permitted for this column.
      */
     nullable?: boolean;
+    /**
+     * Name of the database type, such as “NUMBER” or “VARCHAR2”.
+     */
+    dbTypeName?: string;
 }
 /**
  * Interface for representing result sets as returned by {@link execute}().
  */
-export interface IResultSet {
+export declare abstract class IResultSet {
     /**
      * Contains an array of objects with metadata about the query.
      *
@@ -219,7 +221,7 @@ export interface IResultSet {
      *
      * It must also be called if no rows will ever be fetched from the result set.
      */
-    close(): any;
+    abstract close(): any;
     /**
      * This call fetches one row of the result set as an object or an array of
      * column values, depending on the value of outFormat.
@@ -229,17 +231,20 @@ export interface IResultSet {
      * Performance of getRow() can be tuned by adjusting the value of
      * {@link fetchArraySize}.
      */
-    getRow(): any;
+    abstract getRow(): any;
     /**
      * This call fetches numRows rows of the result set as an object or an array of
      * column values, depending on the value of outFormat.
+     *
+     * @param numRows specifies the number of rows to be returned.
+     * the default value of numRows is 0 and it returns all rows.
      *
      * At the end of fetching, the result set must be freed by calling {@link close}().
      *
      * Performance of getRows() can be tuned by adjusting the value of
      * {@link fetchArraySize}.
      */
-    getRows(numRows: number): any[];
+    abstract getRows(numRows: number): any[];
     /**
      * Convenience function for getting an iterator of this IResultSet.
      *
@@ -250,7 +255,7 @@ export interface IResultSet {
      * @throws {@link IError} if the result set has already been closed
      * @throws {@link IError} if the result set is already being iterated over
      */
-    iterator(): IterableIterator<any>;
+    abstract iterator(): IterableIterator<any>;
     /**
      * This function defines the default iterator for a result set which can be
      * used to iterate over its rows. Using the default iterator, a result set
@@ -260,7 +265,7 @@ export interface IResultSet {
      * @throws {@link IError} if the result set is already being iterated over
      *
      */
-    [Symbol.iterator](): IterableIterator<any>;
+    abstract [Symbol.iterator](): IterableIterator<any>;
 }
 /**
  * Interface for the result of {@link execute}().
@@ -348,11 +353,11 @@ export interface IBindObjectValue {
      */
     maxSize?: number;
     /**
-     * The JavaScript data type to be bound. One of the
-     * mle-js-oracledb JS Constants, see {@link javaScriptType}.  With IN or
-     * INOUT binds the type can be explicitly set with type or it will default
-     * to the type of the input data value. With OUT binds, the type defaults to
-     * {@link STRING} whenever type is not specified.
+     * The JavaScript data type to be bound. One of the mle-js-oracledb JS
+     * Constants.  With IN or INOUT binds the type can be explicitly set with
+     * type or it will default to the type of the input data value. With OUT
+     * binds, the type defaults to {@link STRING} whenever type is not
+     * specified.
      */
     type?: number;
     /**
@@ -405,7 +410,7 @@ export interface IStatementInfo {
 /**
  * Interface for the connection object obtained by {@link defaultConnection}.
  */
-export interface IConnection {
+export declare abstract class IConnection {
     /**
      * This read-only property gives a numeric representation of the Oracle
      * database version which is useful in comparisons. For version a.b.c.d.e,
@@ -426,7 +431,7 @@ export interface IConnection {
     /**
      * This call commits the current transaction in progress.
      */
-    commit(): void;
+    abstract commit(): void;
     /**
      * This call executes a single SQL or PL/SQL statement.
      *
@@ -448,8 +453,8 @@ export interface IConnection {
      * @param options an optional parameter to execute() that may be used to
      * control statement execution.
      */
-    execute(sql: string): IExecuteReturn;
-    execute(sql: string, bindParams: BindParameters, options?: IExecuteOptions): IExecuteReturn;
+    abstract execute(sql: string): IExecuteReturn;
+    abstract execute(sql: string, bindParams: BindParameters, options?: IExecuteOptions): IExecuteReturn;
     /**
      * This method allows sets of data values to be bound to one DML or PL/SQL
      * statement for execution. It is like calling {@link execute}() multiple
@@ -499,8 +504,8 @@ export interface IConnection {
      * @param options The options parameter is optional. It can contain the
      * properties specified in {@link IExecuteManyOptions}.
      */
-    executeMany(sql: string, binds: BindParameters[], options?: IExecuteManyOptions): IExecuteManyReturn;
-    executeMany(sql: string, numIterations: number, options?: IExecuteManyOptions): IExecuteManyReturn;
+    abstract executeMany(sql: string, binds: BindParameters[], options?: IExecuteManyOptions): IExecuteManyReturn;
+    abstract executeMany(sql: string, numIterations: number, options?: IExecuteManyOptions): IExecuteManyReturn;
     /**
      * Parses a SQL statement and returns information about it. This is most
      * useful for finding column names of queries, and for finding the names of
@@ -517,27 +522,40 @@ export interface IConnection {
      *
      * @param sql SQL statement to parse.
      */
-    getStatementInfo(sql: string): IStatementInfo;
+    abstract getStatementInfo(sql: string): IStatementInfo;
     /**
      * This call rolls back the current transaction in progress.
      */
-    rollback(): void;
+    abstract rollback(): void;
+    /**
+     * Returns a parent SodaDatabase object.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#getsodadatabase
+     * @return a new SodaDatabase object.
+     */
+    abstract getSodaDatabase(): ISodaDatabase;
 }
 /**
  * Type for mle-js-oracledb Query OutFormat Constants.
  */
 export declare type OutFormatType = number;
 /**
- * Fetch each row as array of column values.
+ * Fetch each row as array of column values
+ * This constant is deprecated. Use OUT_FORMAT_ARRAY instead.
  */
 export declare const ARRAY: OutFormatType;
 /**
- * Fetch each row as an object of column values.
+ * Fetch each row as array of column values.
+ */
+export declare const OUT_FORMAT_ARRAY: OutFormatType;
+/**
+ * Fetch each row as an object
+ * This constant is deprecated. Use OUT_FORMAT_OBJECT instead.
  */
 export declare const OBJECT: OutFormatType;
 /**
- * Type for mle-js-oracledb JS Type Constants.
+ * Fetch each row as an object of column values.
  */
+export declare const OUT_FORMAT_OBJECT: OutFormatType;
 export declare type JsType = number;
 /**
  * Used with fetchInfo to reset the fetch type to the database type
@@ -557,6 +575,10 @@ export declare const NUMBER: JsType;
  * fetchInfo.
  */
 export declare const DATE: JsType;
+/**
+ * Bind a JavaScript boolean to a PL/SQL BOOLEAN.
+ */
+export declare const BOOLEAN: JsType;
 /**
  * Bind a NUMBER to an OracleNumber object.
  */
@@ -582,9 +604,9 @@ export declare const ORACLE_INTERVAL_DS: JsType;
  */
 export declare const ORACLE_INTERVAL_YM: JsType;
 /**
- * Bind a JavaScript boolean to a PL/SQL BOOLEAN.
+ * Bind a NCLOB to a OracleNCLOB object.
  */
-export declare const BOOLEAN: JsType;
+export declare const ORACLE_NCLOB: JsType;
 /**
  * Bind a RAW, LONG RAW or BLOB to a Uint8Array typed array.
  */
@@ -597,6 +619,10 @@ export declare const ORACLE_TIMESTAMP: JsType;
  * Bind a TIMESTAMP WITH TIME ZONE or TIMESTAMP WITH LOCAL TIME ZONE to an OracleTimestampTZ object.
  */
 export declare const ORACLE_TIMESTAMP_TZ: JsType;
+/**
+ * Bind a DTYDJSON value.
+ */
+export declare const ORACLE_JSON: JsType;
 /**
  * Type for mle-js-oracledb Database Type Constants.
  */
@@ -694,6 +720,10 @@ export declare const DB_TYPE_NCHAR: DbType;
  */
 export declare const DB_TYPE_NCLOB: DbType;
 /**
+ * JSON
+ */
+export declare const DB_TYPE_JSON: DbType;
+/**
  * Direction for IN binds
  */
 export declare const BIND_IN = 3001;
@@ -766,9 +796,15 @@ export declare const STMT_TYPE_ROLLBACK = 17;
  */
 export declare const STMT_TYPE_COMMIT = 21;
 /**
+ * SODA_COLL_MAP_MODE
+ */
+export declare const SODA_COLL_MAP_MODE = 5001;
+/**
  * Class for representing global mle-js-oracledb properties.
  */
-declare class Parameters {
+export declare class Parameters {
+    private _maxRows;
+    get maxRows(): number;
     /**
      * The maximum number of rows that are fetched by a query with
      * connection.{@link execute}() when not using an {@link IResultSet}. Rows
@@ -789,19 +825,22 @@ declare class Parameters {
      * being exceeded or query results being unexpectedly truncated by a maxRows
      * limit.
      */
-    private _maxRows;
-    get maxRows(): number;
     set maxRows(value: number);
+    private _outFormat;
+    get outFormat(): OutFormatType;
     /**
      * The format of query rows fetched when using connection.{@link execute}().
      * It affects both IResultSet and non-IResultSet queries. This can be either
-     * of the constants {@link ARRAY} or {@link OBJECT}. The default value is
-     * {@link ARRAY}.
+     * of the constants {@link OUT_FORMAT_ARRAY} or {@link OUT_FORMAT_OBJECT}. The
+     * default value is {@link OUT_FORMAT_ARRAY} when requiring the module
+     * "mle-js-oracledb" (in Oracle 21c). Oracle 23c introduces and encourages the
+     * use of ECMAScript imports (import oracledb from "mle-js-oracledb") and if
+     * those are used, the default value is {@link OUT_FORMAT_OBJECT}.
      *
-     * If specified as {@link ARRAY}, each row is fetched as an array of column
+     * If specified as {@link OUT_FORMAT_ARRAY}, each row is fetched as an array of column
      * values.
      *
-     * If specified as {@link OBJECT}, each row is fetched as a JavaScript object.
+     * If specified as {@link OUT_FORMAT_OBJECT}, each row is fetched as a JavaScript object.
      * The object has a property for each column name, with the property value set
      * to the respective column value. The property name follows Oracle's standard
      * name-casing rules. It will commonly be uppercase since most applications
@@ -809,9 +848,9 @@ declare class Parameters {
      *
      * This property may be overridden in an {@link execute}() call.
      */
-    private _outFormat;
-    get outFormat(): OutFormatType;
     set outFormat(value: OutFormatType);
+    private _fetchArraySize;
+    get fetchArraySize(): number;
     /**
      * This property sets the size of an internal buffer used for fetching query
      * rows from Oracle Database. Changing it may affect query performance but
@@ -835,8 +874,6 @@ declare class Parameters {
      * internal buffer size will be based on the lesser of maxRows and
      * fetchArraySize.
      */
-    private _fetchArraySize;
-    get fetchArraySize(): number;
     set fetchArraySize(value: number);
     /**
      * Determines whether additional metadata is available for queries.
@@ -850,6 +887,8 @@ declare class Parameters {
     private _extendedMetaData;
     get extendedMetaData(): boolean;
     set extendedMetaData(value: boolean);
+    private _fetchAsString;
+    get fetchAsString(): JsType[];
     /**
      * An array of mle-js-oracledb JS Type values. The valid types are {@link
      * DATE}, {@link NUMBER}, {@link UINT8ARRAY}, and {@link ORACLE_CLOB}. When
@@ -874,9 +913,9 @@ declare class Parameters {
      * Individual query columns in {@link execute}() calls can override the
      * fetchAsString global property by using {@link fetchInfo}.
      */
-    private _fetchAsString;
-    get fetchAsString(): JsType[];
     set fetchAsString(value: JsType[]);
+    private _fetchAsUint8Array;
+    get fetchAsUint8Array(): JsType[];
     /**
      * An array of mle-js-oracledb JS Type values. Currently, the only valid type
      * is {@link ORACLE_BLOB}. When a BLOB column is queried with {@link
@@ -890,9 +929,9 @@ declare class Parameters {
      * Individual query columns in {@link execute}() calls can override the
      * fetchAsUint8Array global property by using {@link fetchInfo}.
      */
-    private _fetchAsUint8Array;
-    get fetchAsUint8Array(): JsType[];
     set fetchAsUint8Array(value: JsType[]);
+    private _fetchAsPlsqlWrapper;
+    get fetchAsPlsqlWrapper(): JsType[];
     /**
      * An array of mle-js-oracledb JS Type values. The valid types are {@link
      * DATE}, {@link NUMBER}, and {@link STRING}. When any column having one of
@@ -911,12 +950,5 @@ declare class Parameters {
      * Individual query columns in {@link execute}() calls can override the
      * fetchAsPlsqlWrapper global property by using {@link fetchInfo}.
      */
-    private _fetchAsPlsqlWrapper;
-    get fetchAsPlsqlWrapper(): JsType[];
     set fetchAsPlsqlWrapper(value: JsType[]);
 }
-/**
- * Object that holds the global mle-js-oracledb properties.
- */
-export declare const parameters: Parameters;
-export {};

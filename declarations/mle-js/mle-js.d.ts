@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2019, 2022, Oracle and/or its affiliates.
+Copyright (c) 2019, 2023, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -37,19 +37,493 @@ SOFTWARE.
 */
 
 declare module "mle-js-oracledb" {
-/** Copyright (c) 2019, 2021, Oracle and/or its affiliates. /*
+/** Copyright (c) 2021, 2023, Oracle and/or its affiliates. */
 /**
- * Interface for errors thrown by {@link execute}() or {@link executeMany}().
+ * SODA API for MLE. This is compatible with node-oracledb 5.0.0.
  */
-interface IError {
+/**
+ * SodaDatabase.createCollection() options. The metadata must conform to the
+ * JSON object layout specified in the Oracle Database
+ * "SODA Collection Metadata Components (Reference)" documentation.
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatecollectionoptions
+ * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-collection-metadata-components-reference.html
+ */
+interface ICreateCollectionOptions {
+    metaData?: Record<string, any>;
+    mode?: number;
+}
+/**
+ * SodaDatabase.createDocument() options.
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatedocumentoptions
+ */
+interface ICreateDocumentOptions {
+    key?: string;
+    mediaType?: string;
+}
+/**
+ * SodaDatabase.getCollectionNames() options.
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbgetcollectionnamesoptions
+ */
+interface IGetCollectionNameOptions {
+    limit?: number;
+    startsWith?: string;
+}
+/**
+ * SodaCollection.dropIndex() options.
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropindexoptions
+ */
+interface IDropIndexOptions {
+    force?: boolean;
+}
+/**
+ * SodaCollection.drop() return value.
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropcallback
+ */
+interface IDropResult {
+    dropped: boolean;
+}
+/**
+ * SodaCollection.dropIndex() result.
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropindexcb
+ */
+interface IDropIndexResult {
+    dropped: boolean;
+}
+/**
+ * SodaOperation.count() result.
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasscount
+ */
+interface ICountResult {
+    count: number;
+}
+/**
+ * SodaOperation.remove() result.
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassremove
+ */
+interface IRemoveResult {
+    count: number;
+}
+/**
+ * SodaOperation.replace() result.
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassreplaceone
+ */
+interface IReplaceResult {
+    replaced: boolean;
+}
+/**
+ * SODA database access class. SodaDatabase is the top level object for
+ * SODA operations. A 'SODA database' is an abstraction, allowing access to SODA
+ * collections in that 'SODA database', which then allow access to documents in
+ * those collections.
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadatabaseclass
+ */
+export abstract class ISodaDatabase {
+    /**
+     * Creates a SODA collection of the given name.
+     * If a collection with the same name already exists,
+     * then that existing collection is opened without error.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatecollection
+     * @param collectionName name of the collection to be created.
+     * @param options the options that specify the collection, see
+     *        CreateCollectionOptions.
+     * @return a new SodaCollection object.
+     */
+    abstract createCollection(collectionName: string, options?: ICreateCollectionOptions): ISodaCollection;
+    /**
+     * Constructs a proto SodaDocument object usable for SODA insert and replace
+     * methods. SodaDocument attributes like createdOn will not be defined, and
+     * neither will attributes valid in options but not specified. The document
+     * will not be stored in the database until an insert or replace method is
+     * called.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatedocument
+     * @param content the document content.
+     * @param options the options that specify the document, see
+     *                CreateDocumentOptions.
+     * @return a new SodaDocument object.
+     */
+    abstract createDocument(content: string | Uint8Array | Record<string, any>, options?: ICreateDocumentOptions): ISodaDocument;
+    /**
+     * Gets an array of collection names in alphabetical order.
+     * Returns names that start with the given string, and all subsequent names,
+     * in alphabetic order.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbgetcollectionnames
+     * @param options see GetCollectionNameOptions.
+     * @return an array of matching collection names.
+     */
+    abstract getCollectionNames(options?: IGetCollectionNameOptions): Array<string>;
+    /**
+     * Opens an existing SodaCollection of the given name.
+     * The collection can then be used to access documents.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbopencollection
+     * @param collectionName the name of the collection to open.
+     * @return a new SodaCollection object if the collection exists.
+     *         If the requested collection does not exist undefined will be
+     *         returned.
+     */
+    abstract openCollection(collectionName: string): ISodaCollection;
+}
+/**
+ * SODA collection class. A SODA collection is a set of SodaDocuments.
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollectionclass
+ */
+abstract class ISodaCollection {
+    /**
+     * Name of the collection.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollectionproperties
+     */
+    abstract get name(): string;
+    /**
+     * Metadata for the collection. The metadata will conform to the JSON object
+     * layout specified in the Oracle Database
+     * "SODA Collection Metadata Components (Reference)" documentation.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollectionproperties
+     * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-collection-metadata-components-reference.html
+     */
+    abstract get metaData(): Record<string, any>;
+    /**
+     * Creates an index on a SODA collection, to improve the performance of SODA
+     * query-by-examples (QBE) or enable text searches. Different index types can
+     * be created, the indexSpec parameter must conform to the JSON object layout
+     * specified in the Oracle Database "SODA Index Specifications (Reference)"
+     * documentation.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollcreateindex
+     * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-index-specifications-reference.html
+     * @param indexSpec index specification,
+     *        see "SODA Index Specifications (Reference)"
+     * @throws an exception if the index creation fails.
+     */
+    abstract createIndex(indexSpec: Record<string, any>): void;
+    /**
+     * Drops the current collection.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldrop
+     * @return a DropResult containing a dropped value of true if the drop
+     * operation succeeded or false if the collection does not exist.
+     * @throws an exception if the collection drop fails.
+     */
+    abstract drop(): IDropResult;
+    /**
+     * Drops the specified index.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropindex
+     * @param indexName the name of the index to drop
+     * @param options an optional force flag may be specified
+     * @return a DropIndexResult containing a dropped value of true if the
+     * drop index operation succeeded or false if the index doesn't exist.
+     * @throws an exception if the index drop fails.
+     */
+    abstract dropIndex(indexName: string, options?: IDropIndexOptions): IDropIndexResult;
+    /**
+     * Locate and order a set of SODA documents for retrieval, replacement,
+     * or removal.
+     * with non-terminal and terminal methods, see SodaOperation for details.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollfind
+     * @return a SodaOperation object which is used via method chaining
+     */
+    abstract find(): ISodaOperation;
+    /**
+     * Infers the schema of a collection of JSON documents.
+     * The data guide is represented as JSON content in a SodaDocument.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollgetdataguide
+     * @return a new SodaDocument containing the inferred schema.
+     * @throws an exception if the schema inference fails.
+     */
+    abstract getDataGuide(): ISodaDocument;
+    /**
+     * Inserts an array of Objects or SodaDocuments into the collection.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertmany
+     * @param docs an array of Objects or SodaDocuments to be inserted into the
+     *             collection.
+     * @throws an exception if a document insertion fails. The offset attribute on
+     * the Error object will contain the number of documents that were
+     * successfully inserted. Subsequent documents in the input array will not be
+     * inserted.
+     */
+    abstract insertMany(docs: Array<Record<string, any> | ISodaDocument>): void;
+    /**
+     * Inserts an array of Objects or SodaDocuuments into the collection and
+     * returns the documents which contain all SodaDocument components except for
+     * content, for performance reasons.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertmanyandget
+     * @param docs an array of Objects or SodaDocuments to be inserted into the
+     *             collection.
+     * @return an array of inserted SodaDocuments.
+     * @throws an exception if a document insertion fails. The offset attribute on
+     * the Error object will contain the number of documents that were
+     * successfully inserted. Subsequent documents in the input array will not be
+     * inserted.
+     */
+    abstract insertManyAndGet(docs: Array<Record<string, any> | ISodaDocument>): Array<ISodaDocument>;
+    /**
+     * Inserts a given document to the collection. The input document can be
+     * either a JavaScript object representing the data content, or it can be an
+     * existing SodaDocument.,
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertone
+     * @param doc an Object or SodaDocument to insert into the collection.
+     * @throws an exception if insertion fails.
+     */
+    abstract insertOne(doc: Record<string, any> | ISodaDocument): void;
+    /**
+     * Inserts a document in a collection and returns the result document which
+     * contains all SodaDocument components except for content, for performance
+     * reasons.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertoneandget
+     * @param doc the Object or SodaDoc to insert into the collection.
+     * @return the inserted SodaDocument.
+     * @throws an exception if insertion fails.
+     */
+    abstract insertOneAndGet(doc: Record<string, any> | ISodaDocument): ISodaDocument;
+    /**
+     * This method behaves like sodaCollection.insertOne() with the exception that
+     * if a document with the same key already exists, then it is updated instead.
+     * The collection must use client-assigned keys, which is why save()
+     * accepts only a SodaDocument, unlike insertOne(). If the collection is not
+     * configured with client-assigned keys, then the behaviour is exactly the
+     * same as sodaCollection.insertOne().
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#user-content-sodacollsave
+     * @param doc the document to save.
+     */
+    abstract save(doc: ISodaDocument): void;
+    /**
+     * This method behaves like sodaCollection.insertOneAndGet() with the
+     * exception that if a document with the same key already exists, then it is
+     * updated instead. The collection must use client-assigned keys keys, which
+     * is why saveAndGet() accepts only a SodaDocument, unlike insertOneAndGet().
+     * If the collection is not configured with client-assigned keys, then the
+     * behaviour is exactly the same as sodaCollection.insertOneAndGet().
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#user-content-sodacollsaveandget
+     * @param doc the document to save.
+     * @return the saved document.
+     */
+    abstract saveAndGet(doc: ISodaDocument): ISodaDocument;
+    /**
+     * This method truncates a collection, removing all documents. The collection
+     * will not be deleted.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#user-content-sodacolltruncate
+     * @throws an exception if truncation fails.
+     */
+    abstract truncate(): any;
+}
+/**
+ * SODA find operation class. This class is used to search and retrieve SODA
+ * documents from a SodaCollection. It provides non-terminal search condition
+ * operations and terminal SodaDocument retrieval operations.
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclass
+ */
+abstract class ISodaOperation {
+    /**
+     * Non-terminals.
+     */
+    /**
+     * Sets the size of an internal buffer used for fetching documents from a
+     * collection with the terminal SodaOperation methods getCursor() and
+     * getDocuments().
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassfetcharraysize
+     * @param size the buffer size to use.
+     * @return the SodaOperation object.
+     */
+    abstract fetchArraySize(size: number): ISodaOperation;
+    /**
+     * Sets a filter specification for the operation, allowing for complex
+     * document queries and ordering of JSON documents. Refer to
+     * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/overview-soda-filter-specifications-qbes.html
+     * and
+     * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-filter-specifications-reference.html
+     * for details of filter specifications.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassfilter
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaqbesearches
+     * @param filter the filter specification to use.
+     * @return the SodaOperation object.
+     */
+    abstract filter(filter: Record<string, any>): ISodaOperation;
+    /**
+     * Sets the key value to be used to match a document for the operation.
+     * Any previous calls made to this method or keys() will be ignored.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasskey
+     * @param key the search key to use.
+     * @return the SodaOperation object.
+     */
+    abstract key(key: string): ISodaOperation;
+    /**
+     * Sets the keys to be used to match multiple documents for the operation.
+     * Any previous calls made to this method or key() will be ignored.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasskeys
+     * @param keys the search keys to use.
+     * @return the SodaOperation object.
+     */
+    abstract keys(keys: Array<string>): ISodaOperation;
+    /**
+     * Sets the maximum number of documents that a terminal method will apply to.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasslimit
+     * @param n the maximum number of documents to return. Must be greater than 0.
+     * @return the SodaOperation object.
+     */
+    abstract limit(n: number): ISodaOperation;
+    /**
+     * Sets the number of documents that will be skipped before the terminal
+     * method is applied. n must be greater than or equal to 0.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationskip
+     * @param n the number of documents to skip.
+     * @return the SodaOperation object.
+     */
+    abstract skip(n: number): ISodaOperation;
+    /**
+     * Sets the document version that retrieved documents must have.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassversion
+     * @param value the version of retrieved documents.
+     * @return the SodaOperation object.
+     */
+    abstract version(value: string): ISodaOperation;
+    /**
+     * Terminals.
+     */
+    /**
+     * Returns the number of documents matching the given SodaOperation query
+     * criteria. If skip() or limit() are set, then an exception will be thrown.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasscount
+     * @return a result object with a count field containing the number of
+     * matching documents.
+     * @throws an exception id skip() or limit() are set.
+     */
+    abstract count(): ICountResult;
+    /**
+     * Returns a SodaDocumentCursor for documents that match the SodaOperation
+     * query criteria.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassgetcursor
+     * @return a cursor that can be used to iterate over the matched documents.
+     */
+    abstract getCursor(): ISodaDocumentCursor;
+    /**
+     * Gets an array of SodaDocuments matching the SodaOperation query criteria.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#-824123-sodaoperationgetdocuments
+     * @return an array of documents, empty if none match.
+     */
+    abstract getDocuments(): Array<ISodaDocument>;
+    /**
+     * Obtains one document matching the SodaOperation query criteria.
+     * If more than one document is matched, then only the first is returned.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassgetone
+     * @return the first matching document, or undefined if none match.
+     */
+    abstract getOne(): ISodaDocument;
+    /**
+     * Removes a set of documents matching the SodaOperation query criteria.
+     * If skip() or limit(0 are set they are ignored.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassremove
+     * @return a result object with a count field containing the number of
+     * removed documents.
+     */
+    abstract remove(): IRemoveResult;
+    /**
+     * Replaces a document in a collection. The input document can be either a
+     * JavaScript object representing the data content, or it can be an existing
+     * SodaDocument. The key() non-terminal must be used when using replaceOne().
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassreplaceone
+     * @param newDoc the new content or SodaDocument.
+     * @return a result object with a boolean replaced field which will be
+     * true if the document was replaced successfully and false otherwise.
+     */
+    abstract replaceOne(newDoc: Record<string, any> | ISodaDocument): IReplaceResult;
+    /**
+     * Replaces a document in a collection and return the result document which
+     * contains all SodaDocument components except for the content.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassreplaceoneandget
+     * @param newDoc the new content or SodaDocument.
+     * @return The updated SodaDocument if replacement was successful, otherwise
+     *         undefined.
+     */
+    abstract replaceOneAndGet(newDoc: Record<string, any> | ISodaDocument): ISodaDocument;
+}
+/**
+ * SODA document cursor class.
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocumentcursorclass
+ * A SodaDocumentCursor is used to walk through a set of SODA documents returned
+ * from a find() getCursor() method.
+ */
+abstract class ISodaDocumentCursor {
+    /**
+     * Close the cursor.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadoccursorclose
+     */
+    abstract close(): void;
+    /**
+     * Returns the next SodaDocument in the cursor returned by a find().
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadoccursorgetnext
+     * @return the next document, or undefined when there are no further
+     * documents.
+     */
+    abstract getNext(): ISodaDocument;
+}
+/**
+ * SODA document class. SodaDocuments represents the document for SODA read and
+ * write operations.
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocumentclass
+ */
+abstract class ISodaDocument {
+    /**
+     * SODA document properties.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocumentproperties
+     */
+    /**
+     * The creation time of the document as a string in the UTC time zone using an
+     * ISO8601 format. By default, SODA sets this automatically.
+     */
+    readonly createdOn: string;
+    /**
+     * A unique key value for this document. By default, SODA automatically
+     * generates the key.
+     */
+    readonly key: string;
+    /**
+     * Last modified time of the document as a string in the UTC time zone using
+     * an ISO8601 format. By default, SODA sets this automatically.
+     */
+    readonly lastModified: string;
+    /**
+     * An arbitrary string value designating the content media type. The
+     * recommendation when creating documents is to use a MIME type for the media
+     * type. By default this property will be 'application/json'.
+     */
+    readonly mediaType: string;
+    /**
+     * Version of the document. By default, SODA automatically updates the version
+     * each time the document is changed.
+     */
+    readonly version: string;
+    /**
+     * Return the document content as an object.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocgetcontent
+     * @return the document content as an object.
+     * @throws an exception if the document content is not JSON and cannot be
+     * converted to an object.
+     */
+    abstract getContent(): Record<string, any>;
+    /**
+     * Return the document content as a Uint8Array. If the collection storage is
+     * BLOB (default) and the mediaType is 'application/json', then the returned
+     * Uint8Array is identical to the one that was stored. If the storage is not
+     * BLOB, it is UTF-8 encoded.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocgetcontentasbuffer
+     * @return the document content as a Uint8Array.
+     */
+    abstract getContentAsUint8Array(): Uint8Array;
+    /**
+     * Return JSON document content as a string. If the document encoding is
+     * unknown, UTF-8 will be used.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocgetcontentasstring
+     * @return the document content as a string.
+     */
+    abstract getContentAsString(): string;
+}
+
+/** Copyright (c) 2019, 2023, Oracle and/or its affiliates. */
+
+/**
+ * Custom class for errors thrown by {@link execute}() or {@link executeMany}().
+ */
+interface IError extends Error {
     /**
      * The Oracle error number. This value is undefined for non-Oracle errors.
      */
     errorNum?: number;
-    /**
-     * The text of the error message.
-     */
-    message: string;
     /**
      * The character offset into the SQL text that resulted in the Oracle
      * error. The value may be 0 in non-SQL contexts. This value is undefined
@@ -64,8 +538,8 @@ interface IError {
 */
 interface IFetchInfoColumnSpec {
     /**
-     * The JavaScript data type to be fetched. One of the
-     * mle-js-oracledb JS Type Constants, see {@link javaScriptType}.
+     * The JavaScript data type to be fetched. One of the mle-js-oracledb JS
+     * Type Constants.
      */
     type: JsType;
 }
@@ -130,8 +604,8 @@ interface IBindDef {
      */
     maxSize?: number;
     /**
-     * The JavaScript data type to be bound. One of the
-     * mle-js-oracledb JS Type Constants, see {@link javaScriptType}.
+     * The JavaScript data type to be bound. One of the mle-js-oracledb JS Type
+     * Constants.
      */
     type: JsType;
 }
@@ -148,7 +622,7 @@ type ArrayBindDefs = IBindDef[];
 /**
  * Interface for BindDefs which are either Array- or Object BindDefs.
  */
-type BindDefs = IObjectBindDefs | ArrayBindDefs;
+type ExecuteManyBindDefs = IObjectBindDefs | ArrayBindDefs;
 /**
  * Interface for the options used in {@link executeMany}().
  */
@@ -166,7 +640,8 @@ interface IExecuteManyOptions {
      * the keys dir, maxSize, and type for each bind variable, similar to how
      * {@link execute} bind parameters are defined (see {@link IBindDef}).
      */
-    bindDefs?: BindDefs;
+    bindDefs?: ExecuteManyBindDefs;
+    dmlRowCounts?: boolean;
 }
 /**
  * Interface representing meta data as used in {@link IResultSet}s and statement info.
@@ -178,7 +653,7 @@ interface IMetaData {
      */
     name: string;
     /**
-     * One of the mle-js-oracledb JS Type Constants, see {@link javaScriptType}.
+     * One of the mle-js-oracledb JS Type Constants.
      */
     fetchType?: JsType;
     /**
@@ -203,11 +678,15 @@ interface IMetaData {
      * Indicates whether NULL values are permitted for this column.
      */
     nullable?: boolean;
+    /**
+     * Name of the database type, such as “NUMBER” or “VARCHAR2”.
+     */
+    dbTypeName?: string;
 }
 /**
  * Interface for representing result sets as returned by {@link execute}().
  */
-interface IResultSet {
+abstract class IResultSet {
     /**
      * Contains an array of objects with metadata about the query.
      *
@@ -222,7 +701,7 @@ interface IResultSet {
      *
      * It must also be called if no rows will ever be fetched from the result set.
      */
-    close(): any;
+    abstract close(): any;
     /**
      * This call fetches one row of the result set as an object or an array of
      * column values, depending on the value of outFormat.
@@ -232,17 +711,20 @@ interface IResultSet {
      * Performance of getRow() can be tuned by adjusting the value of
      * {@link fetchArraySize}.
      */
-    getRow(): any;
+    abstract getRow(): any;
     /**
      * This call fetches numRows rows of the result set as an object or an array of
      * column values, depending on the value of outFormat.
+     *
+     * @param numRows specifies the number of rows to be returned.
+     * the default value of numRows is 0 and it returns all rows.
      *
      * At the end of fetching, the result set must be freed by calling {@link close}().
      *
      * Performance of getRows() can be tuned by adjusting the value of
      * {@link fetchArraySize}.
      */
-    getRows(numRows: number): any[];
+    abstract getRows(numRows: number): any[];
     /**
      * Convenience function for getting an iterator of this IResultSet.
      *
@@ -253,7 +735,7 @@ interface IResultSet {
      * @throws {@link IError} if the result set has already been closed
      * @throws {@link IError} if the result set is already being iterated over
      */
-    iterator(): IterableIterator<any>;
+    abstract iterator(): IterableIterator<any>;
     /**
      * This function defines the default iterator for a result set which can be
      * used to iterate over its rows. Using the default iterator, a result set
@@ -263,7 +745,7 @@ interface IResultSet {
      * @throws {@link IError} if the result set is already being iterated over
      *
      */
-    [Symbol.iterator](): IterableIterator<any>;
+    abstract [Symbol.iterator](): IterableIterator<any>;
 }
 /**
  * Interface for the result of {@link execute}().
@@ -351,11 +833,11 @@ interface IBindObjectValue {
      */
     maxSize?: number;
     /**
-     * The JavaScript data type to be bound. One of the
-     * mle-js-oracledb JS Constants, see {@link javaScriptType}.  With IN or
-     * INOUT binds the type can be explicitly set with type or it will default
-     * to the type of the input data value. With OUT binds, the type defaults to
-     * {@link STRING} whenever type is not specified.
+     * The JavaScript data type to be bound. One of the mle-js-oracledb JS
+     * Constants.  With IN or INOUT binds the type can be explicitly set with
+     * type or it will default to the type of the input data value. With OUT
+     * binds, the type defaults to {@link STRING} whenever type is not
+     * specified.
      */
     type?: number;
     /**
@@ -408,7 +890,7 @@ interface IStatementInfo {
 /**
  * Interface for the connection object obtained by {@link defaultConnection}.
  */
-interface IConnection {
+export abstract class IConnection {
     /**
      * This read-only property gives a numeric representation of the Oracle
      * database version which is useful in comparisons. For version a.b.c.d.e,
@@ -429,7 +911,7 @@ interface IConnection {
     /**
      * This call commits the current transaction in progress.
      */
-    commit(): void;
+    abstract commit(): void;
     /**
      * This call executes a single SQL or PL/SQL statement.
      *
@@ -451,8 +933,8 @@ interface IConnection {
      * @param options an optional parameter to execute() that may be used to
      * control statement execution.
      */
-    execute(sql: string): IExecuteReturn;
-    execute(sql: string, bindParams: BindParameters, options?: IExecuteOptions): IExecuteReturn;
+    abstract execute(sql: string): IExecuteReturn;
+    abstract execute(sql: string, bindParams: BindParameters, options?: IExecuteOptions): IExecuteReturn;
     /**
      * This method allows sets of data values to be bound to one DML or PL/SQL
      * statement for execution. It is like calling {@link execute}() multiple
@@ -502,8 +984,8 @@ interface IConnection {
      * @param options The options parameter is optional. It can contain the
      * properties specified in {@link IExecuteManyOptions}.
      */
-    executeMany(sql: string, binds: BindParameters[], options?: IExecuteManyOptions): IExecuteManyReturn;
-    executeMany(sql: string, numIterations: number, options?: IExecuteManyOptions): IExecuteManyReturn;
+    abstract executeMany(sql: string, binds: BindParameters[], options?: IExecuteManyOptions): IExecuteManyReturn;
+    abstract executeMany(sql: string, numIterations: number, options?: IExecuteManyOptions): IExecuteManyReturn;
     /**
      * Parses a SQL statement and returns information about it. This is most
      * useful for finding column names of queries, and for finding the names of
@@ -520,86 +1002,107 @@ interface IConnection {
      *
      * @param sql SQL statement to parse.
      */
-    getStatementInfo(sql: string): IStatementInfo;
+    abstract getStatementInfo(sql: string): IStatementInfo;
     /**
      * This call rolls back the current transaction in progress.
      */
-    rollback(): void;
+    abstract rollback(): void;
+    /**
+     * Returns a parent SodaDatabase object.
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#getsodadatabase
+     * @return a new SodaDatabase object.
+     */
+    abstract getSodaDatabase(): ISodaDatabase;
 }
 /**
  * Type for mle-js-oracledb Query OutFormat Constants.
  */
 type OutFormatType = number;
 /**
+ * Fetch each row as array of column values
+ * This constant is deprecated. Use OUT_FORMAT_ARRAY instead.
+ */
+const ARRAY: OutFormatType;
+/**
  * Fetch each row as array of column values.
  */
-export const ARRAY: OutFormatType;
+const OUT_FORMAT_ARRAY: OutFormatType;
+/**
+ * Fetch each row as an object
+ * This constant is deprecated. Use OUT_FORMAT_OBJECT instead.
+ */
+const OBJECT: OutFormatType;
 /**
  * Fetch each row as an object of column values.
  */
-export const OBJECT: OutFormatType;
-/**
- * Type for mle-js-oracledb JS Type Constants.
- */
+const OUT_FORMAT_OBJECT: OutFormatType;
 type JsType = number;
 /**
  * Used with fetchInfo to reset the fetch type to the database type
  */
-export const DEFAULT: JsType;
+const DEFAULT: JsType;
 /**
  * Bind as JavaScript String type. It can be used for most database types.
  */
-export const STRING: JsType;
+const STRING: JsType;
 /**
  * Bind as JavaScript number type. It can also be used for fetchAsString and
  * fetchInfo.
  */
-export const NUMBER: JsType;
+const NUMBER: JsType;
 /**
  * Bind as JavaScript date type. It can also be used for fetchAsString and
  * fetchInfo.
  */
-export const DATE: JsType;
-/**
- * Bind a NUMBER to an OracleNumber object.
- */
-export const ORACLE_NUMBER: JsType;
-/**
- * Bind a DATE to an OracleDate object.
- */
-export const ORACLE_DATE: JsType;
-/**
- * Bind a BLOB to an OracleBLOB object.
- */
-export const ORACLE_BLOB: JsType;
-/**
- * Bind a CLOB to an OracleCLOB object.
- */
-export const ORACLE_CLOB: JsType;
-/**
- * Bind a INTERVAL DAY TO SECOND to an OracleIntervalDayToSecond object.
- */
-export const ORACLE_INTERVAL_DS: JsType;
-/**
- * Bind a INTERVAL YEAR TO MONTH to an OracleIntervalYearToMonth object.
- */
-export const ORACLE_INTERVAL_YM: JsType;
+const DATE: JsType;
 /**
  * Bind a JavaScript boolean to a PL/SQL BOOLEAN.
  */
-export const BOOLEAN: JsType;
+const BOOLEAN: JsType;
+/**
+ * Bind a NUMBER to an OracleNumber object.
+ */
+const ORACLE_NUMBER: JsType;
+/**
+ * Bind a DATE to an OracleDate object.
+ */
+const ORACLE_DATE: JsType;
+/**
+ * Bind a BLOB to an OracleBLOB object.
+ */
+const ORACLE_BLOB: JsType;
+/**
+ * Bind a CLOB to an OracleCLOB object.
+ */
+const ORACLE_CLOB: JsType;
+/**
+ * Bind a INTERVAL DAY TO SECOND to an OracleIntervalDayToSecond object.
+ */
+const ORACLE_INTERVAL_DS: JsType;
+/**
+ * Bind a INTERVAL YEAR TO MONTH to an OracleIntervalYearToMonth object.
+ */
+const ORACLE_INTERVAL_YM: JsType;
+/**
+ * Bind a NCLOB to a OracleNCLOB object.
+ */
+const ORACLE_NCLOB: JsType;
 /**
  * Bind a RAW, LONG RAW or BLOB to a Uint8Array typed array.
  */
-export const UINT8ARRAY: JsType;
+const UINT8ARRAY: JsType;
 /**
  * Bind a TIMESTAMP to an OracleTimestamp object.
  */
-export const ORACLE_TIMESTAMP: JsType;
+const ORACLE_TIMESTAMP: JsType;
 /**
  * Bind a TIMESTAMP WITH TIME ZONE or TIMESTAMP WITH LOCAL TIME ZONE to an OracleTimestampTZ object.
  */
-export const ORACLE_TIMESTAMP_TZ: JsType;
+const ORACLE_TIMESTAMP_TZ: JsType;
+/**
+ * Bind a DTYDJSON value.
+ */
+const ORACLE_JSON: JsType;
 /**
  * Type for mle-js-oracledb Database Type Constants.
  */
@@ -607,167 +1110,181 @@ type DbType = number;
 /**
  * VARCHAR2
  */
-export const DB_TYPE_VARCHAR: DbType;
+const DB_TYPE_VARCHAR: DbType;
 /**
  * NUMBER or FLOAT
  */
-export const DB_TYPE_NUMBER: DbType;
+const DB_TYPE_NUMBER: DbType;
 /**
  * LONG
  */
-export const DB_TYPE_LONG: DbType;
+const DB_TYPE_LONG: DbType;
 /**
  * DATE
  */
-export const DB_TYPE_DATE: DbType;
+const DB_TYPE_DATE: DbType;
 /**
  * RAW
  */
-export const DB_TYPE_RAW: DbType;
+const DB_TYPE_RAW: DbType;
 /**
  * LONG RAW
  */
-export const DB_TYPE_LONG_RAW: DbType;
+const DB_TYPE_LONG_RAW: DbType;
 /**
  * CHAR
  */
-export const DB_TYPE_BINARY_FLOAT: DbType;
+const DB_TYPE_CHAR: DbType;
+/**
+ * BINARY_FLOAT
+ */
+const DB_TYPE_BINARY_FLOAT: DbType;
 /**
  * BINARY_DOUBLE
  */
-export const DB_TYPE_BINARY_DOUBLE: DbType;
+const DB_TYPE_BINARY_DOUBLE: DbType;
 /**
  * BINARY_INTEGER
  */
-export const DB_TYPE_BINARY_INTEGER: DbType;
+const DB_TYPE_BINARY_INTEGER: DbType;
 /**
  * ROWID
  */
-export const DB_TYPE_ROWID: DbType;
+const DB_TYPE_ROWID: DbType;
 /**
  * CLOB
  */
-export const DB_TYPE_CLOB: DbType;
+const DB_TYPE_CLOB: DbType;
 /**
  * BLOB
  */
-export const DB_TYPE_BLOB: DbType;
+const DB_TYPE_BLOB: DbType;
 /**
  * TIMESTAMP
  */
-export const DB_TYPE_TIMESTAMP: DbType;
+const DB_TYPE_TIMESTAMP: DbType;
 /**
  * TIMESTAMP WITH TIME ZONE
  */
-export const DB_TYPE_TIMESTAMP_TZ: DbType;
+const DB_TYPE_TIMESTAMP_TZ: DbType;
 /**
  * INTERVAL YEAR TO MONTH
  */
-export const DB_TYPE_INTERVAL_YM: DbType;
+const DB_TYPE_INTERVAL_YM: DbType;
 /**
  * INTERVAL DAY TO SECOND
  */
-export const DB_TYPE_INTERVAL_DS: DbType;
+const DB_TYPE_INTERVAL_DS: DbType;
 /**
  * UROWID
  */
-export const DB_TYPE_UROWID: DbType;
+const DB_TYPE_UROWID: DbType;
 /**
  * BOOLEAN
  */
-export const DB_TYPE_BOOLEAN: DbType;
+const DB_TYPE_BOOLEAN: DbType;
 /**
  * TIMESTAMP WITH LOCAL TIME ZONE
  */
-export const DB_TYPE_TIMESTAMP_LTZ: DbType;
+const DB_TYPE_TIMESTAMP_LTZ: DbType;
 /**
  * NVARCHAR
  */
-export const DB_TYPE_NVARCHAR: DbType;
+const DB_TYPE_NVARCHAR: DbType;
 /**
  * NCHAR
  */
-export const DB_TYPE_NCHAR: DbType;
+const DB_TYPE_NCHAR: DbType;
 /**
  * NCLOB
  */
-export const DB_TYPE_NCLOB: DbType;
+const DB_TYPE_NCLOB: DbType;
+/**
+ * JSON
+ */
+const DB_TYPE_JSON: DbType;
 /**
  * Direction for IN binds
  */
-export const BIND_IN = 3001;
+const BIND_IN = 3001;
 /**
  * Direction for INOUT binds
  */
-export const BIND_INOUT = 3002;
+const BIND_INOUT = 3002;
 /**
  * Direction for OUT binds
  */
-export const BIND_OUT = 3003;
+const BIND_OUT = 3003;
 /**
  * Unknown statement type
  */
-export const STMT_TYPE_UNKNOWN = 0;
+const STMT_TYPE_UNKNOWN = 0;
 /**
  * SELECT
  */
-export const STMT_TYPE_SELECT = 1;
+const STMT_TYPE_SELECT = 1;
 /**
  * UPDATE
  */
-export const STMT_TYPE_UPDATE = 2;
+const STMT_TYPE_UPDATE = 2;
 /**
  * DELETE
  */
-export const STMT_TYPE_DELETE = 3;
+const STMT_TYPE_DELETE = 3;
 /**
  * INSERT
  */
-export const STMT_TYPE_INSERT = 4;
+const STMT_TYPE_INSERT = 4;
 /**
  * CREATE
  */
-export const STMT_TYPE_CREATE = 5;
+const STMT_TYPE_CREATE = 5;
 /**
  * DROP
  */
-export const STMT_TYPE_DROP = 6;
+const STMT_TYPE_DROP = 6;
 /**
  * ALTER
  */
-export const STMT_TYPE_ALTER = 7;
+const STMT_TYPE_ALTER = 7;
 /**
  * BEGIN
  */
-export const STMT_TYPE_BEGIN = 8;
+const STMT_TYPE_BEGIN = 8;
 /**
  * DECLARE
  */
-export const STMT_TYPE_DECLARE = 9;
+const STMT_TYPE_DECLARE = 9;
 /**
  * CALL
  */
-export const STMT_TYPE_CALL = 10;
+const STMT_TYPE_CALL = 10;
 /**
  * EXPLAIN PLAN
  */
-export const STMT_TYPE_EXPLAIN_PLAN = 15;
+const STMT_TYPE_EXPLAIN_PLAN = 15;
 /**
  * MERGE
  */
-export const STMT_TYPE_MERGE = 16;
+const STMT_TYPE_MERGE = 16;
 /**
  * ROLLBACK
  */
-export const STMT_TYPE_ROLLBACK = 17;
+const STMT_TYPE_ROLLBACK = 17;
 /**
  * COMMIT
  */
-export const STMT_TYPE_COMMIT = 21;
+const STMT_TYPE_COMMIT = 21;
+/**
+ * SODA_COLL_MAP_MODE
+ */
+const SODA_COLL_MAP_MODE = 5001;
 /**
  * Class for representing global mle-js-oracledb properties.
  */
 class Parameters {
+    private _maxRows;
+    get maxRows(): number;
     /**
      * The maximum number of rows that are fetched by a query with
      * connection.{@link execute}() when not using an {@link IResultSet}. Rows
@@ -788,19 +1305,22 @@ class Parameters {
      * being exceeded or query results being unexpectedly truncated by a maxRows
      * limit.
      */
-    private _maxRows;
-    get maxRows(): number;
     set maxRows(value: number);
+    private _outFormat;
+    get outFormat(): OutFormatType;
     /**
      * The format of query rows fetched when using connection.{@link execute}().
      * It affects both IResultSet and non-IResultSet queries. This can be either
-     * of the constants {@link ARRAY} or {@link OBJECT}. The default value is
-     * {@link ARRAY}.
+     * of the constants {@link OUT_FORMAT_ARRAY} or {@link OUT_FORMAT_OBJECT}. The
+     * default value is {@link OUT_FORMAT_ARRAY} when requiring the module
+     * "mle-js-oracledb" (in Oracle 21c). Oracle 23c introduces and encourages the
+     * use of ECMAScript imports (import oracledb from "mle-js-oracledb") and if
+     * those are used, the default value is {@link OUT_FORMAT_OBJECT}.
      *
-     * If specified as {@link ARRAY}, each row is fetched as an array of column
+     * If specified as {@link OUT_FORMAT_ARRAY}, each row is fetched as an array of column
      * values.
      *
-     * If specified as {@link OBJECT}, each row is fetched as a JavaScript object.
+     * If specified as {@link OUT_FORMAT_OBJECT}, each row is fetched as a JavaScript object.
      * The object has a property for each column name, with the property value set
      * to the respective column value. The property name follows Oracle's standard
      * name-casing rules. It will commonly be uppercase since most applications
@@ -808,9 +1328,9 @@ class Parameters {
      *
      * This property may be overridden in an {@link execute}() call.
      */
-    private _outFormat;
-    get outFormat(): OutFormatType;
     set outFormat(value: OutFormatType);
+    private _fetchArraySize;
+    get fetchArraySize(): number;
     /**
      * This property sets the size of an internal buffer used for fetching query
      * rows from Oracle Database. Changing it may affect query performance but
@@ -834,8 +1354,6 @@ class Parameters {
      * internal buffer size will be based on the lesser of maxRows and
      * fetchArraySize.
      */
-    private _fetchArraySize;
-    get fetchArraySize(): number;
     set fetchArraySize(value: number);
     /**
      * Determines whether additional metadata is available for queries.
@@ -849,6 +1367,8 @@ class Parameters {
     private _extendedMetaData;
     get extendedMetaData(): boolean;
     set extendedMetaData(value: boolean);
+    private _fetchAsString;
+    get fetchAsString(): JsType[];
     /**
      * An array of mle-js-oracledb JS Type values. The valid types are {@link
      * DATE}, {@link NUMBER}, {@link UINT8ARRAY}, and {@link ORACLE_CLOB}. When
@@ -873,9 +1393,9 @@ class Parameters {
      * Individual query columns in {@link execute}() calls can override the
      * fetchAsString global property by using {@link fetchInfo}.
      */
-    private _fetchAsString;
-    get fetchAsString(): JsType[];
     set fetchAsString(value: JsType[]);
+    private _fetchAsUint8Array;
+    get fetchAsUint8Array(): JsType[];
     /**
      * An array of mle-js-oracledb JS Type values. Currently, the only valid type
      * is {@link ORACLE_BLOB}. When a BLOB column is queried with {@link
@@ -889,9 +1409,9 @@ class Parameters {
      * Individual query columns in {@link execute}() calls can override the
      * fetchAsUint8Array global property by using {@link fetchInfo}.
      */
-    private _fetchAsUint8Array;
-    get fetchAsUint8Array(): JsType[];
     set fetchAsUint8Array(value: JsType[]);
+    private _fetchAsPlsqlWrapper;
+    get fetchAsPlsqlWrapper(): JsType[];
     /**
      * An array of mle-js-oracledb JS Type values. The valid types are {@link
      * DATE}, {@link NUMBER}, and {@link STRING}. When any column having one of
@@ -910,27 +1430,126 @@ class Parameters {
      * Individual query columns in {@link execute}() calls can override the
      * fetchAsPlsqlWrapper global property by using {@link fetchInfo}.
      */
-    private _fetchAsPlsqlWrapper;
-    get fetchAsPlsqlWrapper(): JsType[];
     set fetchAsPlsqlWrapper(value: JsType[]);
 }
-/**
- * Object that holds the global mle-js-oracledb properties.
- */
-export const parameters: Parameters;
-/**
- * Returns the default connection object for executing SQL queries in the Oracle
- * Database using mle-js-oracledb. Note that since in MLE, JavaScript is
- * executed directly in the database, there is no need to establish a specific
- * connection which is why the default connection object should be used.
- *
- * @returns default connection object for executing SQL queries with mle-js-oracledb.
- */
-export function defaultConnection(): IConnection;
+
+/** Copyright (c) 2017, 2023, Oracle and/or its affiliates. */
+
+
+export class OracleDb {
+    OUT_FORMAT_ARRAY: number;
+    ARRAY: number;
+    OUT_FORMAT_OBJECT: number;
+    OBJECT: number;
+    DEFAULT: number;
+    STRING: number;
+    NUMBER: number;
+    DATE: number;
+    ORACLE_NUMBER: number;
+    ORACLE_DATE: number;
+    ORACLE_BLOB: number;
+    ORACLE_CLOB: number;
+    ORACLE_INTERVAL_DS: number;
+    ORACLE_INTERVAL_YM: number;
+    ORACLE_TIMESTAMP: number;
+    ORACLE_TIMESTAMP_TZ: number;
+    ORACLE_JSON: number;
+    UINT8ARRAY: number;
+    BOOLEAN: number;
+    DB_TYPE_VARCHAR: number;
+    DB_TYPE_NUMBER: number;
+    DB_TYPE_LONG: number;
+    DB_TYPE_DATE: number;
+    DB_TYPE_RAW: number;
+    DB_TYPE_LONG_RAW: number;
+    DB_TYPE_CHAR: number;
+    DB_TYPE_BINARY_FLOAT: number;
+    DB_TYPE_BINARY_DOUBLE: number;
+    DB_TYPE_BINARY_INTEGER: number;
+    DB_TYPE_ROWID: number;
+    DB_TYPE_UROWID: number;
+    DB_TYPE_BOOLEAN: number;
+    DB_TYPE_CLOB: number;
+    DB_TYPE_BLOB: number;
+    DB_TYPE_TIMESTAMP: number;
+    DB_TYPE_TIMESTAMP_TZ: number;
+    DB_TYPE_TIMESTAMP_LTZ: number;
+    DB_TYPE_NVARCHAR: number;
+    DB_TYPE_NCHAR: number;
+    DB_TYPE_NCLOB: number;
+    DB_TYPE_JSON: number;
+    DB_TYPE_INTERVAL_YM: number;
+    DB_TYPE_INTERVAL_DS: number;
+    BIND_IN: number;
+    BIND_INOUT: number;
+    BIND_OUT: number;
+    STMT_TYPE_UNKNOWN: number;
+    STMT_TYPE_SELECT: number;
+    STMT_TYPE_UPDATE: number;
+    STMT_TYPE_DELETE: number;
+    STMT_TYPE_INSERT: number;
+    STMT_TYPE_CREATE: number;
+    STMT_TYPE_DROP: number;
+    STMT_TYPE_ALTER: number;
+    STMT_TYPE_BEGIN: number;
+    STMT_TYPE_DECLARE: number;
+    STMT_TYPE_CALL: number;
+    STMT_TYPE_EXPLAIN_PLAN: number;
+    STMT_TYPE_MERGE: number;
+    STMT_TYPE_ROLLBACK: number;
+    STMT_TYPE_COMMIT: number;
+    SODA_COLL_MAP_MODE: number;
+    parameters: Parameters;
+    private _connection;
+    SodaCollection: typeof ISodaCollection;
+    SodaDatabase: typeof ISodaDatabase;
+    SodaDocument: typeof ISodaDocument;
+    SodaDocumentCursor: typeof ISodaDocumentCursor;
+    SodaOperation: typeof ISodaOperation;
+    OracleDb: typeof OracleDb;
+    Connection: typeof IConnection;
+    ResultSet: typeof IResultSet;
+    /**
+     * Construct a new OracleDb object for connecting and querying Oracle Database.
+     *
+     * @param useArrayFormat if set to true, {@link OUT_FORMAT_ARRAY} will be
+     * used as the default out format for SQL results, otherwise
+     * {@link OUT_FORMAT_OBJECT} will be used.
+     */
+    constructor(useArrayFormat?: boolean);
+    get outFormat(): OutFormatType;
+    set outFormat(value: OutFormatType);
+    get extendedMetaData(): boolean;
+    set extendedMetaData(value: boolean);
+    get fetchArraySize(): number;
+    set fetchArraySize(value: number);
+    get fetchAsPlsqlWrapper(): JsType[];
+    set fetchAsPlsqlWrapper(value: JsType[]);
+    get fetchAsString(): JsType[];
+    set fetchAsString(value: JsType[]);
+    get maxRows(): number;
+    set maxRows(value: number);
+    /**
+     * Returns the default connection object for executing SQL queries in the Oracle
+     * Database using mle-js-oracledb. Note that since in MLE, JavaScript is
+     * executed directly in the database, there is no need to establish a specific
+     * connection which is why the default connection object should be used.
+     *
+     * @returns default connection object for executing SQL queries with mle-js-oracledb.
+     */
+    defaultConnection(): IConnection;
+}
+
+/** Copyright (c) 2022, 2023, Oracle and/or its affiliates. */
+
+
+export const oracledb: OracleDb;
+export default oracledb;
+
 }
 
 declare module "mle-js-bindings" {
-//* Copyright (c) 2019, 2021, Oracle and/or its affiliates. /*
+/** Copyright (c) 2019, 2022, Oracle and/or its affiliates. */
 export enum JSTypes {
     /** Type String */
     STRING = 0,
@@ -940,10 +1559,6 @@ export enum JSTypes {
     DATE = 2,
     /** Type Boolean */
     BOOLEAN = 3,
-    /** Type CLOB */
-    CLOB = 4,
-    /** Type BLOB */
-    BLOB = 5,
     /** Type Object */
     OBJECT = 6,
     /** UINT8ARRAY */
@@ -963,7 +1578,9 @@ export enum JSTypes {
     /** Type OracleCLOB */
     ORACLE_CLOB = 14,
     /** Type OracleBLOB */
-    ORACLE_BLOB = 15
+    ORACLE_BLOB = 15,
+    /** Type DbTypeJson */
+    DB_TYPE_JSON = 16
 }
 /**
  * Import a value exported from PL/SQL into the current context
@@ -992,10 +1609,11 @@ export function importValue(name: string, jstype?: JSTypes): any;
  * @throws an exception (Invalid property name) if name is null, undefined or empty.
  */
 export function exportValue(name: string, value: any): void;
+
 }
 
 declare module "mle-js-plsqltypes" {
-//* Copyright (c) 2019, 2021, Oracle and/or its affiliates. /*
+/** Copyright (c) 2019, 2023, Oracle and/or its affiliates. */
 /**
  * JavaScript API for Oracle type TIMESTAMP.
  */
@@ -1244,7 +1862,7 @@ export class OracleNumber {
     trunc(decplace: OracleNumber | number): OracleNumber;
     /**
      * Scale the digits to the left and right of the decimal point.
-     * @param left maximum number of decimal digits to the left of the decimal point. it will not effect the number, but throw an exception if this value is exceeded.
+     * @param left maximum number of decimal digits to the left of the decimal point. It will not effect the number, but throw an exception if this value is exceeded.
      * @param right maximum number of decimal digits to the right of the decimal point. The number is rounded at this point. Negative values are allowed.
      * @returns a new scaled Oracle number scaled according to the arguments
      * @throws throws an exception if the number of left-hand-side digits is exceeded
@@ -1590,6 +2208,15 @@ export class OracleBlob {
      */
     freeTemporary(...args: any[]): void;
     /**
+     * Returns all the BLOB data as Uint8Array.
+     *
+     * For queries returning LOB columns, it can be more efficient to use
+     * fetchAsUint8Array, or fetchInfo instead of lob.getData().
+     *
+     * @throws Error if blob is too large.
+     */
+    getData(): Uint8Array;
+    /**
      * This method reads a piece of a BLOB, and returns the specified amount
      * into the buffer parameter, starting from an absolute offset from the
      * beginning of the BLOB. If the input offset points past the End of BLOB, a
@@ -1631,8 +2258,9 @@ export class IOracleClob {
      * SESSION duration.
      *
      * @param cache Specifies if CLOB should be read into buffer cache or not.
+     * @param isNClob If set to true will create a temporary NCLOB instead of regular CLOB.
      */
-    createTemporary(cache: boolean): any;
+    createTemporary(cache: boolean, isNClob?: boolean): any;
     /**
      * This method compares two entire CLOBs or parts of two CLOBs.
      *
@@ -1703,6 +2331,13 @@ export class IOracleClob {
      * @param buffer Data to write.
      */
     write(offset: number, buffer: string): any;
+    /**
+     * Returns all the CLOB/NCLOB data as string.
+
+     * For queries returning LOB columns, it can be more efficient to use
+     * fetchAsString, or fetchInfo instead of lob.getData().
+     */
+    getData(): string;
 }
 /**
  * JavaScript API for Oracle type TIMESTAMP WITH TIME ZONE.
@@ -2148,9 +2783,194 @@ export class IOracleDate {
      */
     isValid(): boolean;
 }
+
 }
 
-/* Copyright (c) 2022, 2022, Oracle and/or its affiliates. */
+declare module "mle-js-fetch" {
+/** Copyright (c) 2022, 2023, Oracle and/or its affiliates. */
+class Body {
+    #private;
+    /**
+     * Check if the contents of the body have been consumed.
+     */
+    get bodyUsed(): boolean;
+    /**
+     * Retrieve the contents of the body.
+     */
+    get body(): string | null;
+    constructor(body?: string | Body | null);
+    /**
+     * Consume the contents of the body as JSON.
+     */
+    json(): Promise<any>;
+    /**
+     * Consume the contents of the body as text.
+     */
+    text(): Promise<string>;
+    /**
+     * Unsupported operation.
+     */
+    arrayBuffer(): void;
+    /**
+     * Unsupported operation.
+     */
+    blob(): void;
+    /**
+     * Unsupported operation.
+     */
+    formData(): void;
+    protected _cloneBodyContent(): string | null;
+}
+
+/** Copyright (c) 2022, 2023, Oracle and/or its affiliates. */
+type HeadersInit = string[][] | Record<string, string> | Headers;
+class Headers {
+    #private;
+    /**
+     * Create a new instance given initial header values.
+     * @param init initial header values
+     */
+    constructor(init?: HeadersInit);
+    /**
+     * Retrieve a list of header values
+     * @param key the name of the header
+     * @returns a comma-separated list of values
+     */
+    get(key: string): string | null;
+    /**
+     * Set or override the header value
+     * @param key the name of the header
+     * @param value the new value
+     */
+    set(key: string, value: string): void;
+    /**
+     * Add a value to the list corresponding to a header
+     * @param key the name of the header
+     * @param value the value to add
+     */
+    append(key: string, value: string): void;
+    /**
+     * Check if a value of a header has been set
+     * @param name the name of the header
+     * @returns true if the header has been set, false otherwise
+     */
+    has(name: string): boolean;
+    /**
+     * Remove all values for a header
+     * @param name the name of the header
+     */
+    delete(name: string): void;
+    keys(): Generator<string>;
+    values(): Generator<string | null>;
+    entries(): Generator<[string, string | null]>;
+    forEach(func: (value: unknown, key: unknown, object: unknown) => void, thisValue?: unknown): void;
+}
+
+/** Copyright (c) 2022, 2023, Oracle and/or its affiliates. */
+
+
+export type RequestInfo = Request | string;
+export interface RequestInit {
+    method?: string;
+    body?: string;
+    headers?: HeadersInit;
+    credentials?: string;
+}
+/**
+ * Configures the way a resource is retrieved.
+ */
+class Request extends Body {
+    readonly method: string;
+    readonly url: string | null;
+    readonly headers: Headers;
+    credentials: string;
+    /**
+     * Create a new retrieval request.
+     *
+     * @param input a path to the resource to retrieve or a {@link Request} object to copy
+     * @param init additional configuration of the retrieval
+     */
+    constructor(input: RequestInfo, init?: RequestInit);
+    /**
+     * Create a deep copy of this request.
+     */
+    clone(): Request;
+}
+
+/** Copyright (c) 2022, 2023, Oracle and/or its affiliates. */
+
+
+type ResponseType = 'basic' | 'cors' | 'default' | 'error' | 'opaque' | 'opaqueredirect';
+interface ResponseInit {
+    status?: number;
+    statusText?: string;
+    headers?: Headers;
+}
+/**
+ * The result of a resource retrieval.
+ */
+class Response extends Body {
+    #private;
+    readonly url: string | null;
+    readonly statusText: string;
+    readonly headers: Headers;
+    /**
+     * Create a new retrieval result
+     *
+     * @param body the body of the result
+     * @param init additional metadata on the result of the retrieval
+     */
+    constructor(body?: string | null, init?: ResponseInit);
+    /**
+     * Create a new response that represents a network error.
+     */
+    static error(): Response;
+    /**
+     * Create a new response, whose body is JSON-encoded data
+     * @param data JSON-encoded body of the response
+     * @param init additional response metadata
+     */
+    static json(data: any, init?: ResponseInit): Response;
+    /**
+     * Get the {@link ResponseType} type of the response.
+     */
+    get type(): ResponseType;
+    /**
+     * Get the HTTP status code, e.g. 200
+     */
+    get status(): number;
+    /**
+     * Check if this response is a result of successful request.
+     */
+    get ok(): boolean;
+    /**
+     * Create a deep copy of this response.
+     */
+    clone(): Response;
+}
+
+/** Copyright (c) 2022, 2023, Oracle and/or its affiliates. */
+
+
+/**
+ * Make a request to the specified resource.
+ *
+ * @param input a path to the resource or a {@link Request} object that configures the retrieval
+ * @param init additional configuration for the retrieval
+ * @returns a {@link Response} that contains the result of resource retrieval
+ */
+function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
+
+/** Copyright (c) 2022, 2023, Oracle and/or its affiliates. */
+
+
+
+
+export { fetch, Headers, Request, Response };
+
+}
+
+/* Copyright (c) 2022, Oracle and/or its affiliates. */
 
 /*
  * TypeScript declarations for JavaScript builtins in Oracle Database
@@ -2189,7 +3009,7 @@ interface IPolyglot {
      * undefined is returned.
      *
      * @param key identifier of polyglot binding that should be read.
-     * @returns the value of the polyglot binding or undefinied if it does not
+     * @returns the value of the polyglot binding or undefined if it does not
      * exist.
      * @throws TypeError if key is not a String.
      */
@@ -2198,7 +3018,7 @@ interface IPolyglot {
     /**
      * Parses and evaluates sourceCode with the interpreter identified by
      * languageId. The value of sourceCode is expected to be a String (or
-     * convertable to one). Returns the evaluation result.
+     * convertible to one). Returns the evaluation result.
      *
      * @param languageId identifies the language.
      * @param sourceCode contains the source code to be evaluated.
@@ -2308,7 +3128,7 @@ interface IConsole {
 
     /**
      * Decreases the indentation for succeeding outputs to the console that was
-     * prevsiously increased with {@link group}. If identation is already at the
+     * previously increased with {@link group}. If indentation is already at the
      * lowest (outermost) level, this has no effect.
      */
     groupEnd(): undefined;
@@ -2342,3 +3162,39 @@ interface IConsole {
     timeEnd(label?: string): undefined;
 }
 declare const console: IConsole;
+
+/* Copyright (c) 2023, Oracle and/or its affiliates. */
+
+/*
+ * TypeScript declarations for JavaScript globals in Oracle Database
+ * Multilingual Engine, see the following links for more information:
+ * - https://oracle-samples.github.io/mle-modules
+ */
+
+declare namespace _mle_globals {
+    export { OracleDb, ISodaDatabase, IConnection } from "mle-js-oracledb";
+    export {
+        OracleBlob,
+        IOracleClob,
+        IOracleDate,
+        OracleNumber,
+        IOracleTimestamp,
+        IOracleTimestampTZ
+    } from "mle-js-plsqltypes";
+    export { Headers, Request, Response, RequestInfo, RequestInit } from "mle-js-fetch";
+}
+
+declare const oracledb: _mle_globals.OracleDb;
+declare const session: _mle_globals.IConnection;
+declare const soda: _mle_globals.ISodaDatabase;
+declare const OracleNumber: _mle_globals.OracleNumber;
+declare const OracleBlob: _mle_globals.OracleBlob;
+declare const OracleClob: _mle_globals.IOracleClob;
+declare const OracleDate: _mle_globals.IOracleDate;
+declare const OracleTimestampTZ: _mle_globals.IOracleTimestampTZ;
+declare const OracleTimestamp: _mle_globals.IOracleTimestamp;
+declare const Headers: _mle_globals.Headers;
+declare const Request: _mle_globals.Request;
+declare const Response: _mle_globals.Response;
+declare function fetch(input: _mle_globals.RequestInfo, init?: _mle_globals.RequestInit): Promise<_mle_globals.Response>;
+

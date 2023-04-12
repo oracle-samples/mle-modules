@@ -1,4 +1,5 @@
-Copyright (c) 2017, 2023, Oracle and/or its affiliates.
+/**
+Copyright (c) 2022, 2023, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -33,4 +34,54 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
+*/
+import { Body } from './body';
+import { Headers } from './headers';
+export declare type ResponseType = 'basic' | 'cors' | 'default' | 'error' | 'opaque' | 'opaqueredirect';
+export interface ResponseInit {
+    status?: number;
+    statusText?: string;
+    headers?: Headers;
+}
+/**
+ * The result of a resource retrieval.
+ */
+export declare class Response extends Body {
+    #private;
+    readonly url: string | null;
+    readonly statusText: string;
+    readonly headers: Headers;
+    /**
+     * Create a new retrieval result
+     *
+     * @param body the body of the result
+     * @param init additional metadata on the result of the retrieval
+     */
+    constructor(body?: string | null, init?: ResponseInit);
+    /**
+     * Create a new response that represents a network error.
+     */
+    static error(): Response;
+    /**
+     * Create a new response, whose body is JSON-encoded data
+     * @param data JSON-encoded body of the response
+     * @param init additional response metadata
+     */
+    static json(data: any, init?: ResponseInit): Response;
+    /**
+     * Get the {@link ResponseType} type of the response.
+     */
+    get type(): ResponseType;
+    /**
+     * Get the HTTP status code, e.g. 200
+     */
+    get status(): number;
+    /**
+     * Check if this response is a result of successful request.
+     */
+    get ok(): boolean;
+    /**
+     * Create a deep copy of this response.
+     */
+    clone(): Response;
+}

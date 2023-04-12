@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2019, 2021, Oracle and/or its affiliates.
+Copyright (c) 2019, 2022, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -44,10 +44,6 @@ export declare enum JSTypes {
     DATE = 2,
     /** Type Boolean */
     BOOLEAN = 3,
-    /** Type CLOB */
-    CLOB = 4,
-    /** Type BLOB */
-    BLOB = 5,
     /** Type Object */
     OBJECT = 6,
     /** UINT8ARRAY */
@@ -67,7 +63,9 @@ export declare enum JSTypes {
     /** Type OracleCLOB */
     ORACLE_CLOB = 14,
     /** Type OracleBLOB */
-    ORACLE_BLOB = 15
+    ORACLE_BLOB = 15,
+    /** Type DbTypeJson */
+    DB_TYPE_JSON = 16
 }
 /**
  * Import a value exported from PL/SQL into the current context
