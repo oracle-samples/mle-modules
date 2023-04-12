@@ -1,4 +1,5 @@
-Copyright (c) 2017, 2023, Oracle and/or its affiliates.
+/**
+Copyright (c) 2022, 2023, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -33,4 +34,14 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
+*/
+import { RequestInit, RequestInfo } from './request';
+import { Response } from './response';
+/**
+ * Make a request to the specified resource.
+ *
+ * @param input a path to the resource or a {@link Request} object that configures the retrieval
+ * @param init additional configuration for the retrieval
+ * @returns a {@link Response} that contains the result of resource retrieval
+ */
+export declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;

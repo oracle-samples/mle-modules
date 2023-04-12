@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2019, 2021, Oracle and/or its affiliates.
+Copyright (c) 2019, 2023, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -283,7 +283,7 @@ export declare class OracleNumber {
     trunc(decplace: OracleNumber | number): OracleNumber;
     /**
      * Scale the digits to the left and right of the decimal point.
-     * @param left maximum number of decimal digits to the left of the decimal point. it will not effect the number, but throw an exception if this value is exceeded.
+     * @param left maximum number of decimal digits to the left of the decimal point. It will not effect the number, but throw an exception if this value is exceeded.
      * @param right maximum number of decimal digits to the right of the decimal point. The number is rounded at this point. Negative values are allowed.
      * @returns a new scaled Oracle number scaled according to the arguments
      * @throws throws an exception if the number of left-hand-side digits is exceeded
@@ -629,6 +629,15 @@ export declare class OracleBlob {
      */
     freeTemporary(...args: any[]): void;
     /**
+     * Returns all the BLOB data as Uint8Array.
+     *
+     * For queries returning LOB columns, it can be more efficient to use
+     * fetchAsUint8Array, or fetchInfo instead of lob.getData().
+     *
+     * @throws Error if blob is too large.
+     */
+    getData(): Uint8Array;
+    /**
      * This method reads a piece of a BLOB, and returns the specified amount
      * into the buffer parameter, starting from an absolute offset from the
      * beginning of the BLOB. If the input offset points past the End of BLOB, a
@@ -670,8 +679,9 @@ export declare class IOracleClob {
      * SESSION duration.
      *
      * @param cache Specifies if CLOB should be read into buffer cache or not.
+     * @param isNClob If set to true will create a temporary NCLOB instead of regular CLOB.
      */
-    createTemporary(cache: boolean): any;
+    createTemporary(cache: boolean, isNClob?: boolean): any;
     /**
      * This method compares two entire CLOBs or parts of two CLOBs.
      *
@@ -742,6 +752,13 @@ export declare class IOracleClob {
      * @param buffer Data to write.
      */
     write(offset: number, buffer: string): any;
+    /**
+     * Returns all the CLOB/NCLOB data as string.
+
+     * For queries returning LOB columns, it can be more efficient to use
+     * fetchAsString, or fetchInfo instead of lob.getData().
+     */
+    getData(): string;
 }
 /**
  * JavaScript API for Oracle type TIMESTAMP WITH TIME ZONE.

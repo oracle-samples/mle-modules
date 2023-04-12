@@ -1,6 +1,6 @@
 {
   "name": "mle-js-oracledb",
-  "version": "21.3.0",
+  "version": "23.2.0",
   "description": "MLE SQL Driver",
   "types": "index.d.ts",
   "author": "Oracle",

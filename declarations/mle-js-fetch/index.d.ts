@@ -1,4 +1,5 @@
-Copyright (c) 2017, 2023, Oracle and/or its affiliates.
+/**
+Copyright (c) 2022, 2023, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -33,4 +34,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
+*/
+import { fetch } from './fetch';
+import { Headers } from './headers';
+import { Request } from './request';
+import { Response } from './response';
+export { fetch, Headers, Request, Response };

@@ -1,4 +1,5 @@
-Copyright (c) 2017, 2023, Oracle and/or its affiliates.
+/**
+Copyright (c) 2022, 2023, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -33,4 +34,46 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
+*/
+export declare type HeadersInit = string[][] | Record<string, string> | Headers;
+export declare class Headers {
+    #private;
+    /**
+     * Create a new instance given initial header values.
+     * @param init initial header values
+     */
+    constructor(init?: HeadersInit);
+    /**
+     * Retrieve a list of header values
+     * @param key the name of the header
+     * @returns a comma-separated list of values
+     */
+    get(key: string): string | null;
+    /**
+     * Set or override the header value
+     * @param key the name of the header
+     * @param value the new value
+     */
+    set(key: string, value: string): void;
+    /**
+     * Add a value to the list corresponding to a header
+     * @param key the name of the header
+     * @param value the value to add
+     */
+    append(key: string, value: string): void;
+    /**
+     * Check if a value of a header has been set
+     * @param name the name of the header
+     * @returns true if the header has been set, false otherwise
+     */
+    has(name: string): boolean;
+    /**
+     * Remove all values for a header
+     * @param name the name of the header
+     */
+    delete(name: string): void;
+    keys(): Generator<string>;
+    values(): Generator<string | null>;
+    entries(): Generator<[string, string | null]>;
+    forEach(func: (value: unknown, key: unknown, object: unknown) => void, thisValue?: unknown): void;
+}

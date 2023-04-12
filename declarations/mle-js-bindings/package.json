@@ -1,6 +1,6 @@
 {
   "name": "mle-js-bindings",
-  "version": "21.3.0",
+  "version": "23.2.0",
   "description": "MLE Bindings for Oracle Database DBMS_MLE",
   "types": "mle-js-bindings.d.ts",
   "author": "Oracle",
