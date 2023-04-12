@@ -9,25 +9,27 @@ The following JavaScript modules are currently available:
 - MLE SQL Driver: [mle-js-oracledb][mle-js-oracledb]
 - MLE Bindings: [mle-js-bindings][mle-js-bindings]
 - MLE PL/SQL Types [mle-js-plsqltypes][mle-js-plsqltypes]
+- MLE Fetch API polyfill [mle-js-fetch][mle-js-fetch]
 
 ## Installation
 You need an Oracle Database to make use of the JavaScript modules provided in the Oracle Database Multilingual Engine (MLE).
 A very convenient way of getting an Oracle Database instance is to create an always-free Oracle Cloud account and set up a free autonomous database instance there as our [blog article][2] explains in great detail.
 
-The declaration files can conveniently be installed into your project directory using NPM:
+You can install all relevant declarations of these modules plus the declrations of all global sybmols (`Polyglot, `console`, `session`, `soda`, `oracledb`, `OracleNumber`, etc.) in one bundle.
+You can conveniently install `mle-js` from NPM and then reference it in the beginning of your JavaScript code using the `<reference>` tag:
+
+```
+npm install mle-js
+/// <reference types="mle-js" />
+```
+
+If you only need declarations of a particular module, you can also just install them individually:
 
 ```
 npm install mle-js-oracledb
 npm install mle-js-bindings
 npm install mle-js-plsqltypes
-```
-
-Alternatively, you can also download `mle-js` which is a single bundled ambient file for all these module declarations in one.
-In addition, this bundle also contains declarations for GraalVM JavaScript builtins, concretely `Polyglot` and `console`.
-You can conveniently install it from NPM and then reference it in the beginning of your JavaScript code using the `<reference>` tag:
-```
-npm install mle-js
-/// <reference types="mle-js" />
+npm install mle-js-fetch
 ```
 
 ## Documentation
@@ -52,6 +54,12 @@ The mle-js-plsqltypes module contains JavaScript APIs for such JavaScript object
 
 [Continue reading...][mle-js-plsqltypes]
 
+### MLE Fetch API polyfill (mle-js-fetch)
+MLE offers the following functionality to fetch and upload resources asynchronously across the network: fetch, Headers, Request, Response.
+In order to make the Fetch API available, it needs to be imported first.
+
+[Continue reading...][mle-js-fetch]
+
 ### Oracle Database
 Oracle Database is the world's most popular database.
 Available on cloud and on-premises platforms, Oracle Database 19c is the most recent long term release, with an extended support window.
@@ -64,7 +72,8 @@ The following table shows which version of module documentation and declarations
 
 | Oracle Database  | Modules |
 | ---------------- | --------|
-| 21.3, 21.4, etc. | [mle-js-oracledb@21.3.0][mle-js-oracledb] <br/> [mle-js-bindings@21.3.0][mle-js-bindings] <br/> [mle-js-plsqltypes@21.3.0][mle-js-plsqltypes] |
+| 23c | [mle-js-oracledb@23.2.0][mle-js-oracledb] <br/> [mle-js-bindings@23.2.0][mle-js-bindings] <br/> [mle-js-plsqltypes@23.2.0][mle-js-plsqltypes] <br/> [mle-js-fetch@23.2.0][mle-js-fetch] |
+| 21c | [mle-js-oracledb@21.3.0][mle-js-oracledb-21c] <br/> [mle-js-bindings@21.3.0][mle-js-bindings-21c] <br/> [mle-js-plsqltypes@21.3.0][mle-js-plsqltypes-21c] |
 
 ## Examples
 The following code snippet exemplifies the usage of all MLE modules combined.
@@ -106,9 +115,13 @@ Copyright (c) 2022 Oracle and/or its affiliates.
 
 Released under the Universal Permissive License v1.0 as shown at <https://oss.oracle.com/licenses/upl/>.
 
-[mle-js-oracledb]: http://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/21c "mle-js-oracledb@21.3.0"
-[mle-js-bindings]: http://oracle-samples.github.io/mle-modules/docs/mle-js-bindings/21c "mle-js-bindings@21.3.0"
-[mle-js-plsqltypes]: http://oracle-samples.github.io/mle-modules/docs/mle-js-plsqltypes/21c "mle-js-plsqltypes@21.3.0"
+[mle-js-oracledb]: http://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/23c "mle-js-oracledb@23.2.0"
+[mle-js-bindings]: http://oracle-samples.github.io/mle-modules/docs/mle-js-bindings/23c "mle-js-bindings@23.2.0"
+[mle-js-plsqltypes]: http://oracle-samples.github.io/mle-modules/docs/mle-js-plsqltypes/23c "mle-js-plsqltypes@23.2.0"
+[mle-js-fetch]: http://oracle-samples.github.io/mle-modules/docs/mle-js-fetch/23c "mle-js-fetch@23.2.0"
+[mle-js-oracledb-21c]: http://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/21c "mle-js-oracledb@21.3.1"
+[mle-js-bindings-21c]: http://oracle-samples.github.io/mle-modules/docs/mle-js-bindings/21c "mle-js-bindings@21.3.1"
+[mle-js-plsqltypes-21c]: http://oracle-samples.github.io/mle-modules/docs/mle-js-plsqltypes/21c "mle-js-plsqltypes@21.3.1"
 [1]: https://medium.com/graalvm/mle-executing-javascript-in-oracle-database-c545feb1a010 "Multilingual Engine: Executing JavaScript in Oracle Database"
 [2]: https://blogs.oracle.com/apex/post/mle-and-the-future-of-server-side-programming-in-oracle-apex "MLE and the Future of Server-Side Programming in Oracle APEX"
 [3]: https://docs.oracle.com/en/database/oracle/oracle-database/21/index.html "Oracle Database 21c"
