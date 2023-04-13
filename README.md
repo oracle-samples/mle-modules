@@ -8,8 +8,8 @@ This is particularly useful in a scenario where JavaScript code gets developed l
 The following JavaScript modules are currently available:
 - MLE SQL Driver: [mle-js-oracledb][mle-js-oracledb]
 - MLE Bindings: [mle-js-bindings][mle-js-bindings]
-- MLE PL/SQL Types [mle-js-plsqltypes][mle-js-plsqltypes]
-- MLE Fetch API polyfill [mle-js-fetch][mle-js-fetch]
+- MLE PL/SQL Types: [mle-js-plsqltypes][mle-js-plsqltypes]
+- MLE Fetch API polyfill: [mle-js-fetch][mle-js-fetch]
 
 ## Installation
 You need an Oracle Database to make use of the JavaScript modules provided in the Oracle Database Multilingual Engine (MLE).
@@ -130,4 +130,4 @@ Released under the Universal Permissive License v1.0 as shown at <https://oss.or
 [mle-js-plsqltypes-21c]: http://oracle-samples.github.io/mle-modules/docs/mle-js-plsqltypes/21c "mle-js-plsqltypes@21.3.1"
 [1]: https://medium.com/graalvm/mle-executing-javascript-in-oracle-database-c545feb1a010 "Multilingual Engine: Executing JavaScript in Oracle Database"
 [2]: https://blogs.oracle.com/apex/post/mle-and-the-future-of-server-side-programming-in-oracle-apex "MLE and the Future of Server-Side Programming in Oracle APEX"
-[3]: https://docs.oracle.com/en/database/oracle/oracle-database/21/index.html "Oracle Database 21c"
+[3]: https://docs.oracle.com/en/database/oracle/oracle-database/23/index.html "Oracle Database 23c"
