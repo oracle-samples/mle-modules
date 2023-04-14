@@ -1,5 +1,5 @@
 # MLE Modules
-The Oracle Database Multilingual Engine (MLE) enables [JavaScript execution in Oracle Database as of version 21c][1].
+The Oracle Database Multilingual Engine (MLE) enables [JavaScript execution in Oracle Database][1].
 In this database JavaScript environment, there exist some JavaScript modules that are available out of the box.
 This repository contains documentation and interface definitions (in the form of TypeScript declarations) for those predefined modules.
 While the documentation contains set of human-readable, linked pages, the TypeScript declaration files are typically consumed by an IDE for improving auto-completion.
@@ -15,7 +15,7 @@ The following JavaScript modules are currently available:
 You need an Oracle Database to make use of the JavaScript modules provided in the Oracle Database Multilingual Engine (MLE).
 A very convenient way of getting an Oracle Database instance is to create an always-free Oracle Cloud account and set up a free autonomous database instance there as our [blog article][2] explains in great detail.
 
-You can install all relevant declarations of these modules plus the declarations of all global symbols (`Polyglot, `console`, `session`, `soda`, `oracledb`, `OracleNumber`, etc.) in one bundle.
+You can install all relevant declarations of these modules plus the declarations of all global symbols (`Polyglot`, `console`, `session`, `soda`, `oracledb`, `OracleNumber`, etc.) in one bundle.
 You can conveniently install `mle-js` from NPM and then reference it in the beginning of your JavaScript code using the `<reference>` tag:
 
 ```
@@ -81,7 +81,7 @@ The following table shows which version of module documentation and declarations
 | 21c | [mle-js-oracledb@21.3.0][mle-js-oracledb-21c] <br/> [mle-js-bindings@21.3.0][mle-js-bindings-21c] <br/> [mle-js-plsqltypes@21.3.0][mle-js-plsqltypes-21c] |
 
 ## Examples
-The following code snippet exemplifies the usage of all MLE modules combined.
+The following code snippet exemplifies the usage of some of these MLE modules combined.
 For additional examples, please check the module documentation pages or have a look at our [blog article][2].
 
 ```JavaScript
@@ -128,6 +128,6 @@ Released under the Universal Permissive License v1.0 as shown at <https://oss.or
 [mle-js-oracledb-21c]: http://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/21c "mle-js-oracledb@21.3.1"
 [mle-js-bindings-21c]: http://oracle-samples.github.io/mle-modules/docs/mle-js-bindings/21c "mle-js-bindings@21.3.1"
 [mle-js-plsqltypes-21c]: http://oracle-samples.github.io/mle-modules/docs/mle-js-plsqltypes/21c "mle-js-plsqltypes@21.3.1"
-[1]: https://medium.com/graalvm/mle-executing-javascript-in-oracle-database-c545feb1a010 "Multilingual Engine: Executing JavaScript in Oracle Database"
+[1]: https://blogs.oracle.com/developers/post/introduction-javascript-oracle-database-23c-free-developer-release "Introduction to JavaScript in Oracle Database 23c Free - Developer Release"
 [2]: https://blogs.oracle.com/apex/post/mle-and-the-future-of-server-side-programming-in-oracle-apex "MLE and the Future of Server-Side Programming in Oracle APEX"
 [3]: https://docs.oracle.com/en/database/oracle/oracle-database/23/index.html "Oracle Database 23c"
