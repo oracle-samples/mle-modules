@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2022, 2023, Oracle and/or its affiliates.
+Copyright (c) 2023, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -35,40 +35,25 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-import { IBufferWrapper } from './common';
 /**
- * Type alias for the types the body can be
+ * Encode a string or a byte buffer into base64.
+ 
+ * The function converts the characters to bytes as if they were ASCII encoded.
+ * Convert the data to an ArrayBuffer first if you need to convert strings with
+ * characters outside the ASCII alphabet.
+ *
+ * @throws Error if the input string contains a character outside of ASCII
+ * @return a string with base64-encoded data
  *
  * @since Oracle 23.3
  */
-export type BodyType = IBufferWrapper | ArrayBuffer | string | null;
-export declare class Body {
-    #private;
-    /**
-     * Check if the contents of the body have been consumed.
-     */
-    get bodyUsed(): boolean;
-    /**
-     * Retrieve the contents of the body.
-     */
-    get body(): BodyType;
-    constructor(body?: BodyType | Body);
-    /**
-     * Consume the contents of the body as JSON.
-     */
-    json(): Promise<any>;
-    /**
-     * Consume the contents of the body as text.
-     */
-    text(): Promise<string>;
-    arrayBuffer(): Promise<ArrayBuffer>;
-    /**
-     * Unsupported operation (keep protected until implemented)
-     */
-    protected blob(): void;
-    /**
-     * Unsupported operation (keep protected until implemented)
-     */
-    protected formData(): void;
-    protected _cloneBodyContent(): BodyType;
-}
+export declare function encode(input: string | ArrayBuffer | Uint8Array): string;
+/**
+ * Decode a base64 encoded string.
+ *
+ * @throws Error if the input contains characters outside base64 alphabet or is otherwise invalid.
+ * @return a byte array with the decoded data.
+ *
+ * @since Oracle 23.3
+ */
+export declare function decode(input: string): ArrayBuffer;

@@ -56,7 +56,7 @@ export declare enum JSTypes {
     ORACLE_TIMESTAMP = 10,
     /** Type OracleTimeStampTZ */
     ORACLE_TIMESTAMP_TZ = 11,
-    /** Type OracleIntervalYearToDay */
+    /** Type OracleIntervalYearToMonth */
     ORACLE_INTERVAL_YM = 12,
     /** Type OracleIntervalDayToSecond */
     ORACLE_INTERVAL_DS = 13,

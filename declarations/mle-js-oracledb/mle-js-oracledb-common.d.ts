@@ -54,9 +54,7 @@ export declare class OracleDb {
     ORACLE_INTERVAL_YM: number;
     ORACLE_TIMESTAMP: number;
     ORACLE_TIMESTAMP_TZ: number;
-    ORACLE_JSON: number;
     UINT8ARRAY: number;
-    BOOLEAN: number;
     DB_TYPE_VARCHAR: number;
     DB_TYPE_NUMBER: number;
     DB_TYPE_LONG: number;

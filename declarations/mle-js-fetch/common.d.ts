@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2022, 2023, Oracle and/or its affiliates.
+Copyright (c) 2023, 2023, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -35,8 +35,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-export declare type InitiatorType = 'audio' | 'beacon' | 'body' | 'css' | 'early-hint' | 'embed' | 'fetch' | 'font' | 'frame' | 'iframe' | 'image' | 'img' | 'input' | 'link' | 'object' | 'ping' | 'script' | 'track' | 'video' | 'xmlhttprequest' | 'other';
-export declare type ServiceWorkersMode = 'all' | 'none';
-export declare type Initiator = '' | 'download' | 'imageset' | 'manifest' | 'prefetch' | 'prerender' | 'xslt';
-export declare type Destination = '' | 'audio' | 'audioworklet' | 'document' | 'embed' | 'font' | 'frame' | 'iframe' | 'image' | 'manifest' | 'object' | 'paintworklet' | 'report' | 'script' | 'serviceworker' | 'sharedworker' | 'style' | 'track' | 'video' | 'worker' | 'xslt';
-export declare type ResponseTainting = 'basic' | 'cors' | 'opaque';
+/**
+ * Interface to represent types that provide a view into an ArrayBuffer e.g. DataView
+ *
+ * @since Oracle 23.3
+ */
+export interface IBufferWrapper {
+    buffer: ArrayBuffer;
+}
