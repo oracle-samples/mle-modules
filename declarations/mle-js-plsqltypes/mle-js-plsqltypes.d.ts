@@ -325,7 +325,7 @@ export declare class IOracleIntervalDayToSecond {
     /**
      * Parse an interval string into IOracleIntervalDayToSecond. fromString
      * accepts the same input formats as the Oracle SQL function TO_DSINTERVAL:
-
+     
      * - SQL interval format compatible with the SQL standard (ISO/IEC 9075)
      * - ISO duration format compatible with the ISO 8601:2004 standard
      *
@@ -547,8 +547,8 @@ export declare interface CompareOptionalArguments {
      */
     amount?: number;
     /**
-      * Offset (bytes/characters) into the first LOB. Defaults to 1.
-      */
+     * Offset (bytes/characters) into the first LOB. Defaults to 1.
+     */
     offset1?: number;
     /**
      * Offset (bytes/characters) into the second LOB. Defaults to 1.
@@ -754,7 +754,7 @@ export declare class IOracleClob {
     write(offset: number, buffer: string): any;
     /**
      * Returns all the CLOB/NCLOB data as string.
-
+     
      * For queries returning LOB columns, it can be more efficient to use
      * fetchAsString, or fetchInfo instead of lob.getData().
      */
@@ -779,7 +779,7 @@ export declare class IOracleTimestampTZ {
      * If a datetime format model is specified, it overrides the datetime format
      * determined by NLS settings (i.e. the setting of the NLS_TIMESTAMP_TZ
      * parameter).
-
+     
      * The function returns an error if the specified date lies in a DST
      * transition period and if the Oracle Database parameter
      * ERROR_ON_OVERLAP_TIME is true for the current session.

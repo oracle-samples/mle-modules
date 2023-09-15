@@ -1,7 +1,7 @@
 {
-  "name": "mle-js-oracledb",
-  "description": "MLE SQL Driver",
-  "types": "index.d.ts",
+  "name": "mle-encode-base64",
+  "description": "MLE functions to work with base64 encoded data",
+  "types": "mle-encode-base64.d.ts",
   "author": "Oracle",
   "version": "23.3.0",
   "license": "UPL-1.0",

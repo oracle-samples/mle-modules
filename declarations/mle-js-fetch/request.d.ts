@@ -35,12 +35,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-import { Body } from './body';
+import { Body, BodyType } from './body';
 import { Headers, HeadersInit } from './headers';
-export declare type RequestInfo = Request | string;
+export type RequestInfo = Request | string;
 export interface RequestInit {
     method?: string;
-    body?: string;
+    body?: BodyType;
     headers?: HeadersInit;
     credentials?: string;
 }

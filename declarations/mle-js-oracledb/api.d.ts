@@ -55,7 +55,7 @@ export interface IError extends Error {
  * Interface for representing entries in {@link IFetchInfo}.  See
  * https://github.com/oracle/node-oracledb/blob/v3.1.0/doc/api.md#propexecfetchinfo
  * for further information.
-*/
+ */
 export interface IFetchInfoColumnSpec {
     /**
      * The JavaScript data type to be fetched. One of the mle-js-oracledb JS
@@ -106,7 +106,7 @@ export interface IExecuteOptions {
 }
 /**
  * Interface for representing an entry in {@link IObjectBindDefs} or {@link ArrayBindDefs}.
-*/
+ */
 export interface IBindDef {
     /**
      * The direction of the bind. One of the Execute Bind Direction Constants
@@ -125,9 +125,10 @@ export interface IBindDef {
     maxSize?: number;
     /**
      * The JavaScript data type to be bound. One of the mle-js-oracledb JS Type
-     * Constants.
+     * Constants; if binding an ADT, a type descriptor or the FQN of the type is
+     * accepted.
      */
-    type: JsType;
+    type: JsType | string | IDbObjectClass;
 }
 /**
  * Interface for Object BindDefs.
@@ -138,11 +139,11 @@ export interface IObjectBindDefs {
 /**
  * Interface for Array BindDefs.
  */
-export declare type ArrayBindDefs = IBindDef[];
+export type ArrayBindDefs = IBindDef[];
 /**
  * Interface for BindDefs which are either Array- or Object BindDefs.
  */
-export declare type ExecuteManyBindDefs = IObjectBindDefs | ArrayBindDefs;
+export type ExecuteManyBindDefs = IObjectBindDefs | ArrayBindDefs;
 /**
  * Interface for the options used in {@link executeMany}().
  */
@@ -354,12 +355,14 @@ export interface IBindObjectValue {
     maxSize?: number;
     /**
      * The JavaScript data type to be bound. One of the mle-js-oracledb JS
-     * Constants.  With IN or INOUT binds the type can be explicitly set with
+     * Constants; when binding ADTs, a type descriptor or the FQN of the type
+     * is also accepted.
+     * With IN or INOUT binds the type can be explicitly set with
      * type or it will default to the type of the input data value. With OUT
      * binds, the type defaults to {@link STRING} whenever type is not
      * specified.
      */
-    type?: number;
+    type?: number | string | IDbObjectClass;
     /**
      * The input value or variable to be used for an IN or INOUT bind variable.
      */
@@ -369,7 +372,7 @@ export interface IBindObjectValue {
  * Interface for a single bind parameter as used in {@link execute}(). Can
  * either be an bind object or a scalar value.
  */
-export declare type BindValue = IBindObjectValue | any;
+export type BindValue = IBindObjectValue | any;
 /**
  * Interface for object binds (also called "named binds").
  */
@@ -379,13 +382,13 @@ export interface INamedBinds {
 /**
  * Interface for array binds.
  */
-export declare type PosBinds = BindValue[];
+export type PosBinds = BindValue[];
 /**
  * Interface for the collection of bind parameters in {@link execute}(). Can
  * either be an object ({@link INamedBinds}) or an array ({@link PosBinds}) of
  * values.
  */
-export declare type BindParameters = INamedBinds | PosBinds;
+export type BindParameters = INamedBinds | PosBinds;
 /**
  * Interface for the result of {@link getStatementInfo}().
  */
@@ -533,11 +536,137 @@ export declare abstract class IConnection {
      * @return a new SodaDatabase object.
      */
     abstract getSodaDatabase(): ISodaDatabase;
+    /**
+     * Returns a DbObject prototype object representing the named Oracle Database object or collection.
+     * @param className The name of the Oracle object or collection.
+     *
+     * @since Oracle 23.3
+     */
+    abstract getDbObjectClass(className: string): IDbObjectClass;
+}
+/**
+ * Interface for representing a DbObject attribute.
+ *
+ * @since Oracle 23.3
+ */
+export interface IDbObjectAttributes {
+    /**
+     * the value of one of the Oracle Database Type Constants,
+     * such as 2010 for oracledb.DB_TYPE_NUMBER and 2023 for oracledb.DB_TYPE_OBJECT.
+     */
+    type: number;
+    /**
+     * a string corresponding to the type, such as “VARCHAR2” or “NUMBER”.
+     * When the attribute is a DbObject, it will contain the name of the object.
+     */
+    typeName: string;
+    /**
+     * set if the value of type is a DbObject. It is the DbObject class for the attribute.
+     */
+    typeClass?: IDbObjectClass;
+}
+/**
+ * Interface for representing the named Oracle Database object or collection.
+ *
+ * @since Oracle 23.3
+ */
+export declare abstract class IDbObjectClass {
+    /**
+     * List of attributes corresponding to the Oracle Database object attributes.
+     * The name of each attribute follows normal Oracle casing semantics.
+     */
+    attributes?: Record<string, IDbObjectAttributes>;
+    /**
+     * When dbObject.isCollection is true, this will have a value corresponding
+     * to one of the Oracle Database Type Constants.
+     */
+    readonly elementType?: number;
+    /**
+     * When dbObject.isCollection is true, this will have the name of the
+     * element type, such as “VARCHAR2” or “NUMBER”.
+     */
+    readonly elementTypeName?: string;
+    /**
+     * Fully qualified name of the Oracle Database object or collection.
+     */
+    readonly fqn?: string;
+    /**
+     * True if the Oracle object is a collection, false otherwise.
+     */
+    readonly isCollection?: boolean;
+    /**
+     * Name of the Oracle Database object or collection.
+     */
+    readonly name?: string;
+    /**
+     * Schema owning the Oracle Database object or collection.
+     */
+    readonly schema?: string;
+    /**
+     * When dbObject.isCollection is true, this will have the number
+     * of elements in the collection. It is undefined for non-collections.
+     */
+    readonly length?: number | undefined;
+    /**
+     * These methods can be used on Oracle Database collections, identifiable
+     * when dbObject.isCollection is true. When collections are fetched from the database,
+     * altered, and then passed back to the database, it may be more efficient to use these methods
+     * directly on the retrieved DbObject than it is to convert that DbObject to and from a JavaScript object.
+     */
+    /**
+     * Adds the given value to the end of the collection.
+     */
+    abstract append?(value: any): void;
+    /**
+     * Deletes the value from collection at the given index.
+     */
+    abstract deleteElement?(index: number): void;
+    /**
+     * Returns the value associated with the given index.
+     */
+    abstract getElement?(index: number): any;
+    /**
+     * Returns the first index for later use to obtain the value.
+     */
+    abstract getFirstIndex?(): number;
+    /**
+     * Returns a JavaScript array containing the ‘index’ keys.
+     */
+    abstract getKeys?(): number[];
+    /**
+     * To obtain the last index for later use to obtain a value.
+     */
+    abstract getLastIndex?(): number;
+    /**
+     * Returns the next index value for later use to obtain a value.
+     */
+    abstract getNextIndex?(index: number): any;
+    /**
+     * Returns the previous index for later use to obtain the value.
+     */
+    abstract getPrevIndex?(index: number): any;
+    /**
+     * Returns true if an element exists in the collection at the given index.
+     * Returns false otherwise.
+     */
+    abstract hasElement?(index: number): boolean;
+    /**
+     * To set the given value at the position of the given index.
+     */
+    abstract setElement?(index: number, value: any): void;
+    /**
+     * Returns an array of element values as a JavaScript array in key order.
+     */
+    abstract getValues?(): any[];
+    /**
+     * @param count : Trims the specified number of elements from the end of the collection.
+     */
+    abstract trim?(count: number): IDbObjectClass;
 }
 /**
  * Type for mle-js-oracledb Query OutFormat Constants.
  */
-export declare type OutFormatType = number;
+export type OutFormatType = number;
 /**
  * Fetch each row as array of column values
  * This constant is deprecated. Use OUT_FORMAT_ARRAY instead.
@@ -556,29 +685,38 @@ export declare const OBJECT: OutFormatType;
  * Fetch each row as an object of column values.
  */
 export declare const OUT_FORMAT_OBJECT: OutFormatType;
-export declare type JsType = number;
+/**
+ * Type for mle-js-oracledb JavaScript Type Constants. Such constants can be
+ * used in OUT binds as well as fetchInfo to specify what JavaScript type a
+ * database value should be converted to. Some of those types can also be used
+ * in {@link fetchAsString}, {@link fetchAsUint8Array}, and
+ * {@link fetchAsPlsqlWrapper}.
+ *
+ * In addition to the standard JavaScript types which node-oracledb offers,
+ * mle-js-oracledb also offers a number of so-called PL/SQL wrapper types which
+ * are JavaScript types with the exact same semantics like the corresponding
+ * Oracle SQL or PL/SQL types (see mle-js-plsqltypes). The JavaScript constants
+ * for those types all start with ORACLE_, e.g.  ORACLE_NUMBER is the constant
+ * to be used if a database value should be retrieved as OracleNumber rather
+ * than a native JavaScript number.
+ */
+export type JsType = number;
 /**
  * Used with fetchInfo to reset the fetch type to the database type
  */
 export declare const DEFAULT: JsType;
 /**
- * Bind as JavaScript String type. It can be used for most database types.
+ * Bind as JavaScript String type.
  */
 export declare const STRING: JsType;
 /**
- * Bind as JavaScript number type. It can also be used for fetchAsString and
- * fetchInfo.
+ * Bind as JavaScript number type.
  */
 export declare const NUMBER: JsType;
 /**
- * Bind as JavaScript date type. It can also be used for fetchAsString and
- * fetchInfo.
+ * Bind as JavaScript date type.
  */
 export declare const DATE: JsType;
-/**
- * Bind a JavaScript boolean to a PL/SQL BOOLEAN.
- */
-export declare const BOOLEAN: JsType;
 /**
  * Bind a NUMBER to an OracleNumber object.
  */
@@ -620,13 +758,11 @@ export declare const ORACLE_TIMESTAMP: JsType;
  */
 export declare const ORACLE_TIMESTAMP_TZ: JsType;
 /**
- * Bind a DTYDJSON value.
+ * Type for mle-js-oracledb Database Type Constants. Such constants can be used
+ * in IN binds to specify what database type a JavaScript value should be
+ * converted to, but are also what is used in query meta data.
  */
-export declare const ORACLE_JSON: JsType;
-/**
- * Type for mle-js-oracledb Database Type Constants.
- */
-export declare type DbType = number;
+export type DbType = number;
 /**
  * VARCHAR2
  */
@@ -720,9 +856,16 @@ export declare const DB_TYPE_NCHAR: DbType;
  */
 export declare const DB_TYPE_NCLOB: DbType;
 /**
- * JSON
+ * Bind as JSON. This constant can also be used {@link fetchAsString} to express
+ * that JSON column values should be fetched as JS string rather than JS object.
  */
 export declare const DB_TYPE_JSON: DbType;
+/**
+ * ADT
+ *
+ * @since Oracle 23.3
+ */
+export declare const DB_TYPE_OBJECT: DbType;
 /**
  * Direction for IN binds
  */
@@ -891,10 +1034,10 @@ export declare class Parameters {
     get fetchAsString(): JsType[];
     /**
      * An array of mle-js-oracledb JS Type values. The valid types are {@link
-     * DATE}, {@link NUMBER}, {@link UINT8ARRAY}, and {@link ORACLE_CLOB}. When
-     * any column having one of the specified types is queried with {@link
-     * execute}(), the column data is returned as a string instead of the default
-     * representation.
+     * DATE}, {@link NUMBER}, {@link UINT8ARRAY}, {@link ORACLE_CLOB}, and
+     * {@link DB_TYPE_JSON}. When any column having one of the specified types
+     * is queried with {@link execute}(), the column data is returned as a
+     * string instead of the default representation.
      *
      * By default in mle-js-oracledb, all columns are returned as native types or
      * or as OracleClob/OracleBlob wrapper types, in the case of CLOB and BLOB

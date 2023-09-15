@@ -35,9 +35,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-import { Body } from './body';
+import { Body, BodyType } from './body';
 import { Headers } from './headers';
-export declare type ResponseType = 'basic' | 'cors' | 'default' | 'error' | 'opaque' | 'opaqueredirect';
+export type ResponseType = 'basic' | 'cors' | 'default' | 'error' | 'opaque' | 'opaqueredirect';
 export interface ResponseInit {
     status?: number;
     statusText?: string;
@@ -57,7 +57,7 @@ export declare class Response extends Body {
      * @param body the body of the result
      * @param init additional metadata on the result of the retrieval
      */
-    constructor(body?: string | null, init?: ResponseInit);
+    constructor(body?: BodyType, init?: ResponseInit);
     /**
      * Create a new response that represents a network error.
      */

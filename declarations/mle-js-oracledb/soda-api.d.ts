@@ -494,15 +494,6 @@ export declare abstract class ISodaDocument {
      */
     abstract getContent(): Record<string, any>;
     /**
-     * Return the document content as a Uint8Array. If the collection storage is
-     * BLOB (default) and the mediaType is 'application/json', then the returned
-     * Uint8Array is identical to the one that was stored. If the storage is not
-     * BLOB, it is UTF-8 encoded.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocgetcontentasbuffer
-     * @return the document content as a Uint8Array.
-     */
-    abstract getContentAsUint8Array(): Uint8Array;
-    /**
      * Return JSON document content as a string. If the document encoding is
      * unknown, UTF-8 will be used.
      * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocgetcontentasstring
