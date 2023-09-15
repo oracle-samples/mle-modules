@@ -120,9 +120,10 @@ fetchAsPlsqlWrapper global property by using fetchInfo.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4></li>
 <li class="tsd-signature" id="fetchAsString.fetchAsString-2"><span class="tsd-signature-symbol">set</span> fetchAsString<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>An array of mle-js-oracledb JS Type values. The valid types are <a href="../variables/api.DATE.html">DATE</a>, <a href="../variables/api.NUMBER.html">NUMBER</a>, <a href="../variables/api.UINT8ARRAY.html">UINT8ARRAY</a>, and <a href="../variables/api.ORACLE_CLOB.html">ORACLE_CLOB</a>. When
-any column having one of the specified types is queried with execute(), the column data is returned as a string instead of the default
-representation.</p>
+<div class="tsd-comment tsd-typography"><p>An array of mle-js-oracledb JS Type values. The valid types are <a href="../variables/api.DATE.html">DATE</a>, <a href="../variables/api.NUMBER.html">NUMBER</a>, <a href="../variables/api.UINT8ARRAY.html">UINT8ARRAY</a>, <a href="../variables/api.ORACLE_CLOB.html">ORACLE_CLOB</a>, and
+<a href="../variables/api.DB_TYPE_JSON.html">DB_TYPE_JSON</a>. When any column having one of the specified types
+is queried with execute(), the column data is returned as a
+string instead of the default representation.</p>
 <p>By default in mle-js-oracledb, all columns are returned as native types or
 or as OracleClob/OracleBlob wrapper types, in the case of CLOB and BLOB
 types.</p>

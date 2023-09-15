@@ -20,7 +20,7 @@
 This documentation describes the JavaScript module <code>mle-js-bindings</code> that ships with the database.</p>
 <p>The MLE Bindings module can be used to exchange values between PL/SQL and JavaScript.
 The module also takes care of converting values from PL/SQL types to JavaScript types and vice-versa automatically as required.
-Where the default conversion is not appropriate, one can also specify the target JavaScript type explicitly and use for example PL/SQL wrapper types (see the documentation of <code>mle-js-plsqltypes</code>).</p>
+Where the default conversion is not appropriate, you can also specify the target JavaScript type explicitly and use for example PL/SQL wrapper types (see the documentation of <code>mle-js-plsqltypes</code>).</p>
 
 <a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
   <h2>Getting Started</h2>
@@ -38,7 +38,7 @@ If executed as a <em>snippet in <code>DBMS_MLE</code>, a dynamic import</em> nee
 <p>In this example, the <a href="functions/importValue.html">importValue</a> function imports a number identified by its name, <code>param1</code> which was previously exported from PL/SQL to MLE using <code>dbms_mle.export_to_mle(ctx, &#39;param1&#39;, 42)</code>.
 Later on in the example, the <a href="functions/exportValue.html">exportValue</a> function is used to export the result (identified as <code>result</code>).
 After the script has been executed, this result can be obtained by calling <code>dbms_mle.import_from_mle(ctx, &#39;result&#39;, result)</code> where <code>result</code> is a PL/SQL variable.</p>
-<p>Note that when importing values, one can change the default JavaScript type of the imported value by using the second parameter and providing the desired type constant, e.g. <a href="enums/JSTypes.html#STRING">STRING</a>:</p>
+<p>Note that when importing values, you can change the default JavaScript type of the imported value by using the second parameter and providing the desired type constant, e.g. <a href="enums/JSTypes.html#STRING">STRING</a>:</p>
 <pre><code class="language-JavaScript"><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">param1</span><span class="hl-1"> = </span><span class="hl-5">bindings</span><span class="hl-1">.</span><span class="hl-6">importValue</span><span class="hl-1">(</span><span class="hl-4">&quot;param1&quot;</span><span class="hl-1">, </span><span class="hl-5">bindings</span><span class="hl-1">.</span><span class="hl-5">JSTypes</span><span class="hl-1">.</span><span class="hl-2">STRING</span><span class="hl-1">);</span>
 </code></pre>
 <p>Please refer to the conversion mapping tables in the documentation of <code>mle-js-oracledb</code> for an overview of default conversions and available alternatives.</p>

@@ -56,9 +56,11 @@ ignored.</p>
 </div></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="type" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>type</span><a href="#type" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">type<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">number</span></div>
+<div class="tsd-signature">type<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="../classes/api.IDbObjectClass.html" class="tsd-signature-type" data-tsd-kind="Class">IDbObjectClass</a></div>
 <div class="tsd-comment tsd-typography"><p>The JavaScript data type to be bound. One of the mle-js-oracledb JS
-Constants.  With IN or INOUT binds the type can be explicitly set with
+Constants; when binding ADTs, a type descriptor or the FQN of the type
+is also accepted.
+With IN or INOUT binds the type can be explicitly set with
 type or it will default to the type of the input data value. With OUT
 binds, the type defaults to <a href="../variables/api.STRING.html">STRING</a> whenever type is not
 specified.</p>
