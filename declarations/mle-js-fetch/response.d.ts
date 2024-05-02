@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2022, 2023, Oracle and/or its affiliates.
+Copyright (c) 2022, 2024, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -77,7 +77,7 @@ export declare class Response extends Body {
      */
     get status(): number;
     /**
-     * Check if this response is a result of successful request.
+     * Check if this response is a result of a successful request.
      */
     get ok(): boolean;
     /**

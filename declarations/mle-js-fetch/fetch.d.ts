@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2022, 2023, Oracle and/or its affiliates.
+Copyright (c) 2022, 2024, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -39,6 +39,9 @@ import { RequestInit, RequestInfo } from './request';
 import { Response } from './response';
 /**
  * Make a request to the specified resource.
+ *
+ * If there is a field line that is longer than 8192 bytes in the response
+ * received, a TypeError is thrown.
  *
  * @param input a path to the resource or a {@link Request} object that configures the retrieval
  * @param init additional configuration for the retrieval

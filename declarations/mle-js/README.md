@@ -1,1 +1,1 @@
-Please consult install instructions and documentation on https://oracle-samples.github.io/mle-modules.
+Please consult the installation instructions and documentation on https://oracle-samples.github.io/mle-modules.

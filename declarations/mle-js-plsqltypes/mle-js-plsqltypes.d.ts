@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2019, 2023, Oracle and/or its affiliates.
+Copyright (c) 2019, 2024, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -189,16 +189,15 @@ export declare class OracleNumber {
      */
     hypTan(): OracleNumber;
     /**
-     * Compares two Oracle numbers
-     * @returns -1 if this < other
-     *           0 if this = other
-     *           1 if this > other
+     * Compares two Oracle numbers.
+     * Returns -1 if this < other, 0 if they are equal, and 1 if this > other.
+     * @returns the result of the comparison as a number between -1 and +1.
      */
     compare(other: OracleNumber): number;
     /**
      * Checks if the Oracle number is equal to another Oracle number
      * @param other - the other Oracle number
-     * @returns true if both Oracle numbers are equal otherwise false
+     * @returns true if both Oracle numbers are equal, otherwise false
      */
     equals(other: OracleNumber): boolean;
     /**
@@ -229,12 +228,12 @@ export declare class OracleNumber {
     sqrt(): OracleNumber;
     /**
      * Tests if the number is an integer
-     * @returns true if the Oracle number is an integer otherwise false
+     * @returns true if the Oracle number is an integer, otherwise false
      */
     isInt(): boolean;
     /**
      * Tests if the number is zero
-     * @returns true if the Oracle number is zero otherwise false
+     * @returns true if the Oracle number is zero, otherwise false
      */
     isZero(): boolean;
     /**
@@ -270,19 +269,19 @@ export declare class OracleNumber {
      */
     roundPlaces(decplace: OracleNumber | number): OracleNumber;
     /**
-     * Shift the number by the specified number of decimal places
+     * Shifts the number by the specified number of decimal places
      * @param digits - number of decimal places to shift. It can be negative. Positive values shift the decimal place to the right and negative values to the left. For example, if NUMBER corresponds to 1234.5 and digits == -1, the new NUMBER object will correspond to 123.45.
      * @returns an Oracle number containing the shifted result
      */
     shift(digits: OracleNumber | number): OracleNumber;
     /**
-     * Truncate the number to the specified number of decimal places.
+     * Truncates the number to the specified number of decimal places.
      * @param decplace - Number of decimal digits to the right of the decimal point at which to truncate. Negative values are allowed.
      * @returns a truncated Oracle number
      */
     trunc(decplace: OracleNumber | number): OracleNumber;
     /**
-     * Scale the digits to the left and right of the decimal point.
+     * Scales the digits to the left and right of the decimal point.
      * @param left maximum number of decimal digits to the left of the decimal point. It will not effect the number, but throw an exception if this value is exceeded.
      * @param right maximum number of decimal digits to the right of the decimal point. The number is rounded at this point. Negative values are allowed.
      * @returns a new scaled Oracle number scaled according to the arguments
@@ -311,8 +310,8 @@ export declare class OracleNumber {
  */
 export declare class IOracleIntervalDayToSecond {
     /**
-     * Constructor for IOracleIntervalDayToSecond using day, hour, minute, and
-     * second. All arguments must be integral numbers.
+     * Constructor for IOracleIntervalDayToSecond using day, hour, minute,
+     * second, and fraction of a second. All arguments must be integral numbers.
      *
      * @param dy - number of days
      * @param hr - number of hours
@@ -323,7 +322,7 @@ export declare class IOracleIntervalDayToSecond {
      */
     constructor(dy: number, hr: number, mm: number, ss: number, fs: number);
     /**
-     * Parse an interval string into IOracleIntervalDayToSecond. fromString
+     * Parses an interval string into IOracleIntervalDayToSecond. This method
      * accepts the same input formats as the Oracle SQL function TO_DSINTERVAL:
      
      * - SQL interval format compatible with the SQL standard (ISO/IEC 9075)
@@ -352,13 +351,11 @@ export declare class IOracleIntervalDayToSecond {
      */
     fromNumberOfDays(days: number | OracleNumber): IOracleIntervalDayToSecond;
     /**
-     * Compares two intervals
-     *
+     * Compares two intervals.
+     * Returns -1 if i1 < i2, 0 if they are equal, and 1 if i1 > i2.
      * @param i1 - first interval to use for the comparison
      * @param i2 - second interval to use for the comparison
-     * @returns -1 if i1 < i2
-     *           0 if i1 = i2
-     *           1 if i1 > i2
+     * @returns the result of the comparison as a number between -1 and +1.
      */
     compare(i1: IOracleIntervalDayToSecond, i2: IOracleIntervalDayToSecond): any;
     /**
@@ -470,13 +467,11 @@ export declare class IOracleIntervalYearToMonth {
      */
     fromNumberOfYears(years: number | OracleNumber): IOracleIntervalYearToMonth;
     /**
-     * Compares two intervals
-     *
+     * Compares two intervals.
+     * Returns -1 if i1 < i2, 0 if they are equal, and 1 if i1 > i2.
      * @param i1 - first interval to use for the comparison
      * @param i2 - second interval to use for the comparison
-     * @returns -1 if i1 < i2
-     *           0 if i1 = i2
-     *           1 if i1 > i2
+     * @returns the result of the comparison as a number between -1 and +1.
      */
     compare(i1: IOracleIntervalYearToMonth, i2: IOracleIntervalYearToMonth): number;
     /**
@@ -575,7 +570,7 @@ export declare class OracleBlob {
      * your default temporary tablespace. The temporary BLOB is created with
      * SESSION duration.
      *
-     * @param cache Specified if BLOB should be read into buffer cache or not.
+     * @param cache Specifies if BLOB should be read into buffer cache or not.
      */
     static createTemporary(cache: boolean): OracleBlob;
     constructor(delegate: any);
@@ -614,7 +609,7 @@ export declare class OracleBlob {
     isTemporary(...args: any[]): boolean;
     /**
      * This method opens a BLOB in the indicated mode. Valid modes include
-     * read-only, and read/write.
+     * read-only and read/write.
      *
      * @param mode
      */
@@ -717,7 +712,7 @@ export declare class IOracleClob {
     isTemporary(): boolean;
     /**
      * This method opens a CLOB in the indicated mode. Valid modes include
-     * read-only, and read/write.
+     * read-only and read/write.
      *
      * @param mode
      */
@@ -732,7 +727,7 @@ export declare class IOracleClob {
      */
     freeTemporary(): any;
     /**
-     * This method reads a piece of a CLOB, and returns the specified amount
+     * This method reads a piece of a CLOB and returns the specified amount
      * into the buffer parameter, starting from an absolute offset from the
      * beginning of the CLOB. If the input offset points past the End of CLOB, a
      * NO_DATA_FOUND exception is raised.
@@ -788,7 +783,7 @@ export declare class IOracleTimestampTZ {
      * @param format optional datetime format model
      * @param nlsParam optional NLS parameter string. Must have the same format
      * as the NLS argument to the TO_TIMESTAMP_TZ SQL function.
-     * @returns a IOracleTimestampTZ object
+     * @returns an IOracleTimestampTZ object
      */
     fromString(date: string, format?: string, nlsParam?: string): any;
     /**
@@ -797,7 +792,7 @@ export declare class IOracleTimestampTZ {
      */
     asLocalDateTime(): IOracleTimestamp;
     /**
-     * Convert this IOracleTimestampTZ to a IOracleTimestampTZ in the specified
+     * Convert this IOracleTimestampTZ to an IOracleTimestampTZ in the specified
      * time zone. The time zone string has to contain either a time zone offset
      * of the form '(+|-)HH:MM' or a time zone region name.
      *
@@ -810,11 +805,10 @@ export declare class IOracleTimestampTZ {
     atTimeZone(timezone: string): IOracleTimestampTZ;
     /**
      * Compares two datetime values.
+     * Returns -1 if date1 < date2, 0 if they are equal, and 1 if date1 > date2.
      *
      * @param other - second timestamp to be compared
-     * @returns -1 if date1 < date2
-     *           0 if date1 = date2
-     *           1 if date1 > date2
+     * @returns the result of the comparison as a number between -1 and +1.
      */
     compare(date1: IOracleTimestampTZ, date2: IOracleTimestampTZ): number;
     /**
@@ -860,7 +854,7 @@ export declare class IOracleTimestampTZ {
      */
     getFractionalSecond(): number;
     /**
-     * Gets the time zone of a IOracleTimestampTZ.
+     * Gets the time zone of an IOracleTimestampTZ.
      *
      * @returns the time zone name as string
      */
@@ -935,15 +929,15 @@ export declare class IOracleTimestamp {
      * @param format optional datetime format model
      * @param nlsParam optional NLS parameter string. Must have the same format
      * as the NLS argument to the TO_TIMESTAMP SQL function.
-     * @returns a IOracleTimestamp object
+     * @returns an IOracleTimestamp object
      */
     fromString(date: string, format?: string, nlsParam?: string): any;
     /**
-     * Convert to a IOracleTimestampTZ using the session time zone.
+     * Converts to an IOracleTimestampTZ using the session time zone.
      */
     atSessionTimeZone(): IOracleTimestampTZ;
     /**
-     * Convert to a IOracleTimestampTZ in the specified time zone. The time zone
+     * Converts to an IOracleTimestampTZ in the specified time zone. The time zone
      * string has to contain either a time zone offset of the form '(+|-)HH:MM'
      * or a time zone region name.
      *
@@ -952,11 +946,10 @@ export declare class IOracleTimestamp {
     atTimeZone(timezone: string): IOracleTimestampTZ;
     /**
      * Compares two IOracleTimestamp values.
+     * Returns -1 if date1 < date2, 0 if they are equal, and 1 if date1 > date2.
      *
      * @param other - second timestamp to be compared
-     * @returns -1 if date1 < date2
-     *           0 if date1 = date2
-     *           1 if date1 > date2
+     * @returns the result of the comparison as a number between -1 and +1.
      */
     compare(date1: IOracleTimestamp, date2: IOracleTimestamp): number;
     /**
@@ -1132,12 +1125,11 @@ export declare class IOracleDate {
     addDays(numberOfDays: number): IOracleDate;
     /**
      * Compares two dates.
+     * Returns -1 if d1 < d2, 0 if they are equal, and 1 if d1 > d2.
      *
      * @param d1 - first date value
      * @param d2 - second date value
-     * @returns -1 if d1 < d2
-     *           0 if d1 = d2
-     *           1 if d1 > d2
+     * @returns the result of the comparison as a number between -1 and +1.
      */
     compare(d1: IOracleDate, d2: IOracleDate): number;
     /**

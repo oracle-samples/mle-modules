@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2019, 2022, Oracle and/or its affiliates.
+Copyright (c) 2019, 2024, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -44,6 +44,10 @@ export declare enum JSTypes {
     DATE = 2,
     /** Type Boolean */
     BOOLEAN = 3,
+    /**
+     * In 21c, indices 4 and 5 had been used for BLOB and CLOB which do, however,
+     * not make sense for mle-js-oracledb and have therefore been removed in 23ai.
+     */
     /** Type Object */
     OBJECT = 6,
     /** UINT8ARRAY */
@@ -65,7 +69,25 @@ export declare enum JSTypes {
     /** Type OracleBLOB */
     ORACLE_BLOB = 15,
     /** Type DbTypeJson */
-    DB_TYPE_JSON = 16
+    DB_TYPE_JSON = 16,
+    /**
+     * Type Int8Array
+     *
+     * @since Oracle 23.4
+     */
+    INT8ARRAY = 17,
+    /**
+     * Type Float32Array
+     *
+     * @since Oracle 23.4
+     */
+    FLOAT32ARRAY = 18,
+    /**
+     * Type Float64Array
+     *
+     * @since Oracle 23.4
+     */
+    FLOAT64ARRAY = 19
 }
 /**
  * Import a value exported from PL/SQL into the current context

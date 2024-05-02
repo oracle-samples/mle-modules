@@ -1,7 +1,7 @@
 {
-  "name": "mle-js",
-  "description": "Bundle of all declarations of pre-defined JavaScript modules that ship with Oracle Database",
-  "types": "mle-js.d.ts",
+  "name": "mle-js-encodings",
+  "description": "MLE text encoding API",
+  "types": "index.d.ts",
   "author": "Oracle",
   "version": "23.4.0",
   "license": "UPL-1.0",

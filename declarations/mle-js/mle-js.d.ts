@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2019, 2023, Oracle and/or its affiliates.
+Copyright (c) 2019, 2024, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -36,8 +36,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-declare module "mle-js-oracledb" {
-/** Copyright (c) 2021, 2023, Oracle and/or its affiliates. */
+/**
+ * CAUTION: This namespace is used for TYPE DECLARATIONS ONLY and does not have
+ * an equivalent in the actual implementation in MLE. Please either use the
+ * corresponding module or global symbols instead.
+ */
+declare namespace __mlejsoracledb {
+
 /**
  * SODA API for MLE. This is compatible with node-oracledb 5.0.0.
  */
@@ -45,8 +50,10 @@ declare module "mle-js-oracledb" {
  * SodaDatabase.createCollection() options. The metadata must conform to the
  * JSON object layout specified in the Oracle Database
  * "SODA Collection Metadata Components (Reference)" documentation.
- * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatecollectionoptions
- * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-collection-metadata-components-reference.html
+ * @see
+ *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatecollectionoptions
+ * @see
+ *    https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-collection-metadata-components-reference.html
  */
 interface ICreateCollectionOptions {
     metaData?: Record<string, any>;
@@ -54,7 +61,8 @@ interface ICreateCollectionOptions {
 }
 /**
  * SodaDatabase.createDocument() options.
- * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatedocumentoptions
+ * @see
+ *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatedocumentoptions
  */
 interface ICreateDocumentOptions {
     key?: string;
@@ -62,7 +70,8 @@ interface ICreateDocumentOptions {
 }
 /**
  * SodaDatabase.getCollectionNames() options.
- * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbgetcollectionnamesoptions
+ * @see
+ *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbgetcollectionnamesoptions
  */
 interface IGetCollectionNameOptions {
     limit?: number;
@@ -70,42 +79,48 @@ interface IGetCollectionNameOptions {
 }
 /**
  * SodaCollection.dropIndex() options.
- * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropindexoptions
+ * @see
+ *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropindexoptions
  */
 interface IDropIndexOptions {
     force?: boolean;
 }
 /**
  * SodaCollection.drop() return value.
- * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropcallback
+ * @see
+ *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropcallback
  */
 interface IDropResult {
     dropped: boolean;
 }
 /**
  * SodaCollection.dropIndex() result.
- * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropindexcb
+ * @see
+ *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropindexcb
  */
 interface IDropIndexResult {
     dropped: boolean;
 }
 /**
  * SodaOperation.count() result.
- * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasscount
+ * @see
+ *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasscount
  */
 interface ICountResult {
     count: number;
 }
 /**
  * SodaOperation.remove() result.
- * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassremove
+ * @see
+ *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassremove
  */
 interface IRemoveResult {
     count: number;
 }
 /**
  * SodaOperation.replace() result.
- * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassreplaceone
+ * @see
+ *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassreplaceone
  */
 interface IReplaceResult {
     replaced: boolean;
@@ -115,14 +130,16 @@ interface IReplaceResult {
  * SODA operations. A 'SODA database' is an abstraction, allowing access to SODA
  * collections in that 'SODA database', which then allow access to documents in
  * those collections.
- * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadatabaseclass
+ * @see
+ *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadatabaseclass
  */
 export abstract class ISodaDatabase {
     /**
      * Creates a SODA collection of the given name.
      * If a collection with the same name already exists,
      * then that existing collection is opened without error.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatecollection
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatecollection
      * @param collectionName name of the collection to be created.
      * @param options the options that specify the collection, see
      *        CreateCollectionOptions.
@@ -135,7 +152,8 @@ export abstract class ISodaDatabase {
      * neither will attributes valid in options but not specified. The document
      * will not be stored in the database until an insert or replace method is
      * called.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatedocument
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatedocument
      * @param content the document content.
      * @param options the options that specify the document, see
      *                CreateDocumentOptions.
@@ -146,7 +164,8 @@ export abstract class ISodaDatabase {
      * Gets an array of collection names in alphabetical order.
      * Returns names that start with the given string, and all subsequent names,
      * in alphabetic order.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbgetcollectionnames
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbgetcollectionnames
      * @param options see GetCollectionNameOptions.
      * @return an array of matching collection names.
      */
@@ -154,7 +173,8 @@ export abstract class ISodaDatabase {
     /**
      * Opens an existing SodaCollection of the given name.
      * The collection can then be used to access documents.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbopencollection
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbopencollection
      * @param collectionName the name of the collection to open.
      * @return a new SodaCollection object if the collection exists.
      *         If the requested collection does not exist undefined will be
@@ -164,30 +184,36 @@ export abstract class ISodaDatabase {
 }
 /**
  * SODA collection class. A SODA collection is a set of SodaDocuments.
- * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollectionclass
+ * @see
+ *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollectionclass
  */
 abstract class ISodaCollection {
     /**
      * Name of the collection.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollectionproperties
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollectionproperties
      */
     abstract get name(): string;
     /**
      * Metadata for the collection. The metadata will conform to the JSON object
      * layout specified in the Oracle Database
      * "SODA Collection Metadata Components (Reference)" documentation.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollectionproperties
-     * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-collection-metadata-components-reference.html
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollectionproperties
+     * @see
+     *    https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-collection-metadata-components-reference.html
      */
     abstract get metaData(): Record<string, any>;
     /**
-     * Creates an index on a SODA collection, to improve the performance of SODA
-     * query-by-examples (QBE) or enable text searches. Different index types can
-     * be created, the indexSpec parameter must conform to the JSON object layout
-     * specified in the Oracle Database "SODA Index Specifications (Reference)"
-     * documentation.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollcreateindex
-     * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-index-specifications-reference.html
+     * Creates an index on a SODA collection to improve the performance of SODA
+     * query-by-examples (QBE) or to enable text searches. Different index types
+     * can be created as long as the indexSpec parameter conforms to the
+     * JSON object layout specified in the Oracle Database "SODA Index
+     * Specifications (Reference)" documentation.
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollcreateindex
+     * @see
+     *    https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-index-specifications-reference.html
      * @param indexSpec index specification,
      *        see "SODA Index Specifications (Reference)"
      * @throws an exception if the index creation fails.
@@ -195,7 +221,8 @@ abstract class ISodaCollection {
     abstract createIndex(indexSpec: Record<string, any>): void;
     /**
      * Drops the current collection.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldrop
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldrop
      * @return a DropResult containing a dropped value of true if the drop
      * operation succeeded or false if the collection does not exist.
      * @throws an exception if the collection drop fails.
@@ -203,7 +230,8 @@ abstract class ISodaCollection {
     abstract drop(): IDropResult;
     /**
      * Drops the specified index.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropindex
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropindex
      * @param indexName the name of the index to drop
      * @param options an optional force flag may be specified
      * @return a DropIndexResult containing a dropped value of true if the
@@ -212,24 +240,27 @@ abstract class ISodaCollection {
      */
     abstract dropIndex(indexName: string, options?: IDropIndexOptions): IDropIndexResult;
     /**
-     * Locate and order a set of SODA documents for retrieval, replacement,
-     * or removal.
-     * with non-terminal and terminal methods, see SodaOperation for details.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollfind
+     * Locates and orders a set of SODA documents for retrieval, replacement, or
+     * removal with non-terminal and terminal methods, see SodaOperation for
+     * details.
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollfind
      * @return a SodaOperation object which is used via method chaining
      */
     abstract find(): ISodaOperation;
     /**
      * Infers the schema of a collection of JSON documents.
      * The data guide is represented as JSON content in a SodaDocument.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollgetdataguide
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollgetdataguide
      * @return a new SodaDocument containing the inferred schema.
      * @throws an exception if the schema inference fails.
      */
     abstract getDataGuide(): ISodaDocument;
     /**
      * Inserts an array of Objects or SodaDocuments into the collection.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertmany
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertmany
      * @param docs an array of Objects or SodaDocuments to be inserted into the
      *             collection.
      * @throws an exception if a document insertion fails. The offset attribute on
@@ -242,7 +273,8 @@ abstract class ISodaCollection {
      * Inserts an array of Objects or SodaDocuuments into the collection and
      * returns the documents which contain all SodaDocument components except for
      * content, for performance reasons.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertmanyandget
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertmanyandget
      * @param docs an array of Objects or SodaDocuments to be inserted into the
      *             collection.
      * @return an array of inserted SodaDocuments.
@@ -255,17 +287,19 @@ abstract class ISodaCollection {
     /**
      * Inserts a given document to the collection. The input document can be
      * either a JavaScript object representing the data content, or it can be an
-     * existing SodaDocument.,
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertone
+     * existing SodaDocument.
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertone
      * @param doc an Object or SodaDocument to insert into the collection.
      * @throws an exception if insertion fails.
      */
     abstract insertOne(doc: Record<string, any> | ISodaDocument): void;
     /**
-     * Inserts a document in a collection and returns the result document which
+     * Inserts a document in a collection and returns the result document that
      * contains all SodaDocument components except for content, for performance
      * reasons.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertoneandget
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertoneandget
      * @param doc the Object or SodaDoc to insert into the collection.
      * @return the inserted SodaDocument.
      * @throws an exception if insertion fails.
@@ -276,20 +310,22 @@ abstract class ISodaCollection {
      * if a document with the same key already exists, then it is updated instead.
      * The collection must use client-assigned keys, which is why save()
      * accepts only a SodaDocument, unlike insertOne(). If the collection is not
-     * configured with client-assigned keys, then the behaviour is exactly the
+     * configured with client-assigned keys, then the behavior is exactly the
      * same as sodaCollection.insertOne().
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#user-content-sodacollsave
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#user-content-sodacollsave
      * @param doc the document to save.
      */
     abstract save(doc: ISodaDocument): void;
     /**
      * This method behaves like sodaCollection.insertOneAndGet() with the
      * exception that if a document with the same key already exists, then it is
-     * updated instead. The collection must use client-assigned keys keys, which
+     * updated instead. The collection must use client-assigned keys, which
      * is why saveAndGet() accepts only a SodaDocument, unlike insertOneAndGet().
      * If the collection is not configured with client-assigned keys, then the
-     * behaviour is exactly the same as sodaCollection.insertOneAndGet().
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#user-content-sodacollsaveandget
+     * behavior is exactly the same as sodaCollection.insertOneAndGet().
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#user-content-sodacollsaveandget
      * @param doc the document to save.
      * @return the saved document.
      */
@@ -297,7 +333,8 @@ abstract class ISodaCollection {
     /**
      * This method truncates a collection, removing all documents. The collection
      * will not be deleted.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#user-content-sodacolltruncate
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#user-content-sodacolltruncate
      * @throws an exception if truncation fails.
      */
     abstract truncate(): any;
@@ -306,7 +343,8 @@ abstract class ISodaCollection {
  * SODA find operation class. This class is used to search and retrieve SODA
  * documents from a SodaCollection. It provides non-terminal search condition
  * operations and terminal SodaDocument retrieval operations.
- * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclass
+ * @see
+ *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclass
  */
 abstract class ISodaOperation {
     /**
@@ -316,20 +354,23 @@ abstract class ISodaOperation {
      * Sets the size of an internal buffer used for fetching documents from a
      * collection with the terminal SodaOperation methods getCursor() and
      * getDocuments().
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassfetcharraysize
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassfetcharraysize
      * @param size the buffer size to use.
      * @return the SodaOperation object.
      */
     abstract fetchArraySize(size: number): ISodaOperation;
     /**
      * Sets a filter specification for the operation, allowing for complex
-     * document queries and ordering of JSON documents. Refer to
-     * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/overview-soda-filter-specifications-qbes.html
-     * and
-     * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-filter-specifications-reference.html
-     * for details of filter specifications.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassfilter
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaqbesearches
+     * document queries and ordering of JSON documents.
+     * @see
+     *    https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/overview-soda-filter-specifications-qbes.html
+     * @see
+     *    https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-filter-specifications-reference.html
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassfilter
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaqbesearches
      * @param filter the filter specification to use.
      * @return the SodaOperation object.
      */
@@ -337,7 +378,8 @@ abstract class ISodaOperation {
     /**
      * Sets the key value to be used to match a document for the operation.
      * Any previous calls made to this method or keys() will be ignored.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasskey
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasskey
      * @param key the search key to use.
      * @return the SodaOperation object.
      */
@@ -345,14 +387,16 @@ abstract class ISodaOperation {
     /**
      * Sets the keys to be used to match multiple documents for the operation.
      * Any previous calls made to this method or key() will be ignored.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasskeys
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasskeys
      * @param keys the search keys to use.
      * @return the SodaOperation object.
      */
     abstract keys(keys: Array<string>): ISodaOperation;
     /**
      * Sets the maximum number of documents that a terminal method will apply to.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasslimit
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasslimit
      * @param n the maximum number of documents to return. Must be greater than 0.
      * @return the SodaOperation object.
      */
@@ -360,14 +404,16 @@ abstract class ISodaOperation {
     /**
      * Sets the number of documents that will be skipped before the terminal
      * method is applied. n must be greater than or equal to 0.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationskip
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationskip
      * @param n the number of documents to skip.
      * @return the SodaOperation object.
      */
     abstract skip(n: number): ISodaOperation;
     /**
      * Sets the document version that retrieved documents must have.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassversion
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassversion
      * @param value the version of retrieved documents.
      * @return the SodaOperation object.
      */
@@ -378,36 +424,41 @@ abstract class ISodaOperation {
     /**
      * Returns the number of documents matching the given SodaOperation query
      * criteria. If skip() or limit() are set, then an exception will be thrown.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasscount
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasscount
      * @return a result object with a count field containing the number of
      * matching documents.
-     * @throws an exception id skip() or limit() are set.
+     * @throws an exception if skip() or limit() are set.
      */
     abstract count(): ICountResult;
     /**
      * Returns a SodaDocumentCursor for documents that match the SodaOperation
      * query criteria.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassgetcursor
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassgetcursor
      * @return a cursor that can be used to iterate over the matched documents.
      */
     abstract getCursor(): ISodaDocumentCursor;
     /**
      * Gets an array of SodaDocuments matching the SodaOperation query criteria.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#-824123-sodaoperationgetdocuments
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#-824123-sodaoperationgetdocuments
      * @return an array of documents, empty if none match.
      */
     abstract getDocuments(): Array<ISodaDocument>;
     /**
      * Obtains one document matching the SodaOperation query criteria.
      * If more than one document is matched, then only the first is returned.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassgetone
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassgetone
      * @return the first matching document, or undefined if none match.
      */
     abstract getOne(): ISodaDocument;
     /**
      * Removes a set of documents matching the SodaOperation query criteria.
-     * If skip() or limit(0 are set they are ignored.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassremove
+     * If skip() or limit() are set they are ignored.
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassremove
      * @return a result object with a count field containing the number of
      * removed documents.
      */
@@ -416,7 +467,8 @@ abstract class ISodaOperation {
      * Replaces a document in a collection. The input document can be either a
      * JavaScript object representing the data content, or it can be an existing
      * SodaDocument. The key() non-terminal must be used when using replaceOne().
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassreplaceone
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassreplaceone
      * @param newDoc the new content or SodaDocument.
      * @return a result object with a boolean replaced field which will be
      * true if the document was replaced successfully and false otherwise.
@@ -425,7 +477,8 @@ abstract class ISodaOperation {
     /**
      * Replaces a document in a collection and return the result document which
      * contains all SodaDocument components except for the content.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassreplaceoneandget
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassreplaceoneandget
      * @param newDoc the new content or SodaDocument.
      * @return The updated SodaDocument if replacement was successful, otherwise
      *         undefined.
@@ -434,19 +487,22 @@ abstract class ISodaOperation {
 }
 /**
  * SODA document cursor class.
- * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocumentcursorclass
+ * @see
+ *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocumentcursorclass
  * A SodaDocumentCursor is used to walk through a set of SODA documents returned
- * from a find() getCursor() method.
+ * from a find() or getCursor() method.
  */
 abstract class ISodaDocumentCursor {
     /**
      * Close the cursor.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadoccursorclose
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadoccursorclose
      */
     abstract close(): void;
     /**
      * Returns the next SodaDocument in the cursor returned by a find().
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadoccursorgetnext
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadoccursorgetnext
      * @return the next document, or undefined when there are no further
      * documents.
      */
@@ -455,12 +511,14 @@ abstract class ISodaDocumentCursor {
 /**
  * SODA document class. SodaDocuments represents the document for SODA read and
  * write operations.
- * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocumentclass
+ * @see
+ *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocumentclass
  */
 abstract class ISodaDocument {
     /**
      * SODA document properties.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocumentproperties
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocumentproperties
      */
     /**
      * The creation time of the document as a string in the UTC time zone using an
@@ -490,7 +548,8 @@ abstract class ISodaDocument {
     readonly version: string;
     /**
      * Return the document content as an object.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocgetcontent
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocgetcontent
      * @return the document content as an object.
      * @throws an exception if the document content is not JSON and cannot be
      * converted to an object.
@@ -499,13 +558,15 @@ abstract class ISodaDocument {
     /**
      * Return JSON document content as a string. If the document encoding is
      * unknown, UTF-8 will be used.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocgetcontentasstring
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocgetcontentasstring
      * @return the document content as a string.
      */
     abstract getContentAsString(): string;
 }
 
-/** Copyright (c) 2019, 2023, Oracle and/or its affiliates. */
+
+
 
 /**
  * Custom class for errors thrown by {@link execute}() or {@link executeMany}().
@@ -574,6 +635,16 @@ interface IExecuteOptions {
      * IResultSet} object or directly. The default is false.
      */
     resultSet?: boolean;
+    /**
+     * When keepInStmtCache is true, and statement caching is enabled,
+     * then the statement will be added to the cache if it is not already present.
+     * This helps the performance of re-executed statements.
+     *
+     * The default value is true.
+     *
+     * @since Oracle 23.4
+     */
+    keepInStmtCache?: boolean;
 }
 /**
  * Interface for representing an entry in {@link IObjectBindDefs} or {@link ArrayBindDefs}.
@@ -586,18 +657,24 @@ interface IBindDef {
      */
     dir: number;
     /**
-     * Required for Strings and Uint8Arrays. Ignored for other types. Specifies
-     * the maximum number of bytes allocated when processing each value of this
-     * bind variable. When data is being passed into the database, maxSize
-     * must be at least the size of the longest value. When data is being
-     * returned from the database, maxSize must be the size of the longest
-     * value. If maxSize is too small, {@link executeMany} will throw an error.
+     * The maximum number of bytes that an OUT or INOUT bind variable of type
+     * {@link STRING} or {@link UINT8ARRAY} can use to get data. The default
+     * value is 200. The maximum limit depends on the database type. When
+     * binding INOUT, maxSize refers to the size of the returned value.
+     * The input value can be smaller or bigger. For IN binds, maxSize is
+     * ignored. When data is being returned from the database, maxSize must be
+     * at least the size of the longest value. If maxSize is too small, an error
+     * gets thrown.
      */
     maxSize?: number;
     /**
-     * The JavaScript data type to be bound. One of the mle-js-oracledb JS Type
-     * Constants; if binding an ADT, a type descriptor or the FQN of the type is
-     * accepted.
+     * The JavaScript data type to be bound. One of the mle-js-oracledb JS
+     * Constants; when binding ADTs, a type descriptor or the fully-qualified
+     * name (FQN) of the type is also accepted.
+     * With IN or INOUT binds the type can be explicitly set with
+     * type or it will default to the type of the input data value. With OUT
+     * binds, the type defaults to {@link STRING} whenever type is not
+     * specified.
      */
     type: JsType | string | IDbObjectClass;
 }
@@ -634,9 +711,19 @@ interface IExecuteManyOptions {
      */
     bindDefs?: ExecuteManyBindDefs;
     dmlRowCounts?: boolean;
+    /**
+     * When keepInStmtCache is true, and statement caching is enabled,
+     * then the statement will be added to the cache if it is not already present.
+     * This helps the performance of re-executed statements.
+     *
+     * The default value is true.
+     *
+     * @since Oracle 23.4
+     */
+    keepInStmtCache?: boolean;
 }
 /**
- * Interface representing meta data as used in {@link IResultSet}s and statement info.
+ * Interface representing metadata as used in {@link IResultSet}s and statement info.
  */
 interface IMetaData {
     /**
@@ -674,6 +761,18 @@ interface IMetaData {
      * Name of the database type, such as “NUMBER” or “VARCHAR2”.
      */
     dbTypeName?: string;
+    /**
+     * Number of Dimensions in vector.
+     *
+     * @since Oracle 23.4
+     */
+    vectorDimensions?: number;
+    /**
+     * Storage type of elements in vector.
+     *
+     * @since Oracle 23.4
+     */
+    vectorFormat?: number;
 }
 /**
  * Interface for representing result sets as returned by {@link execute}().
@@ -729,7 +828,7 @@ abstract class IResultSet {
      */
     abstract iterator(): IterableIterator<any>;
     /**
-     * This function defines the default iterator for a result set which can be
+     * This function defines the default iterator for a result set that can be
      * used to iterate over its rows. Using the default iterator, a result set
      * can be iterated over using the for..of construct.
      *
@@ -769,9 +868,9 @@ interface IExecuteReturn {
      * For SELECT statements using direct fetches, rows contains an array of
      * fetched rows. It will be NULL if there is an error or the SQL statement
      * was not a SELECT statement. By default, the rows are in an array of
-     * column value arrays, but this can be changed to arrays of objects by
-     * setting outFormat to oracledb.{@link OBJECT}. If a single row is fetched,
-     * then rows is an array that contains one single row.
+     * objects, but this can be changed to arrays of column value arrays by
+     * setting outFormat to oracledb.{@link OUT_FORMAT_ARRAY}. If a single row
+     * is fetched, then rows is an array that contains one single object.
      *
      * The number of rows returned is limited by parameters.{@link maxRows} or
      * the {@link maxRows} option in an {@link execute}() call. If maxRows is 0,
@@ -808,32 +907,15 @@ interface IExecuteManyReturn {
 /**
  * Interface for object binds in {@link execute}().
  */
-interface IBindObjectValue {
+interface IBindObjectValue extends IBindDef {
     /**
-     * The direction of the bind. One of the constants {@link BIND_IN},
-     * {@link BIND_INOUT}, or {@link BIND_OUT}. The default is
-     * {@link BIND_IN}.
+     * The number of array elements to be allocated for a PL/SQL Collection
+     * INDEX BY associative array OUT or IN OUT array bind variable. For IN
+     * binds, the value of maxArraySize is ignored.
+     *
+     * @since Oracle 23.4
      */
-    dir?: number;
-    /**
-     * The maximum number of bytes that an OUT or INOUT bind variable of type
-     * {@link STRING} or {@link UINT8ARRAY} can use to get data. The default
-     * value is 200. The maximum limit depends on the database type. When
-     * binding INOUT, then maxSize refers to the size of the returned value.
-     * The input value can be smaller or bigger. For IN binds, maxSize is
-     * ignored.
-     */
-    maxSize?: number;
-    /**
-     * The JavaScript data type to be bound. One of the mle-js-oracledb JS
-     * Constants; when binding ADTs, a type descriptor or the FQN of the type
-     * is also accepted.
-     * With IN or INOUT binds the type can be explicitly set with
-     * type or it will default to the type of the input data value. With OUT
-     * binds, the type defaults to {@link STRING} whenever type is not
-     * specified.
-     */
-    type?: number | string | IDbObjectClass;
+    maxArraySize?: number;
     /**
      * The input value or variable to be used for an IN or INOUT bind variable.
      */
@@ -841,7 +923,7 @@ interface IBindObjectValue {
 }
 /**
  * Interface for a single bind parameter as used in {@link execute}(). Can
- * either be an bind object or a scalar value.
+ * either be a bind object or a scalar value.
  */
 export type BindValue = IBindObjectValue | any;
 /**
@@ -939,7 +1021,7 @@ export abstract class IConnection {
      * The executeMany() method supports IN, IN OUT and OUT binds for most data
      * types.
      *
-     * The version of this function which accepts a number of iterations must
+     * The version of this function that accepts a number of iterations must
      * be used when no bind parameters are required or when all bind parameters
      * are OUT binds.
      *
@@ -986,7 +1068,7 @@ export abstract class IConnection {
      * bind variables used.
      *
      * This method performs a call to the SQL layer of the database, so
-     * unnecessary calls should be avoided.
+     * unnecessary calls should be avoided for performance reasons.
      *
      * The information is provided by lower-level APIs that have some
      * limitations. Some uncommon statements will return the statement type as
@@ -1003,7 +1085,8 @@ export abstract class IConnection {
     abstract rollback(): void;
     /**
      * Returns a parent SodaDatabase object.
-     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#getsodadatabase
+     * @see
+     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#getsodadatabase
      * @return a new SodaDatabase object.
      */
     abstract getSodaDatabase(): ISodaDatabase;
@@ -1053,6 +1136,14 @@ abstract class IDbObjectClass {
      */
     readonly elementType?: number;
     /**
+     * When dbObject.isCollection is true and the elements in the collection
+     * refer to database objects, this property provides the type class
+     * information of the elements.
+     *
+     * @since Oracle 23.4
+     */
+    readonly elementTypeClass?: IDbObjectClass;
+    /**
      * When dbObject.isCollection is true, this will have the name of the
      * element type, such as “VARCHAR2” or “NUMBER”.
      */
@@ -1074,10 +1165,17 @@ abstract class IDbObjectClass {
      */
     readonly schema?: string;
     /**
+     * String which identifies the name of the package, if the type refers to a
+     * PL/SQL type. Otherwise, it returns undefined.
+     *
+     * @since Oracle 23.4
+     */
+    readonly packageName?: string;
+    /**
      * When dbObject.isCollection is true, this will have the number
      * of elements in the collection. It is undefined for non-collections.
      */
-    readonly length?: number | undefined;
+    readonly length?: number;
     /**
      * These methods can be used on Oracle Database collections, identifiable
      * when dbObject.isCollection is true. When collections are fetched from the database,
@@ -1089,7 +1187,7 @@ abstract class IDbObjectClass {
      */
     abstract append?(value: any): void;
     /**
-     * Deletes the value from collection at the given index.
+     * Deletes the value from the collection at the given index.
      */
     abstract deleteElement?(index: number): void;
     /**
@@ -1105,7 +1203,7 @@ abstract class IDbObjectClass {
      */
     abstract getKeys?(): number[];
     /**
-     * To obtain the last index for later use to obtain a value.
+     * Obtains the last index for later use to obtain a value.
      */
     abstract getLastIndex?(): number;
     /**
@@ -1163,9 +1261,9 @@ const OUT_FORMAT_OBJECT: OutFormatType;
  * in {@link fetchAsString}, {@link fetchAsUint8Array}, and
  * {@link fetchAsPlsqlWrapper}.
  *
- * In addition to the standard JavaScript types which node-oracledb offers,
+ * In addition to the standard JavaScript types that node-oracledb offers,
  * mle-js-oracledb also offers a number of so-called PL/SQL wrapper types which
- * are JavaScript types with the exact same semantics like the corresponding
+ * are JavaScript types with the exact same semantics as the corresponding
  * Oracle SQL or PL/SQL types (see mle-js-plsqltypes). The JavaScript constants
  * for those types all start with ORACLE_, e.g.  ORACLE_NUMBER is the constant
  * to be used if a database value should be retrieved as OracleNumber rather
@@ -1205,15 +1303,15 @@ const ORACLE_BLOB: JsType;
  */
 const ORACLE_CLOB: JsType;
 /**
- * Bind a INTERVAL DAY TO SECOND to an OracleIntervalDayToSecond object.
+ * Bind an INTERVAL DAY TO SECOND to an OracleIntervalDayToSecond object.
  */
 const ORACLE_INTERVAL_DS: JsType;
 /**
- * Bind a INTERVAL YEAR TO MONTH to an OracleIntervalYearToMonth object.
+ * Bind an INTERVAL YEAR TO MONTH to an OracleIntervalYearToMonth object.
  */
 const ORACLE_INTERVAL_YM: JsType;
 /**
- * Bind a NCLOB to a OracleNCLOB object.
+ * Bind an NCLOB to an OracleNCLOB object.
  */
 const ORACLE_NCLOB: JsType;
 /**
@@ -1229,9 +1327,27 @@ const ORACLE_TIMESTAMP: JsType;
  */
 const ORACLE_TIMESTAMP_TZ: JsType;
 /**
+ * Bind a VECTOR(*, int8) to Int8Array
+ * @since Oracle 23.4
+ */
+const INT8ARRAY: JsType;
+/**
+ * Bind a VECTOR(*, float32) to Float32Array
+ * @since Oracle 23.4
+ */
+const FLOAT32ARRAY: JsType;
+/**
+ * Bind a VECTOR(*, float64) to Float64Array
+ * @since Oracle 23.4
+ */
+const FLOAT64ARRAY: JsType;
+/**
  * Type for mle-js-oracledb Database Type Constants. Such constants can be used
  * in IN binds to specify what database type a JavaScript value should be
- * converted to, but are also what is used in query meta data.
+ * converted to and are also what is used in query metadata. In addition, some
+ * of these types can also be used in OUT binds if a corresponding
+ * {@link JsType} does not exist, e.g. {@link DB_TYPE_BOOLEAN},
+ * {@link DB_TYPE_JSON}, {@link DB_TYPE_NCLOB}.
  */
 export type DbType = number;
 /**
@@ -1327,8 +1443,9 @@ const DB_TYPE_NCHAR: DbType;
  */
 const DB_TYPE_NCLOB: DbType;
 /**
- * Bind as JSON. This constant can also be used {@link fetchAsString} to express
- * that JSON column values should be fetched as JS string rather than JS object.
+ * Bind as JSON. This constant can also be used in {@link fetchAsString} to
+ * express that JSON column values should be fetched as JS string rather than JS
+ * object.
  */
 const DB_TYPE_JSON: DbType;
 /**
@@ -1337,6 +1454,11 @@ const DB_TYPE_JSON: DbType;
  * @since Oracle 23.3
  */
 const DB_TYPE_OBJECT: DbType;
+/**
+ * VECTOR
+ * @since Oracle 23.4
+ */
+const DB_TYPE_VECTOR: DbType;
 /**
  * Direction for IN binds
  */
@@ -1436,8 +1558,8 @@ class Parameters {
      * When the number of query rows is relatively big, or cannot be predicted, it
      * is recommended to use an {@link IResultSet}. This allows applications to
      * process rows in smaller chunks or individually, preventing the PGA limits
-     * being exceeded or query results being unexpectedly truncated by a maxRows
-     * limit.
+     * from being exceeded or query results being unexpectedly truncated by a
+     * maxRows limit.
      */
     set maxRows(value: number);
     private _outFormat;
@@ -1447,7 +1569,7 @@ class Parameters {
      * It affects both IResultSet and non-IResultSet queries. This can be either
      * of the constants {@link OUT_FORMAT_ARRAY} or {@link OUT_FORMAT_OBJECT}. The
      * default value is {@link OUT_FORMAT_ARRAY} when requiring the module
-     * "mle-js-oracledb" (in Oracle 21c). Oracle 23c introduces and encourages the
+     * "mle-js-oracledb" (in Oracle 21c). Oracle 23ai introduces and encourages the
      * use of ECMAScript imports (import oracledb from "mle-js-oracledb") and if
      * those are used, the default value is {@link OUT_FORMAT_OBJECT}.
      *
@@ -1510,7 +1632,7 @@ class Parameters {
      * is queried with {@link execute}(), the column data is returned as a
      * string instead of the default representation.
      *
-     * By default in mle-js-oracledb, all columns are returned as native types or
+     * By default in mle-js-oracledb, all columns are returned as native types
      * or as OracleClob/OracleBlob wrapper types, in the case of CLOB and BLOB
      * types.
      *
@@ -1536,7 +1658,7 @@ class Parameters {
      * execute}(), the column data is returned as a Uint8Array instead of the
      * default representation.
      *
-     * By default in mle-js-oracledb, all columns are returned as native types or
+     * By default in mle-js-oracledb, all columns are returned as native types
      * or as OracleClob/OracleBlob wrapper types, in the case of CLOB and BLOB
      * types.
      *
@@ -1552,11 +1674,11 @@ class Parameters {
      * the specified types is queried with {@link execute}(), the column data is
      * returned as a PL/SQL wrapper type instead of the default representation.
      *
-     * By default in mle-js-oracledb, all columns are returned as native types or
+     * By default in mle-js-oracledb, all columns are returned as native types
      * or as OracleClob/OracleBlob wrapper types, in the case of CLOB and BLOB
      * types.
      *
-     * For types that be set in both properties ({@link fetchAsString} and
+     * For types that are set in both properties ({@link fetchAsString} and
      * fetchAsPlsqlWrapper), i.e. {@link DATE} and {@link NUMBER}, the {@link
      * fetchAsString} property has precedence over the fetchAsPlsqlWrapper
      * property.
@@ -1566,9 +1688,6 @@ class Parameters {
      */
     set fetchAsPlsqlWrapper(value: JsType[]);
 }
-
-/** Copyright (c) 2017, 2023, Oracle and/or its affiliates. */
-
 
 export class OracleDb {
     OUT_FORMAT_ARRAY: number;
@@ -1610,6 +1729,10 @@ export class OracleDb {
     DB_TYPE_NCHAR: number;
     DB_TYPE_NCLOB: number;
     DB_TYPE_JSON: number;
+    /**
+     * @since Oracle 23.4
+     */
+    DB_TYPE_VECTOR: number;
     DB_TYPE_INTERVAL_YM: number;
     DB_TYPE_INTERVAL_DS: number;
     BIND_IN: number;
@@ -1663,25 +1786,26 @@ export class OracleDb {
     set maxRows(value: number);
     /**
      * Returns the default connection object for executing SQL queries in the Oracle
-     * Database using mle-js-oracledb. Note that since in MLE, JavaScript is
+     * Database using mle-js-oracledb. Note that with MLE, because JavaScript is
      * executed directly in the database, there is no need to establish a specific
-     * connection which is why the default connection object should be used.
+     * connection, which is why the default connection object should be used.
      *
      * @returns default connection object for executing SQL queries with mle-js-oracledb.
      */
     defaultConnection(): IConnection;
 }
 
-/** Copyright (c) 2022, 2023, Oracle and/or its affiliates. */
+}
 
+declare module "mle-js-oracledb" {
 
-export const oracledb: OracleDb;
+export const oracledb: __mlejsoracledb.OracleDb;
 export default oracledb;
 
 }
 
 declare module "mle-js-bindings" {
-/** Copyright (c) 2019, 2022, Oracle and/or its affiliates. */
+
 export enum JSTypes {
     /** Type String */
     STRING = 0,
@@ -1691,6 +1815,10 @@ export enum JSTypes {
     DATE = 2,
     /** Type Boolean */
     BOOLEAN = 3,
+    /**
+     * In 21c, indices 4 and 5 had been used for BLOB and CLOB which do, however,
+     * not make sense for mle-js-oracledb and have therefore been removed in 23ai.
+     */
     /** Type Object */
     OBJECT = 6,
     /** UINT8ARRAY */
@@ -1712,7 +1840,25 @@ export enum JSTypes {
     /** Type OracleBLOB */
     ORACLE_BLOB = 15,
     /** Type DbTypeJson */
-    DB_TYPE_JSON = 16
+    DB_TYPE_JSON = 16,
+    /**
+     * Type Int8Array
+     *
+     * @since Oracle 23.4
+     */
+    INT8ARRAY = 17,
+    /**
+     * Type Float32Array
+     *
+     * @since Oracle 23.4
+     */
+    FLOAT32ARRAY = 18,
+    /**
+     * Type Float64Array
+     *
+     * @since Oracle 23.4
+     */
+    FLOAT64ARRAY = 19
 }
 /**
  * Import a value exported from PL/SQL into the current context
@@ -1744,8 +1890,13 @@ export function exportValue(name: string, value: any): void;
 
 }
 
-declare module "mle-js-plsqltypes" {
-/** Copyright (c) 2019, 2023, Oracle and/or its affiliates. */
+/**
+ * CAUTION: This namespace is used for TYPE DECLARATIONS ONLY and does not have
+ * an equivalent in the actual implementation in MLE. Please either use the
+ * corresponding module or global symbols instead.
+ */
+declare namespace __mlejsplsqltypes {
+
 /**
  * JavaScript API for Oracle type TIMESTAMP.
  */
@@ -1900,16 +2051,15 @@ export class OracleNumber {
      */
     hypTan(): OracleNumber;
     /**
-     * Compares two Oracle numbers
-     * @returns -1 if this < other
-     *           0 if this = other
-     *           1 if this > other
+     * Compares two Oracle numbers.
+     * Returns -1 if this < other, 0 if they are equal, and 1 if this > other.
+     * @returns the result of the comparison as a number between -1 and +1.
      */
     compare(other: OracleNumber): number;
     /**
      * Checks if the Oracle number is equal to another Oracle number
      * @param other - the other Oracle number
-     * @returns true if both Oracle numbers are equal otherwise false
+     * @returns true if both Oracle numbers are equal, otherwise false
      */
     equals(other: OracleNumber): boolean;
     /**
@@ -1940,12 +2090,12 @@ export class OracleNumber {
     sqrt(): OracleNumber;
     /**
      * Tests if the number is an integer
-     * @returns true if the Oracle number is an integer otherwise false
+     * @returns true if the Oracle number is an integer, otherwise false
      */
     isInt(): boolean;
     /**
      * Tests if the number is zero
-     * @returns true if the Oracle number is zero otherwise false
+     * @returns true if the Oracle number is zero, otherwise false
      */
     isZero(): boolean;
     /**
@@ -1981,19 +2131,19 @@ export class OracleNumber {
      */
     roundPlaces(decplace: OracleNumber | number): OracleNumber;
     /**
-     * Shift the number by the specified number of decimal places
+     * Shifts the number by the specified number of decimal places
      * @param digits - number of decimal places to shift. It can be negative. Positive values shift the decimal place to the right and negative values to the left. For example, if NUMBER corresponds to 1234.5 and digits == -1, the new NUMBER object will correspond to 123.45.
      * @returns an Oracle number containing the shifted result
      */
     shift(digits: OracleNumber | number): OracleNumber;
     /**
-     * Truncate the number to the specified number of decimal places.
+     * Truncates the number to the specified number of decimal places.
      * @param decplace - Number of decimal digits to the right of the decimal point at which to truncate. Negative values are allowed.
      * @returns a truncated Oracle number
      */
     trunc(decplace: OracleNumber | number): OracleNumber;
     /**
-     * Scale the digits to the left and right of the decimal point.
+     * Scales the digits to the left and right of the decimal point.
      * @param left maximum number of decimal digits to the left of the decimal point. It will not effect the number, but throw an exception if this value is exceeded.
      * @param right maximum number of decimal digits to the right of the decimal point. The number is rounded at this point. Negative values are allowed.
      * @returns a new scaled Oracle number scaled according to the arguments
@@ -2022,8 +2172,8 @@ export class OracleNumber {
  */
 export class IOracleIntervalDayToSecond {
     /**
-     * Constructor for IOracleIntervalDayToSecond using day, hour, minute, and
-     * second. All arguments must be integral numbers.
+     * Constructor for IOracleIntervalDayToSecond using day, hour, minute,
+     * second, and fraction of a second. All arguments must be integral numbers.
      *
      * @param dy - number of days
      * @param hr - number of hours
@@ -2034,7 +2184,7 @@ export class IOracleIntervalDayToSecond {
      */
     constructor(dy: number, hr: number, mm: number, ss: number, fs: number);
     /**
-     * Parse an interval string into IOracleIntervalDayToSecond. fromString
+     * Parses an interval string into IOracleIntervalDayToSecond. This method
      * accepts the same input formats as the Oracle SQL function TO_DSINTERVAL:
      
      * - SQL interval format compatible with the SQL standard (ISO/IEC 9075)
@@ -2063,13 +2213,11 @@ export class IOracleIntervalDayToSecond {
      */
     fromNumberOfDays(days: number | OracleNumber): IOracleIntervalDayToSecond;
     /**
-     * Compares two intervals
-     *
+     * Compares two intervals.
+     * Returns -1 if i1 < i2, 0 if they are equal, and 1 if i1 > i2.
      * @param i1 - first interval to use for the comparison
      * @param i2 - second interval to use for the comparison
-     * @returns -1 if i1 < i2
-     *           0 if i1 = i2
-     *           1 if i1 > i2
+     * @returns the result of the comparison as a number between -1 and +1.
      */
     compare(i1: IOracleIntervalDayToSecond, i2: IOracleIntervalDayToSecond): any;
     /**
@@ -2181,13 +2329,11 @@ export class IOracleIntervalYearToMonth {
      */
     fromNumberOfYears(years: number | OracleNumber): IOracleIntervalYearToMonth;
     /**
-     * Compares two intervals
-     *
+     * Compares two intervals.
+     * Returns -1 if i1 < i2, 0 if they are equal, and 1 if i1 > i2.
      * @param i1 - first interval to use for the comparison
      * @param i2 - second interval to use for the comparison
-     * @returns -1 if i1 < i2
-     *           0 if i1 = i2
-     *           1 if i1 > i2
+     * @returns the result of the comparison as a number between -1 and +1.
      */
     compare(i1: IOracleIntervalYearToMonth, i2: IOracleIntervalYearToMonth): number;
     /**
@@ -2286,7 +2432,7 @@ export class OracleBlob {
      * your default temporary tablespace. The temporary BLOB is created with
      * SESSION duration.
      *
-     * @param cache Specified if BLOB should be read into buffer cache or not.
+     * @param cache Specifies if BLOB should be read into buffer cache or not.
      */
     static createTemporary(cache: boolean): OracleBlob;
     constructor(delegate: any);
@@ -2325,7 +2471,7 @@ export class OracleBlob {
     isTemporary(...args: any[]): boolean;
     /**
      * This method opens a BLOB in the indicated mode. Valid modes include
-     * read-only, and read/write.
+     * read-only and read/write.
      *
      * @param mode
      */
@@ -2428,7 +2574,7 @@ export class IOracleClob {
     isTemporary(): boolean;
     /**
      * This method opens a CLOB in the indicated mode. Valid modes include
-     * read-only, and read/write.
+     * read-only and read/write.
      *
      * @param mode
      */
@@ -2443,7 +2589,7 @@ export class IOracleClob {
      */
     freeTemporary(): any;
     /**
-     * This method reads a piece of a CLOB, and returns the specified amount
+     * This method reads a piece of a CLOB and returns the specified amount
      * into the buffer parameter, starting from an absolute offset from the
      * beginning of the CLOB. If the input offset points past the End of CLOB, a
      * NO_DATA_FOUND exception is raised.
@@ -2499,7 +2645,7 @@ export class IOracleTimestampTZ {
      * @param format optional datetime format model
      * @param nlsParam optional NLS parameter string. Must have the same format
      * as the NLS argument to the TO_TIMESTAMP_TZ SQL function.
-     * @returns a IOracleTimestampTZ object
+     * @returns an IOracleTimestampTZ object
      */
     fromString(date: string, format?: string, nlsParam?: string): any;
     /**
@@ -2508,7 +2654,7 @@ export class IOracleTimestampTZ {
      */
     asLocalDateTime(): IOracleTimestamp;
     /**
-     * Convert this IOracleTimestampTZ to a IOracleTimestampTZ in the specified
+     * Convert this IOracleTimestampTZ to an IOracleTimestampTZ in the specified
      * time zone. The time zone string has to contain either a time zone offset
      * of the form '(+|-)HH:MM' or a time zone region name.
      *
@@ -2521,11 +2667,10 @@ export class IOracleTimestampTZ {
     atTimeZone(timezone: string): IOracleTimestampTZ;
     /**
      * Compares two datetime values.
+     * Returns -1 if date1 < date2, 0 if they are equal, and 1 if date1 > date2.
      *
      * @param other - second timestamp to be compared
-     * @returns -1 if date1 < date2
-     *           0 if date1 = date2
-     *           1 if date1 > date2
+     * @returns the result of the comparison as a number between -1 and +1.
      */
     compare(date1: IOracleTimestampTZ, date2: IOracleTimestampTZ): number;
     /**
@@ -2571,7 +2716,7 @@ export class IOracleTimestampTZ {
      */
     getFractionalSecond(): number;
     /**
-     * Gets the time zone of a IOracleTimestampTZ.
+     * Gets the time zone of an IOracleTimestampTZ.
      *
      * @returns the time zone name as string
      */
@@ -2646,15 +2791,15 @@ export class IOracleTimestamp {
      * @param format optional datetime format model
      * @param nlsParam optional NLS parameter string. Must have the same format
      * as the NLS argument to the TO_TIMESTAMP SQL function.
-     * @returns a IOracleTimestamp object
+     * @returns an IOracleTimestamp object
      */
     fromString(date: string, format?: string, nlsParam?: string): any;
     /**
-     * Convert to a IOracleTimestampTZ using the session time zone.
+     * Converts to an IOracleTimestampTZ using the session time zone.
      */
     atSessionTimeZone(): IOracleTimestampTZ;
     /**
-     * Convert to a IOracleTimestampTZ in the specified time zone. The time zone
+     * Converts to an IOracleTimestampTZ in the specified time zone. The time zone
      * string has to contain either a time zone offset of the form '(+|-)HH:MM'
      * or a time zone region name.
      *
@@ -2663,11 +2808,10 @@ export class IOracleTimestamp {
     atTimeZone(timezone: string): IOracleTimestampTZ;
     /**
      * Compares two IOracleTimestamp values.
+     * Returns -1 if date1 < date2, 0 if they are equal, and 1 if date1 > date2.
      *
      * @param other - second timestamp to be compared
-     * @returns -1 if date1 < date2
-     *           0 if date1 = date2
-     *           1 if date1 > date2
+     * @returns the result of the comparison as a number between -1 and +1.
      */
     compare(date1: IOracleTimestamp, date2: IOracleTimestamp): number;
     /**
@@ -2843,12 +2987,11 @@ export class IOracleDate {
     addDays(numberOfDays: number): IOracleDate;
     /**
      * Compares two dates.
+     * Returns -1 if d1 < d2, 0 if they are equal, and 1 if d1 > d2.
      *
      * @param d1 - first date value
      * @param d2 - second date value
-     * @returns -1 if d1 < d2
-     *           0 if d1 = d2
-     *           1 if d1 > d2
+     * @returns the result of the comparison as a number between -1 and +1.
      */
     compare(d1: IOracleDate, d2: IOracleDate): number;
     /**
@@ -2918,8 +3061,26 @@ export class IOracleDate {
 
 }
 
-declare module "mle-js-fetch" {
-/** Copyright (c) 2023, 2023, Oracle and/or its affiliates. */
+declare module "mle-js-plsqltypes" {
+
+export const OracleTimestamp: __mlejsplsqltypes.IOracleTimestamp;
+export const OracleTimestampTZ: __mlejsplsqltypes.IOracleTimestampTZ;
+export const OracleIntervalDayToSecond: __mlejsplsqltypes.IOracleIntervalDayToSecond;
+export const OracleIntervalYearToMonth: __mlejsplsqltypes.IOracleIntervalYearToMonth;
+export const OracleClob: __mlejsplsqltypes.IOracleClob;
+export const OracleDate: __mlejsplsqltypes.IOracleDate;
+export const OracleNumber: __mlejsplsqltypes.OracleNumber;
+export const OracleBlob: __mlejsplsqltypes.OracleBlob;
+
+}
+
+/**
+ * CAUTION: This namespace is used for TYPE DECLARATIONS ONLY and does not have
+ * an equivalent in the actual implementation in MLE. Please either use the
+ * corresponding module or global symbols instead.
+ */
+declare namespace __mlejsfetch {
+
 /**
  * Interface to represent types that provide a view into an ArrayBuffer e.g. DataView
  *
@@ -2929,7 +3090,7 @@ interface IBufferWrapper {
     buffer: ArrayBuffer;
 }
 
-/** Copyright (c) 2022, 2023, Oracle and/or its affiliates. */
+
 
 /**
  * Type alias for the types the body can be
@@ -2968,7 +3129,7 @@ class Body {
     protected _cloneBodyContent(): BodyType;
 }
 
-/** Copyright (c) 2022, 2023, Oracle and/or its affiliates. */
+
 export type HeadersInit = string[][] | Record<string, string> | Headers;
 class Headers {
     #private;
@@ -2985,6 +3146,7 @@ class Headers {
     get(key: string): string | null;
     /**
      * Set or override the header value
+     * Both the key and the value have a limit of 32767 bytes
      * @param key the name of the header
      * @param value the new value
      */
@@ -3012,7 +3174,7 @@ class Headers {
     forEach(func: (value: unknown, key: unknown, object: unknown) => void, thisValue?: unknown): void;
 }
 
-/** Copyright (c) 2022, 2023, Oracle and/or its affiliates. */
+
 
 
 export type RequestInfo = Request | string;
@@ -3043,7 +3205,7 @@ class Request extends Body {
     clone(): Request;
 }
 
-/** Copyright (c) 2022, 2023, Oracle and/or its affiliates. */
+
 
 
 export type ResponseType = 'basic' | 'cors' | 'default' | 'error' | 'opaque' | 'opaqueredirect';
@@ -3086,7 +3248,7 @@ class Response extends Body {
      */
     get status(): number;
     /**
-     * Check if this response is a result of successful request.
+     * Check if this response is a result of a successful request.
      */
     get ok(): boolean;
     /**
@@ -3095,11 +3257,14 @@ class Response extends Body {
     clone(): Response;
 }
 
-/** Copyright (c) 2022, 2023, Oracle and/or its affiliates. */
+
 
 
 /**
  * Make a request to the specified resource.
+ *
+ * If there is a field line that is longer than 8192 bytes in the response
+ * received, a TypeError is thrown.
  *
  * @param input a path to the resource or a {@link Request} object that configures the retrieval
  * @param init additional configuration for the retrieval
@@ -3107,18 +3272,21 @@ class Response extends Body {
  */
 function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 
-/** Copyright (c) 2022, 2023, Oracle and/or its affiliates. */
-
-
-
-
 export { fetch, Headers, Request, Response };
+}
+
+declare module "mle-js-fetch" {
+
+export const Headers: __mlejsfetch.Headers;
+export const Request: __mlejsfetch.Request;
+export const Response: __mlejsfetch.Response;
+export function fetch(input: __mlejsfetch.RequestInfo, init?: __mlejsfetch.RequestInit): Promise<__mlejsfetch.Response>;
 
 }
 
 /** @since Oracle 23.3 */
 declare module "mle-encode-base64" {
-/** Copyright (c) 2023, Oracle and/or its affiliates. */
+
 /**
  * Encode a string or a byte buffer into base64.
  
@@ -3144,7 +3312,137 @@ export function decode(input: string): ArrayBuffer;
 
 }
 
-/* Copyright (c) 2022, 2023, Oracle and/or its affiliates. */
+/**
+ * CAUTION: This namespace is used for TYPE DECLARATIONS ONLY and does not have
+ * an equivalent in the actual implementation in MLE. Please either use the
+ * corresponding module or global symbols instead.
+ */
+declare namespace __mlejsencodings {
+
+interface TextEncoderCommon {
+    readonly encoding: string;
+}
+/**
+ * The object returned by encodeInto.
+ * It reports on the progress of the encoder.
+ */
+export type TextEncoderEncodeIntoResult = {
+    /** The number of UTF-16 *code points* that were read. */
+    read: number;
+    /** The number of bytes written to the given buffer. */
+    written: number;
+};
+/**
+ * TextEncoder takes code points and returns UTF-8 bytes.
+ */
+export class TextEncoder implements TextEncoderCommon {
+    /**
+     * Always returns 'utf-8'.
+     */
+    readonly encoding = "utf-8";
+    /**
+     * Create a new instance of TextEncoder.
+     */
+    constructor();
+    /**
+     * Encode the given string into a byte array.
+     *
+     * @param input the string to encode.
+     */
+    encode(input?: string): Uint8Array;
+    /**
+     * Encode the given string and store the results in the given buffer.
+     *
+     * @param input the string to encode.
+     * @param destination the buffer where the encoded string should be stored.
+     * @returns an object describing the progress made in this call (code points read and bytes written).
+     */
+    encodeInto(input: string, destination: Uint8Array): TextEncoderEncodeIntoResult;
+}
+
+
+interface TextDecoderCommon {
+    readonly encoding: string;
+    readonly fatal: boolean;
+    readonly ignoreBOM: boolean;
+}
+/**
+ * Options given to the constructor of TextDecoder.
+ */
+export type TextDecoderOptions = {
+    /**
+     * Controls the error mode of the decoder.
+     * If set to true an exception is thrown on invalid byte sequences.
+     * Otherwise, the replacement code point will be used.
+     * Default: false.
+     */
+    fatal?: boolean;
+    /**
+     * Controls whether the BOM (Byte Order Mark) should be checked.
+     * If set to true the BOM will not be checked/removed.
+     * Default: false.
+     */
+    ignoreBOM?: boolean;
+};
+/**
+ * Options given to decode.
+ */
+export type TextDecodeOptions = {
+    /**
+     * Controls whether the IO queue should be flushed between calls.
+     * If set to true the corresponding TextDecoder instance may retain state from the previous call.
+     * Used for decoding text in chunks.
+     * Default: false.
+     */
+    stream?: boolean;
+};
+export type AllowSharedBufferSource = ArrayBuffer | SharedArrayBuffer | ArrayBufferView;
+/**
+ * TextDecoder represents a decoder for specific text encoding, such UTF-8, UTF-16, etc.
+ * A decoder takes as input bytes and returns as output code points.
+ */
+export class TextDecoder implements TextDecoderCommon {
+    #private;
+    /**
+     * The name of the decoder that will be used.
+     */
+    readonly encoding: string;
+    /**
+     * Error mode can be either be 'replacement' (replace code point) or 'fatal' (throw exception),
+     */
+    readonly fatal: boolean;
+    /**
+     * Whether the byte order mark will be ignored.
+     */
+    readonly ignoreBOM: boolean;
+    /**
+     * Create a new TextDecoder instance.
+     * Currently, the following encodings are supported: utf-8, utf-16be,
+     * utf-16le, utf-16 (alias to utf-16le).
+     * @param label the name of the encoding to be used when decoding. Default: 'utf-8'.
+     * @param options the decoder options (an object with properties fatal and ignoreBOM).
+     */
+    constructor(label?: string, options?: TextDecoderOptions);
+    /**
+     * Decodes the given bytes with the method given in encoding.
+     * @param input the bytes to decode, given as an ArrayBuffer or ArrayBufferView.
+     * @param options object with the stream property. stream specifies whether data will follow in subsequent calls.
+     *                Should be set to true if processing data in chunks.
+     */
+    decode(input?: AllowSharedBufferSource, options?: TextDecodeOptions): string;
+}
+
+}
+
+/** @since Oracle 23.4 */
+declare module "mle-js-encodings" {
+
+export const TextEncoder: __mlejsencodings.TextEncoder;
+export const TextDecoder: __mlejsencodings.TextDecoder;
+
+}
+
+/* Copyright (c) 2022, 2024, Oracle and/or its affiliates. */
 
 /*
  * TypeScript declarations for JavaScript builtins in Oracle Database
@@ -3160,8 +3458,8 @@ export function decode(input: string): ArrayBuffer;
 type Language = 'js';
 
 /**
- * Interface for Polyglot object. The functions of the Polyglot object allow to
- * interact with values from other polyglot languages.
+ * Interface for Polyglot object. The functions of the Polyglot object allow you
+ * to interact with values from other polyglot languages.
  */
 interface IPolyglot {
 
@@ -3337,7 +3635,8 @@ interface IConsole {
 }
 declare const console: IConsole;
 
-/* Copyright (c) 2023, Oracle and/or its affiliates. */
+
+/* Copyright (c) 2023, 2024, Oracle and/or its affiliates. */
 
 /*
  * TypeScript declarations for JavaScript globals in Oracle Database
@@ -3345,36 +3644,24 @@ declare const console: IConsole;
  * - https://oracle-samples.github.io/mle-modules
  */
 
-declare namespace _mle_globals {
-    export { OracleDb, ISodaDatabase, IConnection } from "mle-js-oracledb";
-    export {
-        OracleBlob,
-        IOracleClob,
-        IOracleDate,
-        OracleNumber,
-        IOracleTimestamp,
-        IOracleTimestampTZ,
-        IOracleIntervalDayToSecond,
-        IOracleIntervalYearToMonth
-    } from "mle-js-plsqltypes";
-    export { Headers, Request, Response, RequestInfo, RequestInit } from "mle-js-fetch";
-}
-
-declare const oracledb: _mle_globals.OracleDb;
-declare const session: _mle_globals.IConnection;
-declare const soda: _mle_globals.ISodaDatabase;
-declare const OracleNumber: _mle_globals.OracleNumber;
-declare const OracleBlob: _mle_globals.OracleBlob;
-declare const OracleClob: _mle_globals.IOracleClob;
-declare const OracleDate: _mle_globals.IOracleDate;
-declare const OracleTimestampTZ: _mle_globals.IOracleTimestampTZ;
-declare const OracleTimestamp: _mle_globals.IOracleTimestamp;
-/* since Oracle 23.3 */
-declare const OracleIntervalDayToSecond: _mle_globals.IOracleIntervalDayToSecond;
-/* since Oracle 23.3 */
-declare const OracleIntervalYearToMonth: _mle_globals.IOracleIntervalYearToMonth;
-declare const Headers: _mle_globals.Headers;
-declare const Request: _mle_globals.Request;
-declare const Response: _mle_globals.Response;
-declare function fetch(input: _mle_globals.RequestInfo, init?: _mle_globals.RequestInit): Promise<_mle_globals.Response>;
+declare const oracledb: __mlejsoracledb.OracleDb;
+declare const session: __mlejsoracledb.IConnection;
+declare const soda: __mlejsoracledb.ISodaDatabase;
+declare const OracleNumber: __mlejsplsqltypes.OracleNumber;
+declare const OracleBlob: __mlejsplsqltypes.OracleBlob;
+declare const OracleClob: __mlejsplsqltypes.IOracleClob;
+declare const OracleDate: __mlejsplsqltypes.IOracleDate;
+declare const OracleTimestampTZ: __mlejsplsqltypes.IOracleTimestampTZ;
+declare const OracleTimestamp: __mlejsplsqltypes.IOracleTimestamp;
+/* @since Oracle 23.3 */
+declare const OracleIntervalDayToSecond: __mlejsplsqltypes.IOracleIntervalDayToSecond;
+/* @since Oracle 23.3 */
+declare const OracleIntervalYearToMonth: __mlejsplsqltypes.IOracleIntervalYearToMonth;
+declare const Headers: __mlejsfetch.Headers;
+declare const Request: __mlejsfetch.Request;
+declare const Response: __mlejsfetch.Response;
+declare function fetch(input: __mlejsfetch.RequestInfo, init?: __mlejsfetch.RequestInit): Promise<__mlejsfetch.Response>;
+/* @since Oracle 23.4 */
+declare const TextEncoder: __mlejsencodings.TextEncoder;
+declare const TextDecoder: __mlejsencodings.TextDecoder;
 

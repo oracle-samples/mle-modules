@@ -73,10 +73,16 @@ This module contains code to work with base64-encoded data.
 
 [Continue reading...][mle-encode-base64]
 
+### MLE text encoding API (mle-js-encodings)
+This module is a partial implementation of the Encoding API that ships with the database as of version 23.4.
+By default, TextDecoder and TextEncoder are available in the global namespace and can be used directly.
+
+[Continue reading...][mle-js-encodings]
+
 
 ### Oracle Database
-Oracle Database is the world’s most popular database. Oracle Database 23c, the next Generation Oracle Database, is now available as a Base Database Service delivering the most complete and simple converged database for developers looking to build new microservice, graph, document and relational applications.
-Oracle Database 23c Free is also available for free as a simple download for ease of use.
+Oracle Database is the world's most popular database.
+Oracle Database 23ai, the next Generation Oracle Database, is now available as a Base Database Service delivering the most complete and simple converged database for developers looking to build new microservice, graph, document and relational applications. Oracle Database 23ai Free is also available for free as a simple download for ease of use.
 
 [Continue reading...][3]
 
@@ -85,7 +91,7 @@ The following table shows which version of module documentation and declarations
 
 | Oracle Database  | Declarations | Documentation |
 | ---------------- | ------------ | ------------- |
-| 23c | [mle-js@23.3.0][mle-js-types-233] for Oracle 23.3 <br/> [mle-js@23.2.0][mle-js-types-232] for Oracle 23.2 - Free | **[mle-js (23c)][mle-js]** <br/> [mle-js-oracledb (23c)][mle-js-oracledb] <br/> [mle-js-bindings (23c)][mle-js-bindings] <br/> [mle-js-plsqltypes (23c)][mle-js-plsqltypes] <br/> [mle-js-fetch (23c)][mle-js-fetch] <br/> [mle-encode-base64 (23c)][mle-encode-base64]|
+| 23ai | [mle-js@23.4.0][mle-js-types-234] for Oracle 23.4 <br/> [mle-js@23.3.0][mle-js-types-233] for Oracle 23.3 <br/> [mle-js@23.2.0][mle-js-types-232] for Oracle 23.2 - Free | **[mle-js (23ai)][mle-js]** <br/> [mle-js-oracledb (23ai)][mle-js-oracledb] <br/> [mle-js-bindings (23ai)][mle-js-bindings] <br/> [mle-js-plsqltypes (23ai)][mle-js-plsqltypes] <br/> [mle-js-fetch (23ai)][mle-js-fetch] <br/> [mle-encode-base64 (23ai)][mle-encode-base64]|
 | 21c | [mle-js@21.3.1][mle-js-types-213] | [mle-js-oracledb (21c)][mle-js-oracledb-21c] <br/> [mle-js-bindings (21c)][mle-js-bindings-21c] <br/> [mle-js-plsqltypes (21c)][mle-js-plsqltypes-21c] |
 
 ## Examples
@@ -124,19 +130,21 @@ Before submitting a pull request, please [review our contribution guide](./CONTR
 Please consult the [security guide](./SECURITY.md) for our responsible security vulnerability disclosure process.
 
 ## License
-Copyright (c) 2022, 2023 Oracle and/or its affiliates.
+Copyright (c) 2022, 2024, Oracle and/or its affiliates.
 
 Released under the Universal Permissive License v1.0 as shown at <https://oss.oracle.com/licenses/upl/>.
 
-[mle-js]: https://oracle-samples.github.io/mle-modules/docs/mle-js/23c "mle-js 23c"
-[mle-js-oracledb]: https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/23c "mle-js-oracledb 23c"
-[mle-js-bindings]: https://oracle-samples.github.io/mle-modules/docs/mle-js-bindings/23c "mle-js-bindings 23c"
-[mle-js-plsqltypes]: https://oracle-samples.github.io/mle-modules/docs/mle-js-plsqltypes/23c "mle-js-plsqltypes 23c"
-[mle-js-fetch]: https://oracle-samples.github.io/mle-modules/docs/mle-js-fetch/23c "mle-js-fetch 23c"
-[mle-encode-base64]: https://oracle-samples.github.io/mle-modules/docs/mle-encode-base64/23c "mle-encode-base64 23c"
+[mle-js]: https://oracle-samples.github.io/mle-modules/docs/mle-js/23ai "mle-js 23ai"
+[mle-js-oracledb]: https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/23ai "mle-js-oracledb 23ai"
+[mle-js-bindings]: https://oracle-samples.github.io/mle-modules/docs/mle-js-bindings/23ai "mle-js-bindings 23ai"
+[mle-js-plsqltypes]: https://oracle-samples.github.io/mle-modules/docs/mle-js-plsqltypes/23ai "mle-js-plsqltypes 23ai"
+[mle-js-fetch]: https://oracle-samples.github.io/mle-modules/docs/mle-js-fetch/23ai "mle-js-fetch 23ai"
+[mle-encode-base64]: https://oracle-samples.github.io/mle-modules/docs/mle-encode-base64/23ai "mle-encode-base64 23ai"
+[mle-js-encodings]: https://oracle-samples.github.io/mle-modules/docs/mle-js-encodings/23ai "mle-js-encodings 23ai"
 [mle-js-oracledb-21c]: https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/21c "mle-js-oracledb 21c"
 [mle-js-bindings-21c]: https://oracle-samples.github.io/mle-modules/docs/mle-js-bindings/21c "mle-js-bindings 21c"
 [mle-js-plsqltypes-21c]: https://oracle-samples.github.io/mle-modules/docs/mle-js-plsqltypes/21c "mle-js-plsqltypes 21c"
+[mle-js-types-234]: https://www.npmjs.com/package/mle-js/v/23.4.0 "mle-js@23.4.0"
 [mle-js-types-233]: https://www.npmjs.com/package/mle-js/v/23.3.0 "mle-js@23.3.0"
 [mle-js-types-232]: https://www.npmjs.com/package/mle-js/v/23.2.0 "mle-js@23.2.0"
 [mle-js-types-213]: https://www.npmjs.com/package/mle-js/v/21.3.1 "mle-js@21.3.1"
