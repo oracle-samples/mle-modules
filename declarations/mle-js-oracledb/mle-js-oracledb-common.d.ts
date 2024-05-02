@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2017, 2023, Oracle and/or its affiliates.
+Copyright (c) 2017, 2024, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -77,6 +77,10 @@ export declare class OracleDb {
     DB_TYPE_NCHAR: number;
     DB_TYPE_NCLOB: number;
     DB_TYPE_JSON: number;
+    /**
+     * @since Oracle 23.4
+     */
+    DB_TYPE_VECTOR: number;
     DB_TYPE_INTERVAL_YM: number;
     DB_TYPE_INTERVAL_DS: number;
     BIND_IN: number;
@@ -130,9 +134,9 @@ export declare class OracleDb {
     set maxRows(value: number);
     /**
      * Returns the default connection object for executing SQL queries in the Oracle
-     * Database using mle-js-oracledb. Note that since in MLE, JavaScript is
+     * Database using mle-js-oracledb. Note that with MLE, because JavaScript is
      * executed directly in the database, there is no need to establish a specific
-     * connection which is why the default connection object should be used.
+     * connection, which is why the default connection object should be used.
      *
      * @returns default connection object for executing SQL queries with mle-js-oracledb.
      */

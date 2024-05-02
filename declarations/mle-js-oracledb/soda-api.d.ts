@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2021, 2023, Oracle and/or its affiliates.
+Copyright (c) 2021, 2024, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -178,11 +178,11 @@ export declare abstract class ISodaCollection {
      */
     abstract get metaData(): Record<string, any>;
     /**
-     * Creates an index on a SODA collection, to improve the performance of SODA
-     * query-by-examples (QBE) or enable text searches. Different index types can
-     * be created, the indexSpec parameter must conform to the JSON object layout
-     * specified in the Oracle Database "SODA Index Specifications (Reference)"
-     * documentation.
+     * Creates an index on a SODA collection to improve the performance of SODA
+     * query-by-examples (QBE) or to enable text searches. Different index types
+     * can be created as long as the indexSpec parameter conforms to the
+     * JSON object layout specified in the Oracle Database "SODA Index
+     * Specifications (Reference)" documentation.
      * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollcreateindex
      * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-index-specifications-reference.html
      * @param indexSpec index specification,
@@ -209,9 +209,9 @@ export declare abstract class ISodaCollection {
      */
     abstract dropIndex(indexName: string, options?: IDropIndexOptions): IDropIndexResult;
     /**
-     * Locate and order a set of SODA documents for retrieval, replacement,
-     * or removal.
-     * with non-terminal and terminal methods, see SodaOperation for details.
+     * Locates and orders a set of SODA documents for retrieval, replacement, or
+     * removal with non-terminal and terminal methods, see SodaOperation for
+     * details.
      * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollfind
      * @return a SodaOperation object which is used via method chaining
      */
@@ -252,14 +252,14 @@ export declare abstract class ISodaCollection {
     /**
      * Inserts a given document to the collection. The input document can be
      * either a JavaScript object representing the data content, or it can be an
-     * existing SodaDocument.,
+     * existing SodaDocument.
      * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertone
      * @param doc an Object or SodaDocument to insert into the collection.
      * @throws an exception if insertion fails.
      */
     abstract insertOne(doc: Record<string, any> | ISodaDocument): void;
     /**
-     * Inserts a document in a collection and returns the result document which
+     * Inserts a document in a collection and returns the result document that
      * contains all SodaDocument components except for content, for performance
      * reasons.
      * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertoneandget
@@ -273,7 +273,7 @@ export declare abstract class ISodaCollection {
      * if a document with the same key already exists, then it is updated instead.
      * The collection must use client-assigned keys, which is why save()
      * accepts only a SodaDocument, unlike insertOne(). If the collection is not
-     * configured with client-assigned keys, then the behaviour is exactly the
+     * configured with client-assigned keys, then the behavior is exactly the
      * same as sodaCollection.insertOne().
      * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#user-content-sodacollsave
      * @param doc the document to save.
@@ -282,10 +282,10 @@ export declare abstract class ISodaCollection {
     /**
      * This method behaves like sodaCollection.insertOneAndGet() with the
      * exception that if a document with the same key already exists, then it is
-     * updated instead. The collection must use client-assigned keys keys, which
+     * updated instead. The collection must use client-assigned keys, which
      * is why saveAndGet() accepts only a SodaDocument, unlike insertOneAndGet().
      * If the collection is not configured with client-assigned keys, then the
-     * behaviour is exactly the same as sodaCollection.insertOneAndGet().
+     * behavior is exactly the same as sodaCollection.insertOneAndGet().
      * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#user-content-sodacollsaveandget
      * @param doc the document to save.
      * @return the saved document.
@@ -320,11 +320,9 @@ export declare abstract class ISodaOperation {
     abstract fetchArraySize(size: number): ISodaOperation;
     /**
      * Sets a filter specification for the operation, allowing for complex
-     * document queries and ordering of JSON documents. Refer to
+     * document queries and ordering of JSON documents.
      * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/overview-soda-filter-specifications-qbes.html
-     * and
      * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-filter-specifications-reference.html
-     * for details of filter specifications.
      * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassfilter
      * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaqbesearches
      * @param filter the filter specification to use.
@@ -378,7 +376,7 @@ export declare abstract class ISodaOperation {
      * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasscount
      * @return a result object with a count field containing the number of
      * matching documents.
-     * @throws an exception id skip() or limit() are set.
+     * @throws an exception if skip() or limit() are set.
      */
     abstract count(): ICountResult;
     /**
@@ -403,7 +401,7 @@ export declare abstract class ISodaOperation {
     abstract getOne(): ISodaDocument;
     /**
      * Removes a set of documents matching the SodaOperation query criteria.
-     * If skip() or limit(0 are set they are ignored.
+     * If skip() or limit() are set they are ignored.
      * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassremove
      * @return a result object with a count field containing the number of
      * removed documents.
@@ -433,7 +431,7 @@ export declare abstract class ISodaOperation {
  * SODA document cursor class.
  * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocumentcursorclass
  * A SodaDocumentCursor is used to walk through a set of SODA documents returned
- * from a find() getCursor() method.
+ * from a find() or getCursor() method.
  */
 export declare abstract class ISodaDocumentCursor {
     /**

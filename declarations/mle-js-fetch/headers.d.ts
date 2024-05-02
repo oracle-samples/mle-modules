@@ -51,6 +51,7 @@ export declare class Headers {
     get(key: string): string | null;
     /**
      * Set or override the header value
+     * Both the key and the value have a limit of 32767 bytes
      * @param key the name of the header
      * @param value the new value
      */

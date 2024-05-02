@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2019, 2023, Oracle and/or its affiliates.
+Copyright (c) 2019, 2024, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -103,6 +103,16 @@ export interface IExecuteOptions {
      * IResultSet} object or directly. The default is false.
      */
     resultSet?: boolean;
+    /**
+     * When keepInStmtCache is true, and statement caching is enabled,
+     * then the statement will be added to the cache if it is not already present.
+     * This helps the performance of re-executed statements.
+     *
+     * The default value is true.
+     *
+     * @since Oracle 23.4
+     */
+    keepInStmtCache?: boolean;
 }
 /**
  * Interface for representing an entry in {@link IObjectBindDefs} or {@link ArrayBindDefs}.
@@ -115,18 +125,24 @@ export interface IBindDef {
      */
     dir: number;
     /**
-     * Required for Strings and Uint8Arrays. Ignored for other types. Specifies
-     * the maximum number of bytes allocated when processing each value of this
-     * bind variable. When data is being passed into the database, maxSize
-     * must be at least the size of the longest value. When data is being
-     * returned from the database, maxSize must be the size of the longest
-     * value. If maxSize is too small, {@link executeMany} will throw an error.
+     * The maximum number of bytes that an OUT or INOUT bind variable of type
+     * {@link STRING} or {@link UINT8ARRAY} can use to get data. The default
+     * value is 200. The maximum limit depends on the database type. When
+     * binding INOUT, maxSize refers to the size of the returned value.
+     * The input value can be smaller or bigger. For IN binds, maxSize is
+     * ignored. When data is being returned from the database, maxSize must be
+     * at least the size of the longest value. If maxSize is too small, an error
+     * gets thrown.
      */
     maxSize?: number;
     /**
-     * The JavaScript data type to be bound. One of the mle-js-oracledb JS Type
-     * Constants; if binding an ADT, a type descriptor or the FQN of the type is
-     * accepted.
+     * The JavaScript data type to be bound. One of the mle-js-oracledb JS
+     * Constants; when binding ADTs, a type descriptor or the fully-qualified
+     * name (FQN) of the type is also accepted.
+     * With IN or INOUT binds the type can be explicitly set with
+     * type or it will default to the type of the input data value. With OUT
+     * binds, the type defaults to {@link STRING} whenever type is not
+     * specified.
      */
     type: JsType | string | IDbObjectClass;
 }
@@ -163,9 +179,19 @@ export interface IExecuteManyOptions {
      */
     bindDefs?: ExecuteManyBindDefs;
     dmlRowCounts?: boolean;
+    /**
+     * When keepInStmtCache is true, and statement caching is enabled,
+     * then the statement will be added to the cache if it is not already present.
+     * This helps the performance of re-executed statements.
+     *
+     * The default value is true.
+     *
+     * @since Oracle 23.4
+     */
+    keepInStmtCache?: boolean;
 }
 /**
- * Interface representing meta data as used in {@link IResultSet}s and statement info.
+ * Interface representing metadata as used in {@link IResultSet}s and statement info.
  */
 export interface IMetaData {
     /**
@@ -203,6 +229,18 @@ export interface IMetaData {
      * Name of the database type, such as “NUMBER” or “VARCHAR2”.
      */
     dbTypeName?: string;
+    /**
+     * Number of Dimensions in vector.
+     *
+     * @since Oracle 23.4
+     */
+    vectorDimensions?: number;
+    /**
+     * Storage type of elements in vector.
+     *
+     * @since Oracle 23.4
+     */
+    vectorFormat?: number;
 }
 /**
  * Interface for representing result sets as returned by {@link execute}().
@@ -258,7 +296,7 @@ export declare abstract class IResultSet {
      */
     abstract iterator(): IterableIterator<any>;
     /**
-     * This function defines the default iterator for a result set which can be
+     * This function defines the default iterator for a result set that can be
      * used to iterate over its rows. Using the default iterator, a result set
      * can be iterated over using the for..of construct.
      *
@@ -298,9 +336,9 @@ export interface IExecuteReturn {
      * For SELECT statements using direct fetches, rows contains an array of
      * fetched rows. It will be NULL if there is an error or the SQL statement
      * was not a SELECT statement. By default, the rows are in an array of
-     * column value arrays, but this can be changed to arrays of objects by
-     * setting outFormat to oracledb.{@link OBJECT}. If a single row is fetched,
-     * then rows is an array that contains one single row.
+     * objects, but this can be changed to arrays of column value arrays by
+     * setting outFormat to oracledb.{@link OUT_FORMAT_ARRAY}. If a single row
+     * is fetched, then rows is an array that contains one single object.
      *
      * The number of rows returned is limited by parameters.{@link maxRows} or
      * the {@link maxRows} option in an {@link execute}() call. If maxRows is 0,
@@ -337,32 +375,15 @@ export interface IExecuteManyReturn {
 /**
  * Interface for object binds in {@link execute}().
  */
-export interface IBindObjectValue {
+export interface IBindObjectValue extends IBindDef {
     /**
-     * The direction of the bind. One of the constants {@link BIND_IN},
-     * {@link BIND_INOUT}, or {@link BIND_OUT}. The default is
-     * {@link BIND_IN}.
+     * The number of array elements to be allocated for a PL/SQL Collection
+     * INDEX BY associative array OUT or IN OUT array bind variable. For IN
+     * binds, the value of maxArraySize is ignored.
+     *
+     * @since Oracle 23.4
      */
-    dir?: number;
-    /**
-     * The maximum number of bytes that an OUT or INOUT bind variable of type
-     * {@link STRING} or {@link UINT8ARRAY} can use to get data. The default
-     * value is 200. The maximum limit depends on the database type. When
-     * binding INOUT, then maxSize refers to the size of the returned value.
-     * The input value can be smaller or bigger. For IN binds, maxSize is
-     * ignored.
-     */
-    maxSize?: number;
-    /**
-     * The JavaScript data type to be bound. One of the mle-js-oracledb JS
-     * Constants; when binding ADTs, a type descriptor or the FQN of the type
-     * is also accepted.
-     * With IN or INOUT binds the type can be explicitly set with
-     * type or it will default to the type of the input data value. With OUT
-     * binds, the type defaults to {@link STRING} whenever type is not
-     * specified.
-     */
-    type?: number | string | IDbObjectClass;
+    maxArraySize?: number;
     /**
      * The input value or variable to be used for an IN or INOUT bind variable.
      */
@@ -370,7 +391,7 @@ export interface IBindObjectValue {
 }
 /**
  * Interface for a single bind parameter as used in {@link execute}(). Can
- * either be an bind object or a scalar value.
+ * either be a bind object or a scalar value.
  */
 export type BindValue = IBindObjectValue | any;
 /**
@@ -468,7 +489,7 @@ export declare abstract class IConnection {
      * The executeMany() method supports IN, IN OUT and OUT binds for most data
      * types.
      *
-     * The version of this function which accepts a number of iterations must
+     * The version of this function that accepts a number of iterations must
      * be used when no bind parameters are required or when all bind parameters
      * are OUT binds.
      *
@@ -515,7 +536,7 @@ export declare abstract class IConnection {
      * bind variables used.
      *
      * This method performs a call to the SQL layer of the database, so
-     * unnecessary calls should be avoided.
+     * unnecessary calls should be avoided for performance reasons.
      *
      * The information is provided by lower-level APIs that have some
      * limitations. Some uncommon statements will return the statement type as
@@ -582,6 +603,14 @@ export declare abstract class IDbObjectClass {
      */
     readonly elementType?: number;
     /**
+     * When dbObject.isCollection is true and the elements in the collection
+     * refer to database objects, this property provides the type class
+     * information of the elements.
+     *
+     * @since Oracle 23.4
+     */
+    readonly elementTypeClass?: IDbObjectClass;
+    /**
      * When dbObject.isCollection is true, this will have the name of the
      * element type, such as “VARCHAR2” or “NUMBER”.
      */
@@ -603,10 +632,17 @@ export declare abstract class IDbObjectClass {
      */
     readonly schema?: string;
     /**
+     * String which identifies the name of the package, if the type refers to a
+     * PL/SQL type. Otherwise, it returns undefined.
+     *
+     * @since Oracle 23.4
+     */
+    readonly packageName?: string;
+    /**
      * When dbObject.isCollection is true, this will have the number
      * of elements in the collection. It is undefined for non-collections.
      */
-    readonly length?: number | undefined;
+    readonly length?: number;
     /**
      * These methods can be used on Oracle Database collections, identifiable
      * when dbObject.isCollection is true. When collections are fetched from the database,
@@ -618,7 +654,7 @@ export declare abstract class IDbObjectClass {
      */
     abstract append?(value: any): void;
     /**
-     * Deletes the value from collection at the given index.
+     * Deletes the value from the collection at the given index.
      */
     abstract deleteElement?(index: number): void;
     /**
@@ -634,7 +670,7 @@ export declare abstract class IDbObjectClass {
      */
     abstract getKeys?(): number[];
     /**
-     * To obtain the last index for later use to obtain a value.
+     * Obtains the last index for later use to obtain a value.
      */
     abstract getLastIndex?(): number;
     /**
@@ -692,9 +728,9 @@ export declare const OUT_FORMAT_OBJECT: OutFormatType;
  * in {@link fetchAsString}, {@link fetchAsUint8Array}, and
  * {@link fetchAsPlsqlWrapper}.
  *
- * In addition to the standard JavaScript types which node-oracledb offers,
+ * In addition to the standard JavaScript types that node-oracledb offers,
  * mle-js-oracledb also offers a number of so-called PL/SQL wrapper types which
- * are JavaScript types with the exact same semantics like the corresponding
+ * are JavaScript types with the exact same semantics as the corresponding
  * Oracle SQL or PL/SQL types (see mle-js-plsqltypes). The JavaScript constants
  * for those types all start with ORACLE_, e.g.  ORACLE_NUMBER is the constant
  * to be used if a database value should be retrieved as OracleNumber rather
@@ -734,15 +770,15 @@ export declare const ORACLE_BLOB: JsType;
  */
 export declare const ORACLE_CLOB: JsType;
 /**
- * Bind a INTERVAL DAY TO SECOND to an OracleIntervalDayToSecond object.
+ * Bind an INTERVAL DAY TO SECOND to an OracleIntervalDayToSecond object.
  */
 export declare const ORACLE_INTERVAL_DS: JsType;
 /**
- * Bind a INTERVAL YEAR TO MONTH to an OracleIntervalYearToMonth object.
+ * Bind an INTERVAL YEAR TO MONTH to an OracleIntervalYearToMonth object.
  */
 export declare const ORACLE_INTERVAL_YM: JsType;
 /**
- * Bind a NCLOB to a OracleNCLOB object.
+ * Bind an NCLOB to an OracleNCLOB object.
  */
 export declare const ORACLE_NCLOB: JsType;
 /**
@@ -758,9 +794,27 @@ export declare const ORACLE_TIMESTAMP: JsType;
  */
 export declare const ORACLE_TIMESTAMP_TZ: JsType;
 /**
+ * Bind a VECTOR(*, int8) to Int8Array
+ * @since Oracle 23.4
+ */
+export declare const INT8ARRAY: JsType;
+/**
+ * Bind a VECTOR(*, float32) to Float32Array
+ * @since Oracle 23.4
+ */
+export declare const FLOAT32ARRAY: JsType;
+/**
+ * Bind a VECTOR(*, float64) to Float64Array
+ * @since Oracle 23.4
+ */
+export declare const FLOAT64ARRAY: JsType;
+/**
  * Type for mle-js-oracledb Database Type Constants. Such constants can be used
  * in IN binds to specify what database type a JavaScript value should be
- * converted to, but are also what is used in query meta data.
+ * converted to and are also what is used in query metadata. In addition, some
+ * of these types can also be used in OUT binds if a corresponding
+ * {@link JsType} does not exist, e.g. {@link DB_TYPE_BOOLEAN},
+ * {@link DB_TYPE_JSON}, {@link DB_TYPE_NCLOB}.
  */
 export type DbType = number;
 /**
@@ -856,8 +910,9 @@ export declare const DB_TYPE_NCHAR: DbType;
  */
 export declare const DB_TYPE_NCLOB: DbType;
 /**
- * Bind as JSON. This constant can also be used {@link fetchAsString} to express
- * that JSON column values should be fetched as JS string rather than JS object.
+ * Bind as JSON. This constant can also be used in {@link fetchAsString} to
+ * express that JSON column values should be fetched as JS string rather than JS
+ * object.
  */
 export declare const DB_TYPE_JSON: DbType;
 /**
@@ -866,6 +921,11 @@ export declare const DB_TYPE_JSON: DbType;
  * @since Oracle 23.3
  */
 export declare const DB_TYPE_OBJECT: DbType;
+/**
+ * VECTOR
+ * @since Oracle 23.4
+ */
+export declare const DB_TYPE_VECTOR: DbType;
 /**
  * Direction for IN binds
  */
@@ -965,8 +1025,8 @@ export declare class Parameters {
      * When the number of query rows is relatively big, or cannot be predicted, it
      * is recommended to use an {@link IResultSet}. This allows applications to
      * process rows in smaller chunks or individually, preventing the PGA limits
-     * being exceeded or query results being unexpectedly truncated by a maxRows
-     * limit.
+     * from being exceeded or query results being unexpectedly truncated by a
+     * maxRows limit.
      */
     set maxRows(value: number);
     private _outFormat;
@@ -976,7 +1036,7 @@ export declare class Parameters {
      * It affects both IResultSet and non-IResultSet queries. This can be either
      * of the constants {@link OUT_FORMAT_ARRAY} or {@link OUT_FORMAT_OBJECT}. The
      * default value is {@link OUT_FORMAT_ARRAY} when requiring the module
-     * "mle-js-oracledb" (in Oracle 21c). Oracle 23c introduces and encourages the
+     * "mle-js-oracledb" (in Oracle 21c). Oracle 23ai introduces and encourages the
      * use of ECMAScript imports (import oracledb from "mle-js-oracledb") and if
      * those are used, the default value is {@link OUT_FORMAT_OBJECT}.
      *
@@ -1039,7 +1099,7 @@ export declare class Parameters {
      * is queried with {@link execute}(), the column data is returned as a
      * string instead of the default representation.
      *
-     * By default in mle-js-oracledb, all columns are returned as native types or
+     * By default in mle-js-oracledb, all columns are returned as native types
      * or as OracleClob/OracleBlob wrapper types, in the case of CLOB and BLOB
      * types.
      *
@@ -1065,7 +1125,7 @@ export declare class Parameters {
      * execute}(), the column data is returned as a Uint8Array instead of the
      * default representation.
      *
-     * By default in mle-js-oracledb, all columns are returned as native types or
+     * By default in mle-js-oracledb, all columns are returned as native types
      * or as OracleClob/OracleBlob wrapper types, in the case of CLOB and BLOB
      * types.
      *
@@ -1081,11 +1141,11 @@ export declare class Parameters {
      * the specified types is queried with {@link execute}(), the column data is
      * returned as a PL/SQL wrapper type instead of the default representation.
      *
-     * By default in mle-js-oracledb, all columns are returned as native types or
+     * By default in mle-js-oracledb, all columns are returned as native types
      * or as OracleClob/OracleBlob wrapper types, in the case of CLOB and BLOB
      * types.
      *
-     * For types that be set in both properties ({@link fetchAsString} and
+     * For types that are set in both properties ({@link fetchAsString} and
      * fetchAsPlsqlWrapper), i.e. {@link DATE} and {@link NUMBER}, the {@link
      * fetchAsString} property has precedence over the fetchAsPlsqlWrapper
      * property.
