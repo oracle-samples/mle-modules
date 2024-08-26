@@ -36,12 +36,1312 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+declare module "mle-js-bindings" {
+
+
+export enum JSTypes {
+    /** Type String */
+    STRING = 0,
+    /** Type Number */
+    NUMBER = 1,
+    /** Type Date */
+    DATE = 2,
+    /** Type Boolean */
+    BOOLEAN = 3,
+    /**
+     * In 21c, indices 4 and 5 had been used for BLOB and CLOB which do, however,
+     * not make sense for mle-js-oracledb and have therefore been removed in 23ai.
+     */
+    /** Type Object */
+    OBJECT = 6,
+    /** UINT8ARRAY */
+    UINT8ARRAY = 7,
+    /** Type OracleNumber */
+    ORACLE_NUMBER = 8,
+    /** Type OracleDate */
+    ORACLE_DATE = 9,
+    /** Type OracleTimeStamp */
+    ORACLE_TIMESTAMP = 10,
+    /** Type OracleTimeStampTZ */
+    ORACLE_TIMESTAMP_TZ = 11,
+    /** Type OracleIntervalYearToMonth */
+    ORACLE_INTERVAL_YM = 12,
+    /** Type OracleIntervalDayToSecond */
+    ORACLE_INTERVAL_DS = 13,
+    /** Type OracleCLOB */
+    ORACLE_CLOB = 14,
+    /** Type OracleBLOB */
+    ORACLE_BLOB = 15,
+    /** Type DbTypeJson */
+    DB_TYPE_JSON = 16,
+    /**
+     * Type Int8Array
+     *
+     * @since Oracle 23.4
+     */
+    INT8ARRAY = 17,
+    /**
+     * Type Float32Array
+     *
+     * @since Oracle 23.4
+     */
+    FLOAT32ARRAY = 18,
+    /**
+     * Type Float64Array
+     *
+     * @since Oracle 23.4
+     */
+    FLOAT64ARRAY = 19
+}
+
+/**
+ * Import a value exported from PL/SQL into the current context
+ *
+ * Import the value, identified by the given name, that was previously exported
+ * from PL/SQL.
+ * The desired result type can be specified explicitly with the jstype parameter.
+ * If no result type is specified, the default PL/SQL-to-JavaScript mapping is
+ * used to determine the result type implicitly.
+ *
+ * @param name Name of the property to be retrieved. Cannot be null, undefined or empty.
+ * @param jstype JavaScript type of the result.
+ * @return a JavaScript value of the desired type. Returns undefined if the
+ * property does not exist.
+ * @throws an exception (Invalid property name) if name is null, undefined or empty.
+ */
+export function importValue(name: string, jstype?: JSTypes): any;
+
+/**
+ * Export a value to PL/SQL
+ *
+ * Export the given value to PL/SQL.
+ * The exported value can be imported into PL/SQL using the given name.
+ *
+ * @param name Name of the property to be exported. Cannot be null, undefined or empty.
+ * @param value Value of the property to be exported.
+ * @throws an exception (Invalid property name) if name is null, undefined or empty.
+ */
+export function exportValue(name: string, value: any): void;
+
+
+}
+
 /**
  * CAUTION: This namespace is used for TYPE DECLARATIONS ONLY and does not have
  * an equivalent in the actual implementation in MLE. Please either use the
  * corresponding module or global symbols instead.
  */
-declare namespace __mlejsoracledb {
+declare namespace __mle_js_plsqltypes {
+
+
+/**
+ * JavaScript API for Oracle type NUMBER.
+ */
+export class OracleNumber {
+    private impl;
+    /**
+     * Construct an OracleNumber from a JavaScript number or a string.
+     *
+     * @param n
+     */
+    constructor(n: number | string);
+    /**
+     * Construct an OracleNumber from a JavaScript number.
+     * @param from - number used to create the OracleNumber
+     * @returns a new OracleNumber object
+     */
+    static fromNumber(n: number): OracleNumber;
+    /**
+     * Parse a string into an OracleNumber, with an optional number format
+     * and NLS parameters. If no format string and NLS parameters are provided,
+     * the default values for the session are used.
+     * @param s the number string
+     * @param format optional number format
+     * @param nlsParam optional NLS parameters
+     * @returns OracleNumber value from parsing the input string
+     */
+    static fromString(s: string, format?: string, nlsParam?: string): OracleNumber;
+    /**
+     * The pi constant.
+     */
+    static pi: OracleNumber;
+    /**
+     * The zero constant.
+     */
+    static zero: OracleNumber;
+    /**
+     * The e constant.
+     */
+    static e: OracleNumber;
+    /**
+     * The ln10 constant.
+     */
+    static ln10: OracleNumber;
+    /**
+     * Computes the absolute value of the Oracle number
+     * @returns the absolute value of the Oracle number
+     */
+    abs(): OracleNumber;
+    /**
+     * Adds an Oracle number to another Oracle number
+     * @param other - the other Oracle number
+     * @returns returns the sum of the two Oracle NUMBERs
+     */
+    add(other: OracleNumber): OracleNumber;
+    /**
+     * Subtracts an Oracle number from the Oracle number and returns the resulting Oracle number
+     * @param other - the other number to be subtracted from the OracleNumber
+     * @returns the result of the subtraction as OracleNumber
+     */
+    sub(other: OracleNumber): OracleNumber;
+    /**
+     * Multiplies the Oracle number with another Oracle number
+     * @param other - the other Oracle number
+     * @returns the result of the multiplication as Oracle number
+     */
+    mul(other: OracleNumber): OracleNumber;
+    /**
+     * Divides two Oracle numbers
+     * @param other - divisor
+     * @returns the result of the division as Oracle number
+     */
+    div(other: OracleNumber): OracleNumber;
+    /**
+     * Computes the modulus of two Oracle numbers.
+     * @param other - the other Oracle number
+     * @returns this number modulo the other number
+     */
+    mod(other: OracleNumber): OracleNumber;
+    /**
+     * Computes the sine of the Oracle number
+     * @returns the sine of the Oracle number
+     */
+    sin(): OracleNumber;
+    /**
+     * Computes the cosine of the Oracle number
+     * @returns the cosine
+     */
+    cos(): OracleNumber;
+    /**
+     * Computes the tangent of the Oracle number
+     * @returns the tangent of the Oracle number
+     */
+    tan(): OracleNumber;
+    /**
+     * Computes the arc sine in radians of the Oracle number
+     * @returns the arc sine in radians of the Oracle number
+     */
+    arcSin(): OracleNumber;
+    /**
+     * Computes the arc cosine in radians of the Oracle number
+     * @returns the arc cosine in radians of the Oracle number
+     */
+    arcCos(): OracleNumber;
+    /**
+     * Computes the arc tangent in radians of the Oracle number
+     * @returns the arc tangent in radians of the Oracle number
+     */
+    arcTan(): OracleNumber;
+    /**
+     * Computes the arc tangent of two Oracle numbers
+     * @param other Oracle number used for the calculation
+     * @returns the arc tangent of two Oracle numbers
+     */
+    arcTan2(other: OracleNumber): OracleNumber;
+    /**
+     * Computes the hyperbolic sine of the Oracle number
+     * @returns the hyperbolic sine of the Oracle number
+     */
+    hypSin(): OracleNumber;
+    /**
+     * Computes the hyperbolic cosine of the Oracle number
+     * @returns the hyperbolic cosine of the Oracle number
+     */
+    hypCos(): OracleNumber;
+    /**
+     * Computes the hyperbolic tangent of the Oracle number
+     * @returns the hyperbolic tangent of the Oracle number
+     */
+    hypTan(): OracleNumber;
+    /**
+     * Compares two Oracle numbers.
+     * Returns -1 if this < other, 0 if they are equal, and 1 if this > other.
+     * @returns the result of the comparison as a number between -1 and +1.
+     */
+    compare(other: OracleNumber): number;
+    /**
+     * Checks if the Oracle number is equal to another Oracle number
+     * @param other - the other Oracle number
+     * @returns true if both Oracle numbers are equal, otherwise false
+     */
+    equals(other: OracleNumber): boolean;
+    /**
+     * Raises e to the power of this Oracle number
+     * @returns the result of the exponentiation as Oracle number
+     */
+    exp(): OracleNumber;
+    /**
+     * Raises this Oracle number to the given exponent
+     * @returns the result of the exponentiation
+     */
+    power(exp: OracleNumber | number): OracleNumber;
+    /**
+     * Computes the natural logarithm of the Oracle number
+     * @returns the natural logarithm of the Oracle number
+     */
+    ln(): OracleNumber;
+    /**
+     * Computes the logarithm to an arbitrary base
+     * @param base the base of the logarithm
+     * @returns the logarithm to an arbitrary base
+     */
+    log(base: OracleNumber | number): OracleNumber;
+    /**
+     * Computes the square root of the Oracle number
+     * @returns the square root of the Oracle number
+     */
+    sqrt(): OracleNumber;
+    /**
+     * Tests if the number is an integer
+     * @returns true if the Oracle number is an integer, otherwise false
+     */
+    isInt(): boolean;
+    /**
+     * Tests if the number is zero
+     * @returns true if the Oracle number is zero, otherwise false
+     */
+    isZero(): boolean;
+    /**
+     * Returns -1 if the sign of the number is negative, 0 if the number is 0, and > 0 if the number is positive.
+     * @returns a number indicating the sign of the Oracle number
+     */
+    sign(): number;
+    /**
+     * Negates the number
+     * @returns the negated Oracle number
+     */
+    neg(): OracleNumber;
+    /**
+     * Computes the ceiling of the Oracle number
+     * @returns the ceiling of the Oracle number
+     */
+    ceil(): OracleNumber;
+    /**
+     * Computes the floor of the number
+     * @returns the floor value of the Oracle number
+     */
+    floor(): OracleNumber;
+    /**
+     * Rounds the number to a specified number of digits
+     * @param ndigs - the number of digits
+     * @returns the rounded Oracle number
+     */
+    roundDigits(ndigs: OracleNumber | number): OracleNumber;
+    /**
+     * Rounds the Oracle number to a specified number of decimal places
+     * @param decplace - the decimal place
+     * @returns the rounded Oracle number
+     */
+    roundPlaces(decplace: OracleNumber | number): OracleNumber;
+    /**
+     * Shifts the number by the specified number of decimal places
+     * @param digits - number of decimal places to shift. It can be negative. Positive values shift the decimal place to the right and negative values to the left. For example, if NUMBER corresponds to 1234.5 and digits == -1, the new NUMBER object will correspond to 123.45.
+     * @returns an Oracle number containing the shifted result
+     */
+    shift(digits: OracleNumber | number): OracleNumber;
+    /**
+     * Truncates the number to the specified number of decimal places.
+     * @param decplace - Number of decimal digits to the right of the decimal point at which to truncate. Negative values are allowed.
+     * @returns a truncated Oracle number
+     */
+    trunc(decplace: OracleNumber | number): OracleNumber;
+    /**
+     * Scales the digits to the left and right of the decimal point.
+     * @param left maximum number of decimal digits to the left of the decimal point. It will not effect the number, but throw an exception if this value is exceeded.
+     * @param right maximum number of decimal digits to the right of the decimal point. The number is rounded at this point. Negative values are allowed.
+     * @returns a new scaled Oracle number scaled according to the arguments
+     * @throws throws an exception if the number of left-hand-side digits is exceeded
+     */
+    scale(left: number, right: number): OracleNumber;
+    /**
+     * Converts an Oracle NUMBER to type number
+     * @returns the converted number
+     */
+    toNumber(): number;
+    /**
+     * Converts an Oracle NUMBER to a string, with an optional number format
+     * and NLS parameters. If no format string and NLS parameters are provided,
+     * the default values for the session are used.
+     * @param format optional number format
+     * @param nlsParam optional NLS parameters
+     * @returns the converted string
+     */
+    toString(format?: string, nlsParam?: string): string;
+    isOracleNumber(): boolean;
+    asPackedDecimalNumber(): any;
+}
+
+/**
+ * JavaScript API for Oracle type INTERVAL DAY TO SECOND.
+ */
+export class IOracleIntervalDayToSecond {
+    /**
+     * Constructor for IOracleIntervalDayToSecond using day, hour, minute,
+     * second, and fraction of a second. All arguments must be integral numbers.
+     *
+     * @param dy - number of days
+     * @param hr - number of hours
+     * @param mm - number of minutes
+     * @param ss - number of seconds
+     * @param fs - fractional seconds
+     * @returns new IOracleIntervalDayToSecond
+     */
+    constructor(dy: number, hr: number, mm: number, ss: number, fs: number);
+    /**
+     * Parses an interval string into IOracleIntervalDayToSecond. This method
+     * accepts the same input formats as the Oracle SQL function TO_DSINTERVAL:
+     
+     * - SQL interval format compatible with the SQL standard (ISO/IEC 9075)
+     * - ISO duration format compatible with the ISO 8601:2004 standard
+     *
+     * @param interval string to parse.
+     * @returns new IOracleIntervalDayToSecond
+     */
+    fromString(interval: string): IOracleIntervalDayToSecond;
+    /**
+     * Returns an IOracleIntervalDayToSecond for a given timezone offset or
+     * timezone name. The input string must be of the form [+/-]TZH:TZM or
+     * 'TZR'.
+     *
+     * @param tz - timezone offset or timezone name as string
+     * @returns new IOracleIntervalDayToSecond that contains the current absolute offset
+     */
+    fromTimeZone(tz: string): IOracleIntervalDayToSecond;
+    /**
+     * Returns an IOracleIntervalDayToSecond for the given number of days. If the
+     * number of days contains a fractional part, the number of hours, minutes
+     * and seconds will be set accordingly.
+     *
+     * @param days - number of days
+     * @returns new IOracleIntervalDayToSecond for the given number of days.
+     */
+    fromNumberOfDays(days: number | OracleNumber): IOracleIntervalDayToSecond;
+    /**
+     * Compares two intervals.
+     * Returns -1 if i1 < i2, 0 if they are equal, and 1 if i1 > i2.
+     * @param i1 - first interval to use for the comparison
+     * @param i2 - second interval to use for the comparison
+     * @returns the result of the comparison as a number between -1 and +1.
+     */
+    compare(i1: IOracleIntervalDayToSecond, i2: IOracleIntervalDayToSecond): any;
+    /**
+     * Returns the number of days from the interval
+     *
+     * @returns the number of days from the interval
+     */
+    getDays(): number;
+    /**
+     * Returns the number of hours from the interval
+     *
+     * @returns the number of hours from the interval
+     */
+    getHours(): number;
+    /**
+     * Returns the number of minutes from the interval
+     *
+     * @returns the number of minutes from the interval
+     */
+    getMinutes(): number;
+    /**
+     * Returns the number of seconds including fractional seconds from the
+     * interval
+     *
+     * @returns the number of seconds including fractional seconds from the
+     *          interval
+     */
+    getSeconds(): number;
+    /**
+     * Adds the interval to another interval and returns the resulting interval
+     *
+     * @param summand - the other interval
+     * @returns the resulting interval as IOracleIntervalDayToSecond
+     */
+    add(summand: IOracleIntervalDayToSecond): IOracleIntervalDayToSecond;
+    /**
+     * Subtracts another interval from the interval and returns the resulting
+     * interval
+     *
+     * @param subtrahend - the other interval
+     * @returns the resulting interval as IOracleIntervalDayToSecond
+     */
+    subtract(subtrahend: IOracleIntervalDayToSecond): IOracleIntervalDayToSecond;
+    /**
+     * Divides the interval by an Oracle number or JavaScript number and returns
+     * the resulting interval
+     *
+     * @param divisor - the divisor used in the division
+     * @returns the resulting interval
+     */
+    divide(divisor: OracleNumber | number): IOracleIntervalDayToSecond;
+    /**
+     * Multiplies the interval with an Oracle number or a JavaScript number and
+     * returns the resulting interval
+     *
+     * @param factor - the factor used in the multiplication
+     * @returns the resulting interval
+     */
+    multiply(factor: OracleNumber | number): IOracleIntervalDayToSecond;
+    /**
+     * Produces a string representing the interval. The string is formatted with
+     * 2 digits for the number of days and 6 digits for the fractional seconds
+     * of the interval.
+     *
+     * @returns a string representing the interval
+     */
+    toString(): string;
+    /**
+     * Produces a string representing the interval. The string is formatted
+     * according to the specified precision for days and fractional seconds.
+     *
+     * @param daysPrecision - The number of digits used to represent days in the interval string.
+     * @param fractionalSecondsPrecision - Fractional second precision of the interval string (the number of digits used to represent the fractional seconds).
+     * @returns a string representing the interval
+     */
+    toStringWithPrecision(daysPrecision: number, fractionalSecondsPrecision: number): string;
+}
+
+/**
+ * JavaScript API for Oracle type INTERVAL YEAR TO MONTH.
+ */
+export class IOracleIntervalYearToMonth {
+    /**
+     * Constructor for IOracleIntervalYearToMonth using year and month. All
+     * arguments must be integral numbers.
+     *
+     * @param yr year value
+     * @param mnth month value
+     * @returns new IOracleIntervalYearToMonth
+     */
+    constructor(yr: number, mnth: number);
+    /**
+     * Parse an interval string into IOracleIntervalYearToMonth. fromString
+     * accepts the same input formats as the Oracle SQL function TO_YMINTERVAL:
+     *
+     * - SQL interval format compatible with the SQL standard (ISO/IEC 9075)
+     * - ISO duration format compatible with the ISO 8601:2004 standard
+     *
+     * @param interval string to parse
+     * @returns new IOracleIntervalYearToMonth
+     */
+    fromString(interval: string): IOracleIntervalYearToMonth;
+    /**
+     * Returns an IOracleIntervalYearToMonth for the given number of years. If
+     * the number of years contains a fractional part, the number of months will
+     * be set accordingly.
+     *
+     * @param days - number of months
+     * @returns new IOracleIntervalYearToMonth for the given number of years.
+     */
+    fromNumberOfYears(years: number | OracleNumber): IOracleIntervalYearToMonth;
+    /**
+     * Compares two intervals.
+     * Returns -1 if i1 < i2, 0 if they are equal, and 1 if i1 > i2.
+     * @param i1 - first interval to use for the comparison
+     * @param i2 - second interval to use for the comparison
+     * @returns the result of the comparison as a number between -1 and +1.
+     */
+    compare(i1: IOracleIntervalYearToMonth, i2: IOracleIntervalYearToMonth): number;
+    /**
+     * Returns the number of years from the interval
+     *
+     * @returns the number of years from the interval
+     */
+    getYears(): number;
+    /**
+     * Returns the total number of months from the interval
+     *
+     * @returns the total number of months from the interval
+     */
+    getMonths(): number;
+    /**
+     * Adds the interval to another interval and returns the resulting interval
+     *
+     * @param other - the other interval
+     * @returns the resulting interval as IOracleIntervalYearToMonth
+     */
+    add(other: IOracleIntervalYearToMonth): IOracleIntervalYearToMonth;
+    /**
+     * Subtracts another interval from the interval and returns the resulting
+     * interval
+     *
+     * @param other - the other interval
+     * @returns the resulting interval as IOracleIntervalYearToMonth
+     */
+    subtract(other: IOracleIntervalYearToMonth): IOracleIntervalYearToMonth;
+    /**
+     * Divides the interval by an OracleNumber or JavaScript number and returns
+     * the resulting interval
+     *
+     * @param dividend - the dividend used in the division
+     * @returns the resulting interval
+     */
+    divide(dividend: OracleNumber | number): IOracleIntervalYearToMonth;
+    /**
+     * Multiplies the interval with an OracleNumber or a JavaScript number and
+     * returns the resulting interval
+     *
+     * @param nfactor - the factor used in the multiplication
+     * @returns the resulting interval
+     */
+    multiply(nfactor: OracleNumber | number): IOracleIntervalYearToMonth;
+    /**
+     * Given an interval, produces a string representing the interval. The
+     * string is formatted with at least 2 digits for the number of years.
+     *
+     * @returns a string representing the year-to-month interval
+     */
+    toString(): string;
+    /**
+     * Produces a string representing the interval. The string is formatted
+     * according to the specified precision for days and fractional seconds.
+     *
+     * @param yearsPrecision - The number of digits used to represent years in the interval string.
+     * @returns a string representing the interval
+     */
+    toStringWithPrecision(yearsPrecision: number): string;
+}
+
+/**
+ * Optional arguments for the compare method of OracleBlob and OracleClob.
+ */
+export interface CompareOptionalArguments {
+    /**
+     * Number of bytes/characters to compare.
+     */
+    amount?: number;
+    /**
+     * Offset (bytes/characters) into the first LOB. Defaults to 1.
+     */
+    offset1?: number;
+    /**
+     * Offset (bytes/characters) into the second LOB. Defaults to 1.
+     */
+    offset2?: number;
+}
+
+/**
+ * JavaScript API for Oracle type Binary Large Object (BLOB).
+ */
+export class OracleBlob {
+    private delegate;
+    /**
+     * Constant for read-only mode.
+     */
+    static LOB_READONLY: number;
+    /**
+     * Constant for read/write mode.
+     */
+    static LOB_READWRITE: number;
+    private static checkArgPresent;
+    private static checkNoArgs;
+    /**
+     * This constructor creates a temporary BLOB and its corresponding index in
+     * your default temporary tablespace. The temporary BLOB is created with
+     * SESSION duration.
+     *
+     * @param cache Specifies if BLOB should be read into buffer cache or not.
+     */
+    static createTemporary(cache: boolean): OracleBlob;
+    constructor(delegate: any);
+    /**
+     * This method compares two entire BLOBs or parts of two BLOBs.
+     *
+     * @param lob1 First target for comparison.
+     * @param lob2 Second target for comparison.
+     * @param optArgs Optional arguments that specify amount and offsets.
+     * @returns 0 if the compared portions are equal, non-zero if not
+     * @throws Error if offset1 or offset2 is not a valid BLOB offset value.
+     */
+    static compare(lob1: OracleBlob, lob2: OracleBlob, optArgs?: CompareOptionalArguments): number;
+    /**
+     * When creating the table, you can specify the chunking factor, a multiple
+     * of tablespace blocks in bytes. This corresponds to the chunk size used
+     * by the BLOB data layer when accessing or modifying the BLOB value. Part of
+     * the chunk is used to store system-related information, and the rest
+     * stores the BLOB value. This method returns the amount of space used in
+     * the BLOB chunk to store the BLOB value.
+     */
+    getChunkSize(...args: any[]): number;
+    /**
+     * This method gets the length of the specified BLOB. The length in bytes
+     * is returned.
+     */
+    length(...args: any[]): number;
+    /**
+     * This method checks to see if the BLOB was already opened using the
+     * input locator.
+     */
+    isOpen(...args: any[]): boolean;
+    /**
+     * This method determines whether a BLOB instance is temporary.
+     */
+    isTemporary(...args: any[]): boolean;
+    /**
+     * This method opens a BLOB in the indicated mode. Valid modes include
+     * read-only and read/write.
+     *
+     * @param mode
+     */
+    open(mode: number): void;
+    /**
+     * This method closes a previously opened BLOB.
+     */
+    close(...args: any[]): void;
+    /**
+     * This method frees the temporary BLOB in the default temporary
+     * tablespace.
+     */
+    freeTemporary(...args: any[]): void;
+    /**
+     * Returns all the BLOB data as Uint8Array.
+     *
+     * For queries returning LOB columns, it can be more efficient to use
+     * fetchAsUint8Array, or fetchInfo instead of lob.getData().
+     *
+     * @throws Error if blob is too large.
+     */
+    getData(): Uint8Array;
+    /**
+     * This method reads a piece of a BLOB, and returns the specified amount
+     * into the buffer parameter, starting from an absolute offset from the
+     * beginning of the BLOB. If the input offset points past the End of BLOB, a
+     * NO_DATA_FOUND exception is raised.
+     *
+     * @param amount Number of bytes to read.
+     * @param offset Offset in bytes from the start of the BLOB (origin: 1).
+     * @returns a Uint8Array that contains the bytes actually read.
+     */
+    read(amount: number, offset: number): Uint8Array;
+    /**
+     * This method writes data into an internal BLOB, starting from an absolute
+     * offset from the beginning of the BLOB. The data is written from the buffer
+     * parameter. WRITE replaces (overwrites) any data that already exists in
+     * the BLOB at the offset.
+     *
+     * @param offset Offset in bytes from the start of the BLOB (origin: 1) for the write operation.
+     * @param buffer Data to write.
+     */
+    write(offset: number, buffer: Uint8Array): void;
+    getDelegate(): any;
+    isOracleBlob(): boolean;
+}
+
+/**
+ * JavaScript API for Oracle type Character Large Object (CLOB).
+ */
+export class IOracleClob {
+    /**
+     * Constant for read-only mode.
+     */
+    LOB_READONLY: number;
+    /**
+     * Constant for read/write mode.
+     */
+    LOB_READWRITE: number;
+    /**
+     * createTemporary creates a temporary CLOB and its corresponding index in
+     * your default temporary tablespace. The temporary CLOB is created with
+     * SESSION duration.
+     *
+     * @param cache Specifies if CLOB should be read into buffer cache or not.
+     * @param isNClob If set to true will create a temporary NCLOB instead of regular CLOB.
+     */
+    createTemporary(cache: boolean, isNClob?: boolean): any;
+    /**
+     * This method compares two entire CLOBs or parts of two CLOBs.
+     *
+     * @param lob1 First target for comparison.
+     * @param lob2 Second target for comparison.
+     * @param optArgs Optional arguments that specify amount and offsets.
+     * @returns 0 if the compared portions are equal, non-zero if not
+     * @throws Error if offset1 or offset2 is not a valid CLOB offset value.
+     */
+    compare(lob1: IOracleClob, lob2: IOracleClob, optArgs?: CompareOptionalArguments): number;
+    /**
+     * When creating the table, you can specify the chunking factor, a multiple
+     * of tablespace blocks in characters. This corresponds to the chunk size used
+     * by the CLOB data layer when accessing or modifying the CLOB value. Part of
+     * the chunk is used to store system-related information, and the rest
+     * stores the CLOB value. This method returns the amount of space used in
+     * the CLOB chunk to store the CLOB value.
+     */
+    getChunkSize(): number;
+    /**
+     * This method gets the length of the specified CLOB. The length in
+     * characters is returned.
+     */
+    length(): number;
+    /**
+     * This method checks to see if the CLOB was already opened using the
+     * input locator.
+     */
+    isOpen(): boolean;
+    /**
+     * This method determines whether a CLOB instance is temporary.
+     */
+    isTemporary(): boolean;
+    /**
+     * This method opens a CLOB in the indicated mode. Valid modes include
+     * read-only and read/write.
+     *
+     * @param mode
+     */
+    open(mode: number): any;
+    /**
+     * This method closes a previously opened CLOB.
+     */
+    close(): any;
+    /**
+     * This method frees the temporary CLOB in the default temporary
+     * tablespace.
+     */
+    freeTemporary(): any;
+    /**
+     * This method reads a piece of a CLOB and returns the specified amount
+     * into the buffer parameter, starting from an absolute offset from the
+     * beginning of the CLOB. If the input offset points past the End of CLOB, a
+     * NO_DATA_FOUND exception is raised.
+     *
+     * @param amount Number of characters to read.
+     * @param offset Offset in characters from the start of the CLOB (origin: 1).
+     * @returns a string that contains the characters actually read.
+     */
+    read(amount: number, offset: number): string;
+    /**
+     * This method writes data into an internal CLOB, starting from an absolute
+     * offset from the beginning of the CLOB. The data is written from the buffer
+     * parameter. WRITE replaces (overwrites) any data that already exists in
+     * the CLOB at the offset.
+     *
+     * @param offset Offset in characters from the start of the CLOB (origin: 1) for the write operation.
+     * @param buffer Data to write.
+     */
+    write(offset: number, buffer: string): any;
+    /**
+     * Returns all the CLOB/NCLOB data as string.
+     
+     * For queries returning LOB columns, it can be more efficient to use
+     * fetchAsString, or fetchInfo instead of lob.getData().
+     */
+    getData(): string;
+}
+
+/**
+ * JavaScript API for Oracle type TIMESTAMP WITH TIME ZONE.
+ */
+export class IOracleTimestampTZ {
+    /**
+     * Parse a string into an IOracleTimestampTZ. An optional datetime format
+     * model and an optional NLS parameter string can be provided. If no format
+     * model is specified, the string must be in the default format for the
+     * Oracle TIMESTAMP WITH TIME ZONE data type, which is determined by the
+     * NLS_TIMESTAMP_TZ_FORMAT parameter.
+     *
+     * If an NLS parameter string is specified, it has the effect of temporarily
+     * altering the session's NLS settings for the duration of the call to this
+     * method. The NLS parameter string may set the NLS_DATE_LANGUAGE
+     * parameter.
+     *
+     * If a datetime format model is specified, it overrides the datetime format
+     * determined by NLS settings (i.e. the setting of the NLS_TIMESTAMP_TZ
+     * parameter).
+     
+     * The function returns an error if the specified date lies in a DST
+     * transition period and if the Oracle Database parameter
+     * ERROR_ON_OVERLAP_TIME is true for the current session.
+     *
+     * @param date date represented as a string
+     * @param format optional datetime format model
+     * @param nlsParam optional NLS parameter string. Must have the same format
+     * as the NLS argument to the TO_TIMESTAMP_TZ SQL function.
+     * @returns an IOracleTimestampTZ object
+     */
+    fromString(date: string, format?: string, nlsParam?: string): any;
+    /**
+     * Convert to an OracleTimestamp that contains the local date/time of the
+     * IOracleTimestampTZ.
+     */
+    asLocalDateTime(): IOracleTimestamp;
+    /**
+     * Convert this IOracleTimestampTZ to an IOracleTimestampTZ in the specified
+     * time zone. The time zone string has to contain either a time zone offset
+     * of the form '(+|-)HH:MM' or a time zone region name.
+     *
+     * The function returns an error if the date lies in a DST transition period
+     * in the specified time zone and if the Oracle Database parameter
+     * ERROR_ON_OVERLAP_TIME is true for the current session.
+     *
+     * @param timezone The time zone string.
+     */
+    atTimeZone(timezone: string): IOracleTimestampTZ;
+    /**
+     * Compares two datetime values.
+     * Returns -1 if date1 < date2, 0 if they are equal, and 1 if date1 > date2.
+     *
+     * @param other - second timestamp to be compared
+     * @returns the result of the comparison as a number between -1 and +1.
+     */
+    compare(date1: IOracleTimestampTZ, date2: IOracleTimestampTZ): number;
+    /**
+     * Gets the year component in the Gregorian calendar.
+     *
+     * @returns year component as number
+     */
+    getYear(): number;
+    /**
+     * Gets the month component in the Gregorian calendar.
+     *
+     * @returns month component as number
+     */
+    getMonth(): number;
+    /**
+     * Gets the day component in the Gregorian calendar.
+     *
+     * @returns day component as number
+     */
+    getDay(): number;
+    /**
+     * Gets the hour component.
+     *
+     * @returns hour component as number
+     */
+    getHour(): number;
+    /**
+     * Gets the minute component.
+     *
+     * @returns minute component as number
+     */
+    getMinute(): number;
+    /**
+     * Gets the second component.
+     *
+     * @returns second component as number
+     */
+    getSecond(): number;
+    /**
+     * Gets the fractional second component.
+     *
+     * @returns fractional second component as number
+     */
+    getFractionalSecond(): number;
+    /**
+     * Gets the time zone of an IOracleTimestampTZ.
+     *
+     * @returns the time zone name as string
+     */
+    getTimeZone(): string;
+    /**
+     * Adds an interval to the timestamp to obtain a new timestamp
+     * @param interval - the interval used to obtain the new timestamp
+     * @returns resulting timestamp
+     */
+    addInterval(interval: IOracleIntervalDayToSecond | IOracleIntervalYearToMonth): IOracleTimestampTZ;
+    /**
+     * Subtracts an interval from the timestamp to obtain a new timestamp
+     * @param interval - the interval used to obtain the new timestamp
+     * @returns resulting timestamp
+     */
+    subtractInterval(interval: IOracleIntervalDayToSecond | IOracleIntervalYearToMonth): IOracleTimestampTZ;
+    /**
+     * Subtracts another timestamp from the timestamp to obtain a year-to-month interval
+     * @param other - the other timestamp used as subtrahend
+     * @returns year-to-month interval defined by the two timestamps
+     */
+    subtractIntoYearToMonth(other: IOracleTimestampTZ): IOracleIntervalYearToMonth;
+    /**
+     * Subtracts another timestamp from the timestamp to obtain a day-to-second
+     * interval.
+     *
+     * @param other - the other timestamp used as subtrahend
+     * @returns year-to-month interval defined by the two timestamps
+     */
+    subtractIntoDayToSecond(other: IOracleTimestampTZ): IOracleIntervalDayToSecond;
+    /**
+     * Converts the given datetime to a string in a given format. An optional
+     * datetime format model and an optional NLS parameter string can be
+     * provided. If no format model and/or no NLS parameter string is provided,
+     * the respective default values for the session are used.
+     *
+     * If an NLS parameter string is specified, it has the effect of temporarily
+     * altering the session's NLS settings for the duration of the call to this
+     * method. The NLS parameter string may set the NLS_DATE_LANGUAGE
+     * parameter.
+     *
+     * If a datetime format model is specified, it overrides the datetime format
+     * determined by NLS settings.
+     *
+     * @param format datetime format model
+     * @param nlsParam optional NLS parameter string
+     * @returns a string of the timestamp
+     */
+    toString(format?: string, nlsParam?: string): string;
+}
+
+/**
+ * JavaScript API for Oracle type TIMESTAMP.
+ */
+export class IOracleTimestamp {
+    /**
+     * Parse a string into an IOracleTimestamp. An optional datetime format model
+     * and an optional NLS parameter string can be provided. If no format model
+     * is specified, the string must be in the default format for the Oracle
+     * TIMESTAMP data type, which is determined by the NLS_TIMESTAMP_FORMAT
+     * parameter.
+     *
+     * If an NLS parameter string is specified, it has the effect of temporarily
+     * altering the session's NLS settings for the duration of the call to this
+     * method. The NLS parameter string may set the NLS_DATE_LANGUAGE
+     * parameter.
+     *
+     * If a datetime format model is specified, it overrides the datetime format
+     * determined by NLS settings (i.e. the setting of the NLS_TIMESTAMP FORMAT
+     * parameter).
+     *
+     * @param date date represented as a string
+     * @param format optional datetime format model
+     * @param nlsParam optional NLS parameter string. Must have the same format
+     * as the NLS argument to the TO_TIMESTAMP SQL function.
+     * @returns an IOracleTimestamp object
+     */
+    fromString(date: string, format?: string, nlsParam?: string): any;
+    /**
+     * Converts to an IOracleTimestampTZ using the session time zone.
+     */
+    atSessionTimeZone(): IOracleTimestampTZ;
+    /**
+     * Converts to an IOracleTimestampTZ in the specified time zone. The time zone
+     * string has to contain either a time zone offset of the form '(+|-)HH:MM'
+     * or a time zone region name.
+     *
+     * @param timezone The time zone string.
+     */
+    atTimeZone(timezone: string): IOracleTimestampTZ;
+    /**
+     * Compares two IOracleTimestamp values.
+     * Returns -1 if date1 < date2, 0 if they are equal, and 1 if date1 > date2.
+     *
+     * @param other - second timestamp to be compared
+     * @returns the result of the comparison as a number between -1 and +1.
+     */
+    compare(date1: IOracleTimestamp, date2: IOracleTimestamp): number;
+    /**
+     * Gets the year component in the Gregorian calendar.
+     *
+     * @returns year component as number
+     */
+    getYear(): number;
+    /**
+     * Gets the month component in the Gregorian calendar.
+     *
+     * @returns month component as number
+     */
+    getMonth(): number;
+    /**
+     * Gets the day component in the Gregorian calendar.
+     *
+     * @returns day component as number
+     */
+    getDay(): number;
+    /**
+     * Gets the hour component.
+     *
+     * @returns hour component as number
+     */
+    getHour(): number;
+    /**
+     * Gets the minute component.
+     *
+     * @returns minute component as number
+     */
+    getMinute(): number;
+    /**
+     * Gets the second component, including the fractional part.
+     *
+     * @returns second component as number
+     */
+    getSecond(): number;
+    /**
+     * Adds an interval to the timestamp to obtain a new timestamp
+     * @param interval - the interval used to obtain the new timestamp
+     * @returns resulting timestamp
+     */
+    addInterval(interval: IOracleIntervalDayToSecond | IOracleIntervalYearToMonth): IOracleTimestamp;
+    /**
+     * Subtracts an interval from the timestamp to obtain a new timestamp
+     * @param interval - the interval used to obtain the new timestamp
+     * @returns resulting timestamp
+     */
+    subtractInterval(interval: IOracleIntervalDayToSecond | IOracleIntervalYearToMonth): IOracleTimestamp;
+    /**
+     * Subtracts another timestamp from the timestamp to obtain a year-to-month interval
+     * @param other - the other timestamp used as subtrahend
+     * @returns year-to-month interval defined by the two timestamps
+     */
+    subtractIntoYearToMonth(other: IOracleTimestamp): IOracleIntervalYearToMonth;
+    /**
+     * Subtracts another timestamp from the timestamp to obtain a day-to-second
+     * interval.
+     *
+     * @param other - the other timestamp used as subtrahend
+     * @returns year-to-month interval defined by the two timestamps
+     */
+    subtractIntoDayToSecond(other: IOracleTimestamp): IOracleIntervalDayToSecond;
+    /**
+     * Converts the given datetime to a string in a certain format. An optional
+     * datetime format model and an optional NLS parameter string can be
+     * provided. If no format model and/or no NLS parameter string is provided,
+     * the respective default values for the session are used.
+     *
+     * If an NLS parameter string is specified, it has the effect of temporarily
+     * altering the session's NLS settings for the duration of the call to this
+     * method. The NLS parameter string may set the NLS_DATE_LANGUAGE
+     * parameter.
+     *
+     * If a datetime format model is specified, it overrides the datetime format
+     * determined by NLS settings.
+     *
+     * @param format datetime format model
+     * @param nlsParam optional NLS parameter string
+     * @returns a string of the timestamp
+     */
+    toString(format?: string, nlsParam?: string): string;
+}
+
+/**
+ * JavaScript API for Oracle type DATE.
+ */
+export class IOracleDate {
+    /**
+     * Construct a new IOracleDate object from date and time components
+     * (Gregorian calendar).
+     *
+     * @param year year component (-4712 <= y <= 9999)
+     * @param month month component (1 <= m <= 12)
+     * @param day day component (1 <= d <= 31)
+     * @param hour hour component (0 <= h <= 23)
+     * @param minute minute component (0 <= m <= 59)
+     * @param second second component (0 <= s <= 59)
+     */
+    constructor(year: number, month: number, day: number, hour: number, minute: number, second: number);
+    /**
+     * Construct a new IOracleDate object from date components (Gregorian
+     * calendar).
+     *
+     * @param year year component (-4712 <= y <= 9999)
+     * @param month month component (1 <= m <= 12)
+     * @param day day component (1 <= d <= 31)
+     */
+    constructor(year: number, month: number, day: number);
+    /**
+     * Parse a date string into an IOracleDate. An optional datetime format
+     * model and an optional NLS parameter string can be provided. If no format
+     * model and/or no NLS parameter string is provided, the respective default
+     * values for the session are used.
+     *
+     * If an NLS parameter string is specified, it has the effect of temporarily
+     * altering the session's NLS settings for the duration of the call to this
+     * method. The NLS parameter string may only set the NLS_DATE_LANGUAGE
+     * parameter.
+     *
+     * If a datetime format model is specified, it overrides the date format
+     * determined by NLS settings.
+     *
+     * @param date date represented as a string
+     * @param fmt optional datetime format model
+     * @param nlsParam optional NLS parameter string. Must have the same format
+     * as the NLS argument to the TO_DATE SQL function.
+     * @returns the new date as IOracleDate object
+     */
+    fromString(date: string, fmt?: string, nlsParam?: string): IOracleDate;
+    /**
+     * Gets the current system date and time as an IOracleDate.
+     * @returns the system date and time as IOracleDate
+     */
+    sysDate(): IOracleDate;
+    /**
+     * Converts an IOracleDate to a string and returns it. An optional datetime
+     * format model and an optional NLS parameter string can be provided. If no
+     * format model and/or no NLS parameter string is provided, the respective
+     * default values for the session are used.
+     *
+     * If an NLS parameter string is specified, it has the effect of temporarily
+     * altering the session's NLS settings for the duration of the call to this
+     * method. The NLS parameter string may only set the NLS_DATE_LANGUAGE
+     * parameter.
+     *
+     * If a datetime format model is specified, it overrides the date format
+     * determined by NLS settings.
+     *
+     * @param fmt optional datetime format model
+     * @param nlsParam optional NLS parameter string. Must have the same format
+     * as the NLS argument to the TO_DATE SQL function.
+     * @returns the date as string
+     */
+    toString(fmt?: string, nlsParam?: string): string;
+    /**
+     * Construct a new IOracleDate object by adding number of months to this
+     * date. The result of this function is sensitive to the setting for the
+     * NLS_CALENDAR parameter in the current session.
+     *
+     * @param numberOfMonths number of months to add
+     * @returns the new date as IOracleDate object
+     */
+    addMonths(numberOfMonths: number): IOracleDate;
+    /**
+     * Construct a new IOracleDate object by adding number of days to this date.
+     * The result of this function is sensitive to the setting for the
+     * NLS_CALENDAR parameter in the current session.
+     *
+     * @param numberOfDays - number of days to add
+     * @returns the new date as IOracleDate object
+     */
+    addDays(numberOfDays: number): IOracleDate;
+    /**
+     * Compares two dates.
+     * Returns -1 if d1 < d2, 0 if they are equal, and 1 if d1 > d2.
+     *
+     * @param d1 - first date value
+     * @param d2 - second date value
+     * @returns the result of the comparison as a number between -1 and +1.
+     */
+    compare(d1: IOracleDate, d2: IOracleDate): number;
+    /**
+     * Gets the number of days between two dates. The result of this function
+     * is sensitive to the setting for the NLS_CALENDAR parameter in the
+     * current session.
+     *
+     * @param d1 - first date value
+     * @param d2 - date value to compare with
+     * @returns number of days between d1 and d2
+     */
+    daysBetween(d1: IOracleDate, d2: IOracleDate): number;
+    /**
+     * Gets the date of the last day of the month specified by this date. The
+     * result of this function is sensitive to the setting for the NLS_CALENDAR
+     * parameter of the current session.
+     *
+     * @returns a new date set set to the last day of the month
+     */
+    lastDayOfMonth(): IOracleDate;
+    /**
+     * Gets the date of the first weekday named by dayOfTheWeek that is later
+     * than this date. The result of this method is sensitive to the
+     * NLS_DATE_LANGUAGE parameter of the current session.
+     *
+     * @returns a new date set to the first weekday name by dayOfTheWeek that
+     * is later than this date.
+     */
+    nextDay(dayOfTheWeek: string): IOracleDate;
+    /**
+     * Gets the year component according to the Gregorian calendar.
+     *
+     * @returns year component (-4712 <= y <= 9999)
+     */
+    getYear(): number;
+    /**
+     * Gets the month component according to the Gregorian calendar.
+     * @returns month component (1 <= m <= 12)
+     */
+    getMonth(): number;
+    /**
+     * Gets the day component according to the Gregorian calendar.
+     * @returns day component (1 <= d <= 31)
+     */
+    getDay(): number;
+    /**
+     * Gets the hour component.
+     * @returns our component (0 <= h <= 23)
+     */
+    getHour(): number;
+    /**
+     * Gets the minute component.
+     * @returns minute component (0 <= m <= 59)
+     */
+    getMinute(): number;
+    /**
+     * Gets the second component.
+     * @returns second component (0 <= s <= 59)
+     */
+    getSecond(): number;
+    /**
+     * Checks if this has a valid date.
+     * @returns true iff the date is valid
+     */
+    isValid(): boolean;
+}
+}
+
+declare module "mle-js-plsqltypes" {
+
+
+/**
+ * JavaScript API for Oracle type TIMESTAMP.
+ */
+export const OracleTimestamp: IOracleTimestamp;
+
+/**
+ * JavaScript API for Oracle type TIMESTAMP WITH TIMEZONE.
+ */
+export const OracleTimestampTZ: IOracleTimestampTZ;
+
+/**
+ * JavaScript API for Oracle type INTERVAL DAY TO SECOND.
+ */
+export const OracleIntervalDayToSecond: IOracleIntervalDayToSecond;
+
+/**
+ * JavaScript API for Oracle type INTERVAL YEAR TO MONTH.
+ */
+export const OracleIntervalYearToMonth: IOracleIntervalYearToMonth;
+
+/**
+ * JavaScript API for Oracle type CLOB.
+ */
+export const OracleClob: IOracleClob;
+
+/**
+ * JavaScript API for Oracle type DATE.
+ */
+export const OracleDate: IOracleDate;
+export const OracleNumber: __mle_js_plsqltypes.OracleNumber;
+type OracleNumber = __mle_js_plsqltypes.OracleNumber;
+export const IOracleIntervalDayToSecond: __mle_js_plsqltypes.IOracleIntervalDayToSecond;
+type IOracleIntervalDayToSecond = __mle_js_plsqltypes.IOracleIntervalDayToSecond;
+export const IOracleIntervalYearToMonth: __mle_js_plsqltypes.IOracleIntervalYearToMonth;
+type IOracleIntervalYearToMonth = __mle_js_plsqltypes.IOracleIntervalYearToMonth;
+export const CompareOptionalArguments: __mle_js_plsqltypes.CompareOptionalArguments;
+type CompareOptionalArguments = __mle_js_plsqltypes.CompareOptionalArguments;
+export const OracleBlob: __mle_js_plsqltypes.OracleBlob;
+type OracleBlob = __mle_js_plsqltypes.OracleBlob;
+export const IOracleClob: __mle_js_plsqltypes.IOracleClob;
+type IOracleClob = __mle_js_plsqltypes.IOracleClob;
+export const IOracleTimestampTZ: __mle_js_plsqltypes.IOracleTimestampTZ;
+type IOracleTimestampTZ = __mle_js_plsqltypes.IOracleTimestampTZ;
+export const IOracleTimestamp: __mle_js_plsqltypes.IOracleTimestamp;
+type IOracleTimestamp = __mle_js_plsqltypes.IOracleTimestamp;
+export const IOracleDate: __mle_js_plsqltypes.IOracleDate;
+type IOracleDate = __mle_js_plsqltypes.IOracleDate;
+
+
+}
+
+/**
+ * CAUTION: This namespace is used for TYPE DECLARATIONS ONLY and does not have
+ * an equivalent in the actual implementation in MLE. Please either use the
+ * corresponding module or global symbols instead.
+ */
+declare namespace __mle_js_oracledb {
+
 
 /**
  * SODA API for MLE. This is compatible with node-oracledb 5.0.0.
@@ -50,96 +1350,93 @@ declare namespace __mlejsoracledb {
  * SodaDatabase.createCollection() options. The metadata must conform to the
  * JSON object layout specified in the Oracle Database
  * "SODA Collection Metadata Components (Reference)" documentation.
- * @see
- *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatecollectionoptions
- * @see
- *    https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-collection-metadata-components-reference.html
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatecollectionoptions
+ * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-collection-metadata-components-reference.html
  */
 interface ICreateCollectionOptions {
     metaData?: Record<string, any>;
     mode?: number;
 }
+
 /**
  * SodaDatabase.createDocument() options.
- * @see
- *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatedocumentoptions
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatedocumentoptions
  */
 interface ICreateDocumentOptions {
     key?: string;
     mediaType?: string;
 }
+
 /**
  * SodaDatabase.getCollectionNames() options.
- * @see
- *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbgetcollectionnamesoptions
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbgetcollectionnamesoptions
  */
 interface IGetCollectionNameOptions {
     limit?: number;
     startsWith?: string;
 }
+
 /**
  * SodaCollection.dropIndex() options.
- * @see
- *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropindexoptions
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropindexoptions
  */
 interface IDropIndexOptions {
     force?: boolean;
 }
+
 /**
  * SodaCollection.drop() return value.
- * @see
- *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropcallback
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropcallback
  */
 interface IDropResult {
     dropped: boolean;
 }
+
 /**
  * SodaCollection.dropIndex() result.
- * @see
- *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropindexcb
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropindexcb
  */
 interface IDropIndexResult {
     dropped: boolean;
 }
+
 /**
  * SodaOperation.count() result.
- * @see
- *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasscount
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasscount
  */
 interface ICountResult {
     count: number;
 }
+
 /**
  * SodaOperation.remove() result.
- * @see
- *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassremove
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassremove
  */
 interface IRemoveResult {
     count: number;
 }
+
 /**
  * SodaOperation.replace() result.
- * @see
- *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassreplaceone
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassreplaceone
  */
 interface IReplaceResult {
     replaced: boolean;
 }
+
 /**
  * SODA database access class. SodaDatabase is the top level object for
  * SODA operations. A 'SODA database' is an abstraction, allowing access to SODA
  * collections in that 'SODA database', which then allow access to documents in
  * those collections.
- * @see
- *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadatabaseclass
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadatabaseclass
  */
 export abstract class ISodaDatabase {
     /**
      * Creates a SODA collection of the given name.
      * If a collection with the same name already exists,
      * then that existing collection is opened without error.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatecollection
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatecollection
      * @param collectionName name of the collection to be created.
      * @param options the options that specify the collection, see
      *        CreateCollectionOptions.
@@ -152,8 +1449,7 @@ export abstract class ISodaDatabase {
      * neither will attributes valid in options but not specified. The document
      * will not be stored in the database until an insert or replace method is
      * called.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatedocument
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbcreatedocument
      * @param content the document content.
      * @param options the options that specify the document, see
      *                CreateDocumentOptions.
@@ -164,8 +1460,7 @@ export abstract class ISodaDatabase {
      * Gets an array of collection names in alphabetical order.
      * Returns names that start with the given string, and all subsequent names,
      * in alphabetic order.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbgetcollectionnames
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbgetcollectionnames
      * @param options see GetCollectionNameOptions.
      * @return an array of matching collection names.
      */
@@ -173,8 +1468,7 @@ export abstract class ISodaDatabase {
     /**
      * Opens an existing SodaCollection of the given name.
      * The collection can then be used to access documents.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbopencollection
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadbopencollection
      * @param collectionName the name of the collection to open.
      * @return a new SodaCollection object if the collection exists.
      *         If the requested collection does not exist undefined will be
@@ -182,26 +1476,23 @@ export abstract class ISodaDatabase {
      */
     abstract openCollection(collectionName: string): ISodaCollection;
 }
+
 /**
  * SODA collection class. A SODA collection is a set of SodaDocuments.
- * @see
- *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollectionclass
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollectionclass
  */
 abstract class ISodaCollection {
     /**
      * Name of the collection.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollectionproperties
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollectionproperties
      */
     abstract get name(): string;
     /**
      * Metadata for the collection. The metadata will conform to the JSON object
      * layout specified in the Oracle Database
      * "SODA Collection Metadata Components (Reference)" documentation.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollectionproperties
-     * @see
-     *    https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-collection-metadata-components-reference.html
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollectionproperties
+     * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-collection-metadata-components-reference.html
      */
     abstract get metaData(): Record<string, any>;
     /**
@@ -210,10 +1501,8 @@ abstract class ISodaCollection {
      * can be created as long as the indexSpec parameter conforms to the
      * JSON object layout specified in the Oracle Database "SODA Index
      * Specifications (Reference)" documentation.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollcreateindex
-     * @see
-     *    https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-index-specifications-reference.html
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollcreateindex
+     * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-index-specifications-reference.html
      * @param indexSpec index specification,
      *        see "SODA Index Specifications (Reference)"
      * @throws an exception if the index creation fails.
@@ -221,8 +1510,7 @@ abstract class ISodaCollection {
     abstract createIndex(indexSpec: Record<string, any>): void;
     /**
      * Drops the current collection.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldrop
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldrop
      * @return a DropResult containing a dropped value of true if the drop
      * operation succeeded or false if the collection does not exist.
      * @throws an exception if the collection drop fails.
@@ -230,8 +1518,7 @@ abstract class ISodaCollection {
     abstract drop(): IDropResult;
     /**
      * Drops the specified index.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropindex
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacolldropindex
      * @param indexName the name of the index to drop
      * @param options an optional force flag may be specified
      * @return a DropIndexResult containing a dropped value of true if the
@@ -243,24 +1530,21 @@ abstract class ISodaCollection {
      * Locates and orders a set of SODA documents for retrieval, replacement, or
      * removal with non-terminal and terminal methods, see SodaOperation for
      * details.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollfind
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollfind
      * @return a SodaOperation object which is used via method chaining
      */
     abstract find(): ISodaOperation;
     /**
      * Infers the schema of a collection of JSON documents.
      * The data guide is represented as JSON content in a SodaDocument.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollgetdataguide
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollgetdataguide
      * @return a new SodaDocument containing the inferred schema.
      * @throws an exception if the schema inference fails.
      */
     abstract getDataGuide(): ISodaDocument;
     /**
      * Inserts an array of Objects or SodaDocuments into the collection.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertmany
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertmany
      * @param docs an array of Objects or SodaDocuments to be inserted into the
      *             collection.
      * @throws an exception if a document insertion fails. The offset attribute on
@@ -273,8 +1557,7 @@ abstract class ISodaCollection {
      * Inserts an array of Objects or SodaDocuuments into the collection and
      * returns the documents which contain all SodaDocument components except for
      * content, for performance reasons.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertmanyandget
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertmanyandget
      * @param docs an array of Objects or SodaDocuments to be inserted into the
      *             collection.
      * @return an array of inserted SodaDocuments.
@@ -288,8 +1571,7 @@ abstract class ISodaCollection {
      * Inserts a given document to the collection. The input document can be
      * either a JavaScript object representing the data content, or it can be an
      * existing SodaDocument.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertone
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertone
      * @param doc an Object or SodaDocument to insert into the collection.
      * @throws an exception if insertion fails.
      */
@@ -298,8 +1580,7 @@ abstract class ISodaCollection {
      * Inserts a document in a collection and returns the result document that
      * contains all SodaDocument components except for content, for performance
      * reasons.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertoneandget
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodacollinsertoneandget
      * @param doc the Object or SodaDoc to insert into the collection.
      * @return the inserted SodaDocument.
      * @throws an exception if insertion fails.
@@ -312,8 +1593,7 @@ abstract class ISodaCollection {
      * accepts only a SodaDocument, unlike insertOne(). If the collection is not
      * configured with client-assigned keys, then the behavior is exactly the
      * same as sodaCollection.insertOne().
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#user-content-sodacollsave
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#user-content-sodacollsave
      * @param doc the document to save.
      */
     abstract save(doc: ISodaDocument): void;
@@ -324,8 +1604,7 @@ abstract class ISodaCollection {
      * is why saveAndGet() accepts only a SodaDocument, unlike insertOneAndGet().
      * If the collection is not configured with client-assigned keys, then the
      * behavior is exactly the same as sodaCollection.insertOneAndGet().
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#user-content-sodacollsaveandget
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#user-content-sodacollsaveandget
      * @param doc the document to save.
      * @return the saved document.
      */
@@ -333,18 +1612,17 @@ abstract class ISodaCollection {
     /**
      * This method truncates a collection, removing all documents. The collection
      * will not be deleted.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#user-content-sodacolltruncate
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#user-content-sodacolltruncate
      * @throws an exception if truncation fails.
      */
     abstract truncate(): any;
 }
+
 /**
  * SODA find operation class. This class is used to search and retrieve SODA
  * documents from a SodaCollection. It provides non-terminal search condition
  * operations and terminal SodaDocument retrieval operations.
- * @see
- *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclass
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclass
  */
 abstract class ISodaOperation {
     /**
@@ -354,8 +1632,7 @@ abstract class ISodaOperation {
      * Sets the size of an internal buffer used for fetching documents from a
      * collection with the terminal SodaOperation methods getCursor() and
      * getDocuments().
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassfetcharraysize
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassfetcharraysize
      * @param size the buffer size to use.
      * @return the SodaOperation object.
      */
@@ -363,14 +1640,10 @@ abstract class ISodaOperation {
     /**
      * Sets a filter specification for the operation, allowing for complex
      * document queries and ordering of JSON documents.
-     * @see
-     *    https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/overview-soda-filter-specifications-qbes.html
-     * @see
-     *    https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-filter-specifications-reference.html
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassfilter
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaqbesearches
+     * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/overview-soda-filter-specifications-qbes.html
+     * @see https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/adsdi/soda-filter-specifications-reference.html
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassfilter
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaqbesearches
      * @param filter the filter specification to use.
      * @return the SodaOperation object.
      */
@@ -378,8 +1651,7 @@ abstract class ISodaOperation {
     /**
      * Sets the key value to be used to match a document for the operation.
      * Any previous calls made to this method or keys() will be ignored.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasskey
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasskey
      * @param key the search key to use.
      * @return the SodaOperation object.
      */
@@ -387,16 +1659,14 @@ abstract class ISodaOperation {
     /**
      * Sets the keys to be used to match multiple documents for the operation.
      * Any previous calls made to this method or key() will be ignored.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasskeys
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasskeys
      * @param keys the search keys to use.
      * @return the SodaOperation object.
      */
     abstract keys(keys: Array<string>): ISodaOperation;
     /**
      * Sets the maximum number of documents that a terminal method will apply to.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasslimit
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasslimit
      * @param n the maximum number of documents to return. Must be greater than 0.
      * @return the SodaOperation object.
      */
@@ -404,16 +1674,14 @@ abstract class ISodaOperation {
     /**
      * Sets the number of documents that will be skipped before the terminal
      * method is applied. n must be greater than or equal to 0.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationskip
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationskip
      * @param n the number of documents to skip.
      * @return the SodaOperation object.
      */
     abstract skip(n: number): ISodaOperation;
     /**
      * Sets the document version that retrieved documents must have.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassversion
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassversion
      * @param value the version of retrieved documents.
      * @return the SodaOperation object.
      */
@@ -424,8 +1692,7 @@ abstract class ISodaOperation {
     /**
      * Returns the number of documents matching the given SodaOperation query
      * criteria. If skip() or limit() are set, then an exception will be thrown.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasscount
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclasscount
      * @return a result object with a count field containing the number of
      * matching documents.
      * @throws an exception if skip() or limit() are set.
@@ -434,31 +1701,27 @@ abstract class ISodaOperation {
     /**
      * Returns a SodaDocumentCursor for documents that match the SodaOperation
      * query criteria.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassgetcursor
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassgetcursor
      * @return a cursor that can be used to iterate over the matched documents.
      */
     abstract getCursor(): ISodaDocumentCursor;
     /**
      * Gets an array of SodaDocuments matching the SodaOperation query criteria.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#-824123-sodaoperationgetdocuments
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#-824123-sodaoperationgetdocuments
      * @return an array of documents, empty if none match.
      */
     abstract getDocuments(): Array<ISodaDocument>;
     /**
      * Obtains one document matching the SodaOperation query criteria.
      * If more than one document is matched, then only the first is returned.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassgetone
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassgetone
      * @return the first matching document, or undefined if none match.
      */
     abstract getOne(): ISodaDocument;
     /**
      * Removes a set of documents matching the SodaOperation query criteria.
      * If skip() or limit() are set they are ignored.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassremove
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassremove
      * @return a result object with a count field containing the number of
      * removed documents.
      */
@@ -467,8 +1730,7 @@ abstract class ISodaOperation {
      * Replaces a document in a collection. The input document can be either a
      * JavaScript object representing the data content, or it can be an existing
      * SodaDocument. The key() non-terminal must be used when using replaceOne().
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassreplaceone
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassreplaceone
      * @param newDoc the new content or SodaDocument.
      * @return a result object with a boolean replaced field which will be
      * true if the document was replaced successfully and false otherwise.
@@ -477,48 +1739,44 @@ abstract class ISodaOperation {
     /**
      * Replaces a document in a collection and return the result document which
      * contains all SodaDocument components except for the content.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassreplaceoneandget
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodaoperationclassreplaceoneandget
      * @param newDoc the new content or SodaDocument.
      * @return The updated SodaDocument if replacement was successful, otherwise
      *         undefined.
      */
     abstract replaceOneAndGet(newDoc: Record<string, any> | ISodaDocument): ISodaDocument;
 }
+
 /**
  * SODA document cursor class.
- * @see
- *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocumentcursorclass
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocumentcursorclass
  * A SodaDocumentCursor is used to walk through a set of SODA documents returned
  * from a find() or getCursor() method.
  */
 abstract class ISodaDocumentCursor {
     /**
      * Close the cursor.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadoccursorclose
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadoccursorclose
      */
     abstract close(): void;
     /**
      * Returns the next SodaDocument in the cursor returned by a find().
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadoccursorgetnext
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadoccursorgetnext
      * @return the next document, or undefined when there are no further
      * documents.
      */
     abstract getNext(): ISodaDocument;
 }
+
 /**
  * SODA document class. SodaDocuments represents the document for SODA read and
  * write operations.
- * @see
- *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocumentclass
+ * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocumentclass
  */
 abstract class ISodaDocument {
     /**
      * SODA document properties.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocumentproperties
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocumentproperties
      */
     /**
      * The creation time of the document as a string in the UTC time zone using an
@@ -548,8 +1806,7 @@ abstract class ISodaDocument {
     readonly version: string;
     /**
      * Return the document content as an object.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocgetcontent
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocgetcontent
      * @return the document content as an object.
      * @throws an exception if the document content is not JSON and cannot be
      * converted to an object.
@@ -558,31 +1815,12 @@ abstract class ISodaDocument {
     /**
      * Return JSON document content as a string. If the document encoding is
      * unknown, UTF-8 will be used.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocgetcontentasstring
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#sodadocgetcontentasstring
      * @return the document content as a string.
      */
     abstract getContentAsString(): string;
 }
 
-
-
-
-/**
- * Custom class for errors thrown by {@link execute}() or {@link executeMany}().
- */
-interface IError extends Error {
-    /**
-     * The Oracle error number. This value is undefined for non-Oracle errors.
-     */
-    errorNum?: number;
-    /**
-     * The character offset into the SQL text that resulted in the Oracle
-     * error. The value may be 0 in non-SQL contexts. This value is undefined
-     * for non-Oracle errors.
-     */
-    offset?: number;
-}
 /**
  * Interface for representing entries in {@link IFetchInfo}.  See
  * https://github.com/oracle/node-oracledb/blob/v3.1.0/doc/api.md#propexecfetchinfo
@@ -595,12 +1833,14 @@ interface IFetchInfoColumnSpec {
      */
     type: JsType;
 }
+
 /**
  * Interface for representing {@link fetchInfo} in {@link execute}().
  */
 interface IFetchInfo {
     [columnName: string]: IFetchInfoColumnSpec;
 }
+
 /**
  * Interface for options used in {@link execute}().
  */
@@ -646,6 +1886,7 @@ interface IExecuteOptions {
      */
     keepInStmtCache?: boolean;
 }
+
 /**
  * Interface for representing an entry in {@link IObjectBindDefs} or {@link ArrayBindDefs}.
  */
@@ -678,20 +1919,24 @@ interface IBindDef {
      */
     type: JsType | string | IDbObjectClass;
 }
+
 /**
  * Interface for Object BindDefs.
  */
 interface IObjectBindDefs {
     [bindName: string]: IBindDef;
 }
+
 /**
  * Interface for Array BindDefs.
  */
-export type ArrayBindDefs = IBindDef[];
+type ArrayBindDefs = IBindDef[];
+
 /**
  * Interface for BindDefs which are either Array- or Object BindDefs.
  */
-export type ExecuteManyBindDefs = IObjectBindDefs | ArrayBindDefs;
+type ExecuteManyBindDefs = IObjectBindDefs | ArrayBindDefs;
+
 /**
  * Interface for the options used in {@link executeMany}().
  */
@@ -722,6 +1967,7 @@ interface IExecuteManyOptions {
      */
     keepInStmtCache?: boolean;
 }
+
 /**
  * Interface representing metadata as used in {@link IResultSet}s and statement info.
  */
@@ -774,6 +2020,7 @@ interface IMetaData {
      */
     vectorFormat?: number;
 }
+
 /**
  * Interface for representing result sets as returned by {@link execute}().
  */
@@ -838,6 +2085,7 @@ abstract class IResultSet {
      */
     abstract [Symbol.iterator](): IterableIterator<any>;
 }
+
 /**
  * Interface for the result of {@link execute}().
  */
@@ -885,6 +2133,7 @@ interface IExecuteReturn {
      */
     rowsAffected?: number;
 }
+
 /**
  * Interface for the result of {@link executeMany}().
  */
@@ -904,6 +2153,7 @@ interface IExecuteManyReturn {
      */
     rowsAffected?: number;
 }
+
 /**
  * Interface for object binds in {@link execute}().
  */
@@ -921,27 +2171,32 @@ interface IBindObjectValue extends IBindDef {
      */
     val: any;
 }
+
 /**
  * Interface for a single bind parameter as used in {@link execute}(). Can
  * either be a bind object or a scalar value.
  */
-export type BindValue = IBindObjectValue | any;
+type BindValue = IBindObjectValue | any;
+
 /**
  * Interface for object binds (also called "named binds").
  */
 interface INamedBinds {
     [bindName: string]: BindValue;
 }
+
 /**
  * Interface for array binds.
  */
-export type PosBinds = BindValue[];
+type PosBinds = BindValue[];
+
 /**
  * Interface for the collection of bind parameters in {@link execute}(). Can
  * either be an object ({@link INamedBinds}) or an array ({@link PosBinds}) of
  * values.
  */
-export type BindParameters = INamedBinds | PosBinds;
+type BindParameters = INamedBinds | PosBinds;
+
 /**
  * Interface for the result of {@link getStatementInfo}().
  */
@@ -963,6 +2218,7 @@ interface IStatementInfo {
      */
     statementType: number;
 }
+
 /**
  * Interface for the connection object obtained by {@link defaultConnection}.
  */
@@ -1085,8 +2341,7 @@ export abstract class IConnection {
     abstract rollback(): void;
     /**
      * Returns a parent SodaDatabase object.
-     * @see
-     *    https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#getsodadatabase
+     * @see https://github.com/oracle/node-oracledb/blob/v5.0.0/doc/api.md#getsodadatabase
      * @return a new SodaDatabase object.
      */
     abstract getSodaDatabase(): ISodaDatabase;
@@ -1098,6 +2353,7 @@ export abstract class IConnection {
      */
     abstract getDbObjectClass(className: string): IDbObjectClass;
 }
+
 /**
  * Interface for representing a DbObject attribute.
  *
@@ -1119,6 +2375,7 @@ interface IDbObjectAttributes {
      */
     typeClass?: IDbObjectClass;
 }
+
 /**
  * Interface for representing the named Oracle Database object or collection.
  *
@@ -1232,28 +2489,12 @@ abstract class IDbObjectClass {
      */
     abstract trim?(count: number): IDbObjectClass;
 }
+
 /**
  * Type for mle-js-oracledb Query OutFormat Constants.
  */
-export type OutFormatType = number;
-/**
- * Fetch each row as array of column values
- * This constant is deprecated. Use OUT_FORMAT_ARRAY instead.
- */
-const ARRAY: OutFormatType;
-/**
- * Fetch each row as array of column values.
- */
-const OUT_FORMAT_ARRAY: OutFormatType;
-/**
- * Fetch each row as an object
- * This constant is deprecated. Use OUT_FORMAT_OBJECT instead.
- */
-const OBJECT: OutFormatType;
-/**
- * Fetch each row as an object of column values.
- */
-const OUT_FORMAT_OBJECT: OutFormatType;
+type OutFormatType = number;
+
 /**
  * Type for mle-js-oracledb JavaScript Type Constants. Such constants can be
  * used in OUT binds as well as fetchInfo to specify what JavaScript type a
@@ -1269,272 +2510,8 @@ const OUT_FORMAT_OBJECT: OutFormatType;
  * to be used if a database value should be retrieved as OracleNumber rather
  * than a native JavaScript number.
  */
-export type JsType = number;
-/**
- * Used with fetchInfo to reset the fetch type to the database type
- */
-const DEFAULT: JsType;
-/**
- * Bind as JavaScript String type.
- */
-const STRING: JsType;
-/**
- * Bind as JavaScript number type.
- */
-const NUMBER: JsType;
-/**
- * Bind as JavaScript date type.
- */
-const DATE: JsType;
-/**
- * Bind a NUMBER to an OracleNumber object.
- */
-const ORACLE_NUMBER: JsType;
-/**
- * Bind a DATE to an OracleDate object.
- */
-const ORACLE_DATE: JsType;
-/**
- * Bind a BLOB to an OracleBLOB object.
- */
-const ORACLE_BLOB: JsType;
-/**
- * Bind a CLOB to an OracleCLOB object.
- */
-const ORACLE_CLOB: JsType;
-/**
- * Bind an INTERVAL DAY TO SECOND to an OracleIntervalDayToSecond object.
- */
-const ORACLE_INTERVAL_DS: JsType;
-/**
- * Bind an INTERVAL YEAR TO MONTH to an OracleIntervalYearToMonth object.
- */
-const ORACLE_INTERVAL_YM: JsType;
-/**
- * Bind an NCLOB to an OracleNCLOB object.
- */
-const ORACLE_NCLOB: JsType;
-/**
- * Bind a RAW, LONG RAW or BLOB to a Uint8Array typed array.
- */
-const UINT8ARRAY: JsType;
-/**
- * Bind a TIMESTAMP to an OracleTimestamp object.
- */
-const ORACLE_TIMESTAMP: JsType;
-/**
- * Bind a TIMESTAMP WITH TIME ZONE or TIMESTAMP WITH LOCAL TIME ZONE to an OracleTimestampTZ object.
- */
-const ORACLE_TIMESTAMP_TZ: JsType;
-/**
- * Bind a VECTOR(*, int8) to Int8Array
- * @since Oracle 23.4
- */
-const INT8ARRAY: JsType;
-/**
- * Bind a VECTOR(*, float32) to Float32Array
- * @since Oracle 23.4
- */
-const FLOAT32ARRAY: JsType;
-/**
- * Bind a VECTOR(*, float64) to Float64Array
- * @since Oracle 23.4
- */
-const FLOAT64ARRAY: JsType;
-/**
- * Type for mle-js-oracledb Database Type Constants. Such constants can be used
- * in IN binds to specify what database type a JavaScript value should be
- * converted to and are also what is used in query metadata. In addition, some
- * of these types can also be used in OUT binds if a corresponding
- * {@link JsType} does not exist, e.g. {@link DB_TYPE_BOOLEAN},
- * {@link DB_TYPE_JSON}, {@link DB_TYPE_NCLOB}.
- */
-export type DbType = number;
-/**
- * VARCHAR2
- */
-const DB_TYPE_VARCHAR: DbType;
-/**
- * NUMBER or FLOAT
- */
-const DB_TYPE_NUMBER: DbType;
-/**
- * LONG
- */
-const DB_TYPE_LONG: DbType;
-/**
- * DATE
- */
-const DB_TYPE_DATE: DbType;
-/**
- * RAW
- */
-const DB_TYPE_RAW: DbType;
-/**
- * LONG RAW
- */
-const DB_TYPE_LONG_RAW: DbType;
-/**
- * CHAR
- */
-const DB_TYPE_CHAR: DbType;
-/**
- * BINARY_FLOAT
- */
-const DB_TYPE_BINARY_FLOAT: DbType;
-/**
- * BINARY_DOUBLE
- */
-const DB_TYPE_BINARY_DOUBLE: DbType;
-/**
- * BINARY_INTEGER
- */
-const DB_TYPE_BINARY_INTEGER: DbType;
-/**
- * ROWID
- */
-const DB_TYPE_ROWID: DbType;
-/**
- * CLOB
- */
-const DB_TYPE_CLOB: DbType;
-/**
- * BLOB
- */
-const DB_TYPE_BLOB: DbType;
-/**
- * TIMESTAMP
- */
-const DB_TYPE_TIMESTAMP: DbType;
-/**
- * TIMESTAMP WITH TIME ZONE
- */
-const DB_TYPE_TIMESTAMP_TZ: DbType;
-/**
- * INTERVAL YEAR TO MONTH
- */
-const DB_TYPE_INTERVAL_YM: DbType;
-/**
- * INTERVAL DAY TO SECOND
- */
-const DB_TYPE_INTERVAL_DS: DbType;
-/**
- * UROWID
- */
-const DB_TYPE_UROWID: DbType;
-/**
- * BOOLEAN
- */
-const DB_TYPE_BOOLEAN: DbType;
-/**
- * TIMESTAMP WITH LOCAL TIME ZONE
- */
-const DB_TYPE_TIMESTAMP_LTZ: DbType;
-/**
- * NVARCHAR
- */
-const DB_TYPE_NVARCHAR: DbType;
-/**
- * NCHAR
- */
-const DB_TYPE_NCHAR: DbType;
-/**
- * NCLOB
- */
-const DB_TYPE_NCLOB: DbType;
-/**
- * Bind as JSON. This constant can also be used in {@link fetchAsString} to
- * express that JSON column values should be fetched as JS string rather than JS
- * object.
- */
-const DB_TYPE_JSON: DbType;
-/**
- * ADT
- *
- * @since Oracle 23.3
- */
-const DB_TYPE_OBJECT: DbType;
-/**
- * VECTOR
- * @since Oracle 23.4
- */
-const DB_TYPE_VECTOR: DbType;
-/**
- * Direction for IN binds
- */
-const BIND_IN = 3001;
-/**
- * Direction for INOUT binds
- */
-const BIND_INOUT = 3002;
-/**
- * Direction for OUT binds
- */
-const BIND_OUT = 3003;
-/**
- * Unknown statement type
- */
-const STMT_TYPE_UNKNOWN = 0;
-/**
- * SELECT
- */
-const STMT_TYPE_SELECT = 1;
-/**
- * UPDATE
- */
-const STMT_TYPE_UPDATE = 2;
-/**
- * DELETE
- */
-const STMT_TYPE_DELETE = 3;
-/**
- * INSERT
- */
-const STMT_TYPE_INSERT = 4;
-/**
- * CREATE
- */
-const STMT_TYPE_CREATE = 5;
-/**
- * DROP
- */
-const STMT_TYPE_DROP = 6;
-/**
- * ALTER
- */
-const STMT_TYPE_ALTER = 7;
-/**
- * BEGIN
- */
-const STMT_TYPE_BEGIN = 8;
-/**
- * DECLARE
- */
-const STMT_TYPE_DECLARE = 9;
-/**
- * CALL
- */
-const STMT_TYPE_CALL = 10;
-/**
- * EXPLAIN PLAN
- */
-const STMT_TYPE_EXPLAIN_PLAN = 15;
-/**
- * MERGE
- */
-const STMT_TYPE_MERGE = 16;
-/**
- * ROLLBACK
- */
-const STMT_TYPE_ROLLBACK = 17;
-/**
- * COMMIT
- */
-const STMT_TYPE_COMMIT = 21;
-/**
- * SODA_COLL_MAP_MODE
- */
-const SODA_COLL_MAP_MODE = 5001;
+type JsType = number;
+
 /**
  * Class for representing global mle-js-oracledb properties.
  */
@@ -1794,99 +2771,426 @@ export class OracleDb {
      */
     defaultConnection(): IConnection;
 }
-
 }
 
 declare module "mle-js-oracledb" {
 
-export const oracledb: __mlejsoracledb.OracleDb;
+type ICreateCollectionOptions = __mle_js_oracledb.ICreateCollectionOptions;
+type ICreateDocumentOptions = __mle_js_oracledb.ICreateDocumentOptions;
+type IGetCollectionNameOptions = __mle_js_oracledb.IGetCollectionNameOptions;
+type IDropIndexOptions = __mle_js_oracledb.IDropIndexOptions;
+type IDropResult = __mle_js_oracledb.IDropResult;
+type IDropIndexResult = __mle_js_oracledb.IDropIndexResult;
+type ICountResult = __mle_js_oracledb.ICountResult;
+type IRemoveResult = __mle_js_oracledb.IRemoveResult;
+type IReplaceResult = __mle_js_oracledb.IReplaceResult;
+type ISodaDatabase = __mle_js_oracledb.ISodaDatabase;
+type ISodaCollection = __mle_js_oracledb.ISodaCollection;
+type ISodaOperation = __mle_js_oracledb.ISodaOperation;
+type ISodaDocumentCursor = __mle_js_oracledb.ISodaDocumentCursor;
+type ISodaDocument = __mle_js_oracledb.ISodaDocument;
+
+
+
+/**
+ * Custom class for errors thrown by {@link execute}() or {@link executeMany}().
+ */
+interface IError extends Error {
+    /**
+     * The Oracle error number. This value is undefined for non-Oracle errors.
+     */
+    errorNum?: number;
+    /**
+     * The character offset into the SQL text that resulted in the Oracle
+     * error. The value may be 0 in non-SQL contexts. This value is undefined
+     * for non-Oracle errors.
+     */
+    offset?: number;
+}
+type IFetchInfoColumnSpec = __mle_js_oracledb.IFetchInfoColumnSpec;
+type IFetchInfo = __mle_js_oracledb.IFetchInfo;
+type IExecuteOptions = __mle_js_oracledb.IExecuteOptions;
+type IBindDef = __mle_js_oracledb.IBindDef;
+type IObjectBindDefs = __mle_js_oracledb.IObjectBindDefs;
+type ArrayBindDefs = __mle_js_oracledb.ArrayBindDefs;
+type ExecuteManyBindDefs = __mle_js_oracledb.ExecuteManyBindDefs;
+type IExecuteManyOptions = __mle_js_oracledb.IExecuteManyOptions;
+type IMetaData = __mle_js_oracledb.IMetaData;
+type IResultSet = __mle_js_oracledb.IResultSet;
+type IExecuteReturn = __mle_js_oracledb.IExecuteReturn;
+type IExecuteManyReturn = __mle_js_oracledb.IExecuteManyReturn;
+type IBindObjectValue = __mle_js_oracledb.IBindObjectValue;
+type BindValue = __mle_js_oracledb.BindValue;
+type INamedBinds = __mle_js_oracledb.INamedBinds;
+type PosBinds = __mle_js_oracledb.PosBinds;
+type BindParameters = __mle_js_oracledb.BindParameters;
+type IStatementInfo = __mle_js_oracledb.IStatementInfo;
+type IConnection = __mle_js_oracledb.IConnection;
+type IDbObjectAttributes = __mle_js_oracledb.IDbObjectAttributes;
+type IDbObjectClass = __mle_js_oracledb.IDbObjectClass;
+type OutFormatType = __mle_js_oracledb.OutFormatType;
+
+/**
+ * Fetch each row as array of column values
+ * This constant is deprecated. Use OUT_FORMAT_ARRAY instead.
+ */
+const ARRAY: OutFormatType;
+
+/**
+ * Fetch each row as array of column values.
+ */
+const OUT_FORMAT_ARRAY: OutFormatType;
+
+/**
+ * Fetch each row as an object
+ * This constant is deprecated. Use OUT_FORMAT_OBJECT instead.
+ */
+const OBJECT: OutFormatType;
+
+/**
+ * Fetch each row as an object of column values.
+ */
+const OUT_FORMAT_OBJECT: OutFormatType;
+type JsType = __mle_js_oracledb.JsType;
+
+/**
+ * Used with fetchInfo to reset the fetch type to the database type
+ */
+const DEFAULT: JsType;
+
+/**
+ * Bind as JavaScript String type.
+ */
+const STRING: JsType;
+
+/**
+ * Bind as JavaScript number type.
+ */
+const NUMBER: JsType;
+
+/**
+ * Bind as JavaScript date type.
+ */
+const DATE: JsType;
+
+/**
+ * Bind a NUMBER to an OracleNumber object.
+ */
+const ORACLE_NUMBER: JsType;
+
+/**
+ * Bind a DATE to an OracleDate object.
+ */
+const ORACLE_DATE: JsType;
+
+/**
+ * Bind a BLOB to an OracleBLOB object.
+ */
+const ORACLE_BLOB: JsType;
+
+/**
+ * Bind a CLOB to an OracleCLOB object.
+ */
+const ORACLE_CLOB: JsType;
+
+/**
+ * Bind an INTERVAL DAY TO SECOND to an OracleIntervalDayToSecond object.
+ */
+const ORACLE_INTERVAL_DS: JsType;
+
+/**
+ * Bind an INTERVAL YEAR TO MONTH to an OracleIntervalYearToMonth object.
+ */
+const ORACLE_INTERVAL_YM: JsType;
+
+/**
+ * Bind an NCLOB to an OracleNCLOB object.
+ */
+const ORACLE_NCLOB: JsType;
+
+/**
+ * Bind a RAW, LONG RAW or BLOB to a Uint8Array typed array.
+ */
+const UINT8ARRAY: JsType;
+
+/**
+ * Bind a TIMESTAMP to an OracleTimestamp object.
+ */
+const ORACLE_TIMESTAMP: JsType;
+
+/**
+ * Bind a TIMESTAMP WITH TIME ZONE or TIMESTAMP WITH LOCAL TIME ZONE to an OracleTimestampTZ object.
+ */
+const ORACLE_TIMESTAMP_TZ: JsType;
+
+/**
+ * Bind a VECTOR(*, int8) to Int8Array
+ * @since Oracle 23.4
+ */
+const INT8ARRAY: JsType;
+
+/**
+ * Bind a VECTOR(*, float32) to Float32Array
+ * @since Oracle 23.4
+ */
+const FLOAT32ARRAY: JsType;
+
+/**
+ * Bind a VECTOR(*, float64) to Float64Array
+ * @since Oracle 23.4
+ */
+const FLOAT64ARRAY: JsType;
+
+/**
+ * Type for mle-js-oracledb Database Type Constants. Such constants can be used
+ * in IN binds to specify what database type a JavaScript value should be
+ * converted to and are also what is used in query metadata. In addition, some
+ * of these types can also be used in OUT binds if a corresponding
+ * {@link JsType} does not exist, e.g. {@link DB_TYPE_BOOLEAN},
+ * {@link DB_TYPE_JSON}, {@link DB_TYPE_NCLOB}.
+ */
+type DbType = number;
+
+/**
+ * VARCHAR2
+ */
+const DB_TYPE_VARCHAR: DbType;
+
+/**
+ * NUMBER or FLOAT
+ */
+const DB_TYPE_NUMBER: DbType;
+
+/**
+ * LONG
+ */
+const DB_TYPE_LONG: DbType;
+
+/**
+ * DATE
+ */
+const DB_TYPE_DATE: DbType;
+
+/**
+ * RAW
+ */
+const DB_TYPE_RAW: DbType;
+
+/**
+ * LONG RAW
+ */
+const DB_TYPE_LONG_RAW: DbType;
+
+/**
+ * CHAR
+ */
+const DB_TYPE_CHAR: DbType;
+
+/**
+ * BINARY_FLOAT
+ */
+const DB_TYPE_BINARY_FLOAT: DbType;
+
+/**
+ * BINARY_DOUBLE
+ */
+const DB_TYPE_BINARY_DOUBLE: DbType;
+
+/**
+ * BINARY_INTEGER
+ */
+const DB_TYPE_BINARY_INTEGER: DbType;
+
+/**
+ * ROWID
+ */
+const DB_TYPE_ROWID: DbType;
+
+/**
+ * CLOB
+ */
+const DB_TYPE_CLOB: DbType;
+
+/**
+ * BLOB
+ */
+const DB_TYPE_BLOB: DbType;
+
+/**
+ * TIMESTAMP
+ */
+const DB_TYPE_TIMESTAMP: DbType;
+
+/**
+ * TIMESTAMP WITH TIME ZONE
+ */
+const DB_TYPE_TIMESTAMP_TZ: DbType;
+
+/**
+ * INTERVAL YEAR TO MONTH
+ */
+const DB_TYPE_INTERVAL_YM: DbType;
+
+/**
+ * INTERVAL DAY TO SECOND
+ */
+const DB_TYPE_INTERVAL_DS: DbType;
+
+/**
+ * UROWID
+ */
+const DB_TYPE_UROWID: DbType;
+
+/**
+ * BOOLEAN
+ */
+const DB_TYPE_BOOLEAN: DbType;
+
+/**
+ * TIMESTAMP WITH LOCAL TIME ZONE
+ */
+const DB_TYPE_TIMESTAMP_LTZ: DbType;
+
+/**
+ * NVARCHAR
+ */
+const DB_TYPE_NVARCHAR: DbType;
+
+/**
+ * NCHAR
+ */
+const DB_TYPE_NCHAR: DbType;
+
+/**
+ * NCLOB
+ */
+const DB_TYPE_NCLOB: DbType;
+
+/**
+ * Bind as JSON. This constant can also be used in {@link fetchAsString} to
+ * express that JSON column values should be fetched as JS string rather than JS
+ * object.
+ */
+const DB_TYPE_JSON: DbType;
+
+/**
+ * ADT
+ *
+ * @since Oracle 23.3
+ */
+const DB_TYPE_OBJECT: DbType;
+
+/**
+ * VECTOR
+ * @since Oracle 23.4
+ */
+const DB_TYPE_VECTOR: DbType;
+
+/**
+ * Direction for IN binds
+ */
+const BIND_IN = 3001;
+
+/**
+ * Direction for INOUT binds
+ */
+const BIND_INOUT = 3002;
+
+/**
+ * Direction for OUT binds
+ */
+const BIND_OUT = 3003;
+
+/**
+ * Unknown statement type
+ */
+const STMT_TYPE_UNKNOWN = 0;
+
+/**
+ * SELECT
+ */
+const STMT_TYPE_SELECT = 1;
+
+/**
+ * UPDATE
+ */
+const STMT_TYPE_UPDATE = 2;
+
+/**
+ * DELETE
+ */
+const STMT_TYPE_DELETE = 3;
+
+/**
+ * INSERT
+ */
+const STMT_TYPE_INSERT = 4;
+
+/**
+ * CREATE
+ */
+const STMT_TYPE_CREATE = 5;
+
+/**
+ * DROP
+ */
+const STMT_TYPE_DROP = 6;
+
+/**
+ * ALTER
+ */
+const STMT_TYPE_ALTER = 7;
+
+/**
+ * BEGIN
+ */
+const STMT_TYPE_BEGIN = 8;
+
+/**
+ * DECLARE
+ */
+const STMT_TYPE_DECLARE = 9;
+
+/**
+ * CALL
+ */
+const STMT_TYPE_CALL = 10;
+
+/**
+ * EXPLAIN PLAN
+ */
+const STMT_TYPE_EXPLAIN_PLAN = 15;
+
+/**
+ * MERGE
+ */
+const STMT_TYPE_MERGE = 16;
+
+/**
+ * ROLLBACK
+ */
+const STMT_TYPE_ROLLBACK = 17;
+
+/**
+ * COMMIT
+ */
+const STMT_TYPE_COMMIT = 21;
+
+/**
+ * SODA_COLL_MAP_MODE
+ */
+const SODA_COLL_MAP_MODE = 5001;
+type Parameters = __mle_js_oracledb.Parameters;
+
+
+type OracleDb = __mle_js_oracledb.OracleDb;
+
+
+
+export const oracledb: OracleDb;
+
 export default oracledb;
 
-}
-
-declare module "mle-js-bindings" {
-
-export enum JSTypes {
-    /** Type String */
-    STRING = 0,
-    /** Type Number */
-    NUMBER = 1,
-    /** Type Date */
-    DATE = 2,
-    /** Type Boolean */
-    BOOLEAN = 3,
-    /**
-     * In 21c, indices 4 and 5 had been used for BLOB and CLOB which do, however,
-     * not make sense for mle-js-oracledb and have therefore been removed in 23ai.
-     */
-    /** Type Object */
-    OBJECT = 6,
-    /** UINT8ARRAY */
-    UINT8ARRAY = 7,
-    /** Type OracleNumber */
-    ORACLE_NUMBER = 8,
-    /** Type OracleDate */
-    ORACLE_DATE = 9,
-    /** Type OracleTimeStamp */
-    ORACLE_TIMESTAMP = 10,
-    /** Type OracleTimeStampTZ */
-    ORACLE_TIMESTAMP_TZ = 11,
-    /** Type OracleIntervalYearToMonth */
-    ORACLE_INTERVAL_YM = 12,
-    /** Type OracleIntervalDayToSecond */
-    ORACLE_INTERVAL_DS = 13,
-    /** Type OracleCLOB */
-    ORACLE_CLOB = 14,
-    /** Type OracleBLOB */
-    ORACLE_BLOB = 15,
-    /** Type DbTypeJson */
-    DB_TYPE_JSON = 16,
-    /**
-     * Type Int8Array
-     *
-     * @since Oracle 23.4
-     */
-    INT8ARRAY = 17,
-    /**
-     * Type Float32Array
-     *
-     * @since Oracle 23.4
-     */
-    FLOAT32ARRAY = 18,
-    /**
-     * Type Float64Array
-     *
-     * @since Oracle 23.4
-     */
-    FLOAT64ARRAY = 19
-}
-/**
- * Import a value exported from PL/SQL into the current context
- *
- * Import the value, identified by the given name, that was previously exported
- * from PL/SQL.
- * The desired result type can be specified explicitly with the jstype parameter.
- * If no result type is specified, the default PL/SQL-to-JavaScript mapping is
- * used to determine the result type implicitly.
- *
- * @param name Name of the property to be retrieved. Cannot be null, undefined or empty.
- * @param jstype JavaScript type of the result.
- * @return a JavaScript value of the desired type. Returns undefined if the
- * property does not exist.
- * @throws an exception (Invalid property name) if name is null, undefined or empty.
- */
-export function importValue(name: string, jstype?: JSTypes): any;
-/**
- * Export a value to PL/SQL
- *
- * Export the given value to PL/SQL.
- * The exported value can be imported into PL/SQL using the given name.
- *
- * @param name Name of the property to be exported. Cannot be null, undefined or empty.
- * @param value Value of the property to be exported.
- * @throws an exception (Invalid property name) if name is null, undefined or empty.
- */
-export function exportValue(name: string, value: any): void;
 
 }
 
@@ -1895,1202 +3199,17 @@ export function exportValue(name: string, value: any): void;
  * an equivalent in the actual implementation in MLE. Please either use the
  * corresponding module or global symbols instead.
  */
-declare namespace __mlejsplsqltypes {
+declare namespace __mle_js_fetch {
 
-/**
- * JavaScript API for Oracle type TIMESTAMP.
- */
-export const OracleTimestamp: IOracleTimestamp;
-/**
- * JavaScript API for Oracle type TIMESTAMP WITH TIMEZONE.
- */
-export const OracleTimestampTZ: IOracleTimestampTZ;
-/**
- * JavaScript API for Oracle type INTERVAL DAY TO SECOND.
- */
-export const OracleIntervalDayToSecond: IOracleIntervalDayToSecond;
-/**
- * JavaScript API for Oracle type INTERVAL YEAR TO MONTH.
- */
-export const OracleIntervalYearToMonth: IOracleIntervalYearToMonth;
-/**
- * JavaScript API for Oracle type CLOB.
- */
-export const OracleClob: IOracleClob;
-/**
- * JavaScript API for Oracle type DATE.
- */
-export const OracleDate: IOracleDate;
-/**
- * JavaScript API for Oracle type NUMBER.
- */
-export class OracleNumber {
-    private impl;
-    /**
-     * Construct an OracleNumber from a JavaScript number or a string.
-     *
-     * @param n
-     */
-    constructor(n: number | string);
-    /**
-     * Construct an OracleNumber from a JavaScript number.
-     * @param from - number used to create the OracleNumber
-     * @returns a new OracleNumber object
-     */
-    static fromNumber(n: number): OracleNumber;
-    /**
-     * Parse a string into an OracleNumber, with an optional number format
-     * and NLS parameters. If no format string and NLS parameters are provided,
-     * the default values for the session are used.
-     * @param s the number string
-     * @param format optional number format
-     * @param nlsParam optional NLS parameters
-     * @returns OracleNumber value from parsing the input string
-     */
-    static fromString(s: string, format?: string, nlsParam?: string): OracleNumber;
-    /**
-     * The pi constant.
-     */
-    static pi: OracleNumber;
-    /**
-     * The zero constant.
-     */
-    static zero: OracleNumber;
-    /**
-     * The e constant.
-     */
-    static e: OracleNumber;
-    /**
-     * The ln10 constant.
-     */
-    static ln10: OracleNumber;
-    /**
-     * Computes the absolute value of the Oracle number
-     * @returns the absolute value of the Oracle number
-     */
-    abs(): OracleNumber;
-    /**
-     * Adds an Oracle number to another Oracle number
-     * @param other - the other Oracle number
-     * @returns returns the sum of the two Oracle NUMBERs
-     */
-    add(other: OracleNumber): OracleNumber;
-    /**
-     * Subtracts an Oracle number from the Oracle number and returns the resulting Oracle number
-     * @param other - the other number to be subtracted from the OracleNumber
-     * @returns the result of the subtraction as OracleNumber
-     */
-    sub(other: OracleNumber): OracleNumber;
-    /**
-     * Multiplies the Oracle number with another Oracle number
-     * @param other - the other Oracle number
-     * @returns the result of the multiplication as Oracle number
-     */
-    mul(other: OracleNumber): OracleNumber;
-    /**
-     * Divides two Oracle numbers
-     * @param other - divisor
-     * @returns the result of the division as Oracle number
-     */
-    div(other: OracleNumber): OracleNumber;
-    /**
-     * Computes the modulus of two Oracle numbers.
-     * @param other - the other Oracle number
-     * @returns this number modulo the other number
-     */
-    mod(other: OracleNumber): OracleNumber;
-    /**
-     * Computes the sine of the Oracle number
-     * @returns the sine of the Oracle number
-     */
-    sin(): OracleNumber;
-    /**
-     * Computes the cosine of the Oracle number
-     * @returns the cosine
-     */
-    cos(): OracleNumber;
-    /**
-     * Computes the tangent of the Oracle number
-     * @returns the tangent of the Oracle number
-     */
-    tan(): OracleNumber;
-    /**
-     * Computes the arc sine in radians of the Oracle number
-     * @returns the arc sine in radians of the Oracle number
-     */
-    arcSin(): OracleNumber;
-    /**
-     * Computes the arc cosine in radians of the Oracle number
-     * @returns the arc cosine in radians of the Oracle number
-     */
-    arcCos(): OracleNumber;
-    /**
-     * Computes the arc tangent in radians of the Oracle number
-     * @returns the arc tangent in radians of the Oracle number
-     */
-    arcTan(): OracleNumber;
-    /**
-     * Computes the arc tangent of two Oracle numbers
-     * @param other Oracle number used for the calculation
-     * @returns the arc tangent of two Oracle numbers
-     */
-    arcTan2(other: OracleNumber): OracleNumber;
-    /**
-     * Computes the hyperbolic sine of the Oracle number
-     * @returns the hyperbolic sine of the Oracle number
-     */
-    hypSin(): OracleNumber;
-    /**
-     * Computes the hyperbolic cosine of the Oracle number
-     * @returns the hyperbolic cosine of the Oracle number
-     */
-    hypCos(): OracleNumber;
-    /**
-     * Computes the hyperbolic tangent of the Oracle number
-     * @returns the hyperbolic tangent of the Oracle number
-     */
-    hypTan(): OracleNumber;
-    /**
-     * Compares two Oracle numbers.
-     * Returns -1 if this < other, 0 if they are equal, and 1 if this > other.
-     * @returns the result of the comparison as a number between -1 and +1.
-     */
-    compare(other: OracleNumber): number;
-    /**
-     * Checks if the Oracle number is equal to another Oracle number
-     * @param other - the other Oracle number
-     * @returns true if both Oracle numbers are equal, otherwise false
-     */
-    equals(other: OracleNumber): boolean;
-    /**
-     * Raises e to the power of this Oracle number
-     * @returns the result of the exponentiation as Oracle number
-     */
-    exp(): OracleNumber;
-    /**
-     * Raises this Oracle number to the given exponent
-     * @returns the result of the exponentiation
-     */
-    power(exp: OracleNumber | number): OracleNumber;
-    /**
-     * Computes the natural logarithm of the Oracle number
-     * @returns the natural logarithm of the Oracle number
-     */
-    ln(): OracleNumber;
-    /**
-     * Computes the logarithm to an arbitrary base
-     * @param base the base of the logarithm
-     * @returns the logarithm to an arbitrary base
-     */
-    log(base: OracleNumber | number): OracleNumber;
-    /**
-     * Computes the square root of the Oracle number
-     * @returns the square root of the Oracle number
-     */
-    sqrt(): OracleNumber;
-    /**
-     * Tests if the number is an integer
-     * @returns true if the Oracle number is an integer, otherwise false
-     */
-    isInt(): boolean;
-    /**
-     * Tests if the number is zero
-     * @returns true if the Oracle number is zero, otherwise false
-     */
-    isZero(): boolean;
-    /**
-     * Returns -1 if the sign of the number is negative, 0 if the number is 0, and > 0 if the number is positive.
-     * @returns a number indicating the sign of the Oracle number
-     */
-    sign(): number;
-    /**
-     * Negates the number
-     * @returns the negated Oracle number
-     */
-    neg(): OracleNumber;
-    /**
-     * Computes the ceiling of the Oracle number
-     * @returns the ceiling of the Oracle number
-     */
-    ceil(): OracleNumber;
-    /**
-     * Computes the floor of the number
-     * @returns the floor value of the Oracle number
-     */
-    floor(): OracleNumber;
-    /**
-     * Rounds the number to a specified number of digits
-     * @param ndigs - the number of digits
-     * @returns the rounded Oracle number
-     */
-    roundDigits(ndigs: OracleNumber | number): OracleNumber;
-    /**
-     * Rounds the Oracle number to a specified number of decimal places
-     * @param decplace - the decimal place
-     * @returns the rounded Oracle number
-     */
-    roundPlaces(decplace: OracleNumber | number): OracleNumber;
-    /**
-     * Shifts the number by the specified number of decimal places
-     * @param digits - number of decimal places to shift. It can be negative. Positive values shift the decimal place to the right and negative values to the left. For example, if NUMBER corresponds to 1234.5 and digits == -1, the new NUMBER object will correspond to 123.45.
-     * @returns an Oracle number containing the shifted result
-     */
-    shift(digits: OracleNumber | number): OracleNumber;
-    /**
-     * Truncates the number to the specified number of decimal places.
-     * @param decplace - Number of decimal digits to the right of the decimal point at which to truncate. Negative values are allowed.
-     * @returns a truncated Oracle number
-     */
-    trunc(decplace: OracleNumber | number): OracleNumber;
-    /**
-     * Scales the digits to the left and right of the decimal point.
-     * @param left maximum number of decimal digits to the left of the decimal point. It will not effect the number, but throw an exception if this value is exceeded.
-     * @param right maximum number of decimal digits to the right of the decimal point. The number is rounded at this point. Negative values are allowed.
-     * @returns a new scaled Oracle number scaled according to the arguments
-     * @throws throws an exception if the number of left-hand-side digits is exceeded
-     */
-    scale(left: number, right: number): OracleNumber;
-    /**
-     * Converts an Oracle NUMBER to type number
-     * @returns the converted number
-     */
-    toNumber(): number;
-    /**
-     * Converts an Oracle NUMBER to a string, with an optional number format
-     * and NLS parameters. If no format string and NLS parameters are provided,
-     * the default values for the session are used.
-     * @param format optional number format
-     * @param nlsParam optional NLS parameters
-     * @returns the converted string
-     */
-    toString(format?: string, nlsParam?: string): string;
-    isOracleNumber(): boolean;
-    asPackedDecimalNumber(): any;
-}
-/**
- * JavaScript API for Oracle type INTERVAL DAY TO SECOND.
- */
-export class IOracleIntervalDayToSecond {
-    /**
-     * Constructor for IOracleIntervalDayToSecond using day, hour, minute,
-     * second, and fraction of a second. All arguments must be integral numbers.
-     *
-     * @param dy - number of days
-     * @param hr - number of hours
-     * @param mm - number of minutes
-     * @param ss - number of seconds
-     * @param fs - fractional seconds
-     * @returns new IOracleIntervalDayToSecond
-     */
-    constructor(dy: number, hr: number, mm: number, ss: number, fs: number);
-    /**
-     * Parses an interval string into IOracleIntervalDayToSecond. This method
-     * accepts the same input formats as the Oracle SQL function TO_DSINTERVAL:
-     
-     * - SQL interval format compatible with the SQL standard (ISO/IEC 9075)
-     * - ISO duration format compatible with the ISO 8601:2004 standard
-     *
-     * @param interval string to parse.
-     * @returns new IOracleIntervalDayToSecond
-     */
-    fromString(interval: string): IOracleIntervalDayToSecond;
-    /**
-     * Returns an IOracleIntervalDayToSecond for a given timezone offset or
-     * timezone name. The input string must be of the form [+/-]TZH:TZM or
-     * 'TZR'.
-     *
-     * @param tz - timezone offset or timezone name as string
-     * @returns new IOracleIntervalDayToSecond that contains the current absolute offset
-     */
-    fromTimeZone(tz: string): IOracleIntervalDayToSecond;
-    /**
-     * Returns an IOracleIntervalDayToSecond for the given number of days. If the
-     * number of days contains a fractional part, the number of hours, minutes
-     * and seconds will be set accordingly.
-     *
-     * @param days - number of days
-     * @returns new IOracleIntervalDayToSecond for the given number of days.
-     */
-    fromNumberOfDays(days: number | OracleNumber): IOracleIntervalDayToSecond;
-    /**
-     * Compares two intervals.
-     * Returns -1 if i1 < i2, 0 if they are equal, and 1 if i1 > i2.
-     * @param i1 - first interval to use for the comparison
-     * @param i2 - second interval to use for the comparison
-     * @returns the result of the comparison as a number between -1 and +1.
-     */
-    compare(i1: IOracleIntervalDayToSecond, i2: IOracleIntervalDayToSecond): any;
-    /**
-     * Returns the number of days from the interval
-     *
-     * @returns the number of days from the interval
-     */
-    getDays(): number;
-    /**
-     * Returns the number of hours from the interval
-     *
-     * @returns the number of hours from the interval
-     */
-    getHours(): number;
-    /**
-     * Returns the number of minutes from the interval
-     *
-     * @returns the number of minutes from the interval
-     */
-    getMinutes(): number;
-    /**
-     * Returns the number of seconds including fractional seconds from the
-     * interval
-     *
-     * @returns the number of seconds including fractional seconds from the
-     *          interval
-     */
-    getSeconds(): number;
-    /**
-     * Adds the interval to another interval and returns the resulting interval
-     *
-     * @param summand - the other interval
-     * @returns the resulting interval as IOracleIntervalDayToSecond
-     */
-    add(summand: IOracleIntervalDayToSecond): IOracleIntervalDayToSecond;
-    /**
-     * Subtracts another interval from the interval and returns the resulting
-     * interval
-     *
-     * @param subtrahend - the other interval
-     * @returns the resulting interval as IOracleIntervalDayToSecond
-     */
-    subtract(subtrahend: IOracleIntervalDayToSecond): IOracleIntervalDayToSecond;
-    /**
-     * Divides the interval by an Oracle number or JavaScript number and returns
-     * the resulting interval
-     *
-     * @param divisor - the divisor used in the division
-     * @returns the resulting interval
-     */
-    divide(divisor: OracleNumber | number): IOracleIntervalDayToSecond;
-    /**
-     * Multiplies the interval with an Oracle number or a JavaScript number and
-     * returns the resulting interval
-     *
-     * @param factor - the factor used in the multiplication
-     * @returns the resulting interval
-     */
-    multiply(factor: OracleNumber | number): IOracleIntervalDayToSecond;
-    /**
-     * Produces a string representing the interval. The string is formatted with
-     * 2 digits for the number of days and 6 digits for the fractional seconds
-     * of the interval.
-     *
-     * @returns a string representing the interval
-     */
-    toString(): string;
-    /**
-     * Produces a string representing the interval. The string is formatted
-     * according to the specified precision for days and fractional seconds.
-     *
-     * @param daysPrecision - The number of digits used to represent days in the interval string.
-     * @param fractionalSecondsPrecision - Fractional second precision of the interval string (the number of digits used to represent the fractional seconds).
-     * @returns a string representing the interval
-     */
-    toStringWithPrecision(daysPrecision: number, fractionalSecondsPrecision: number): string;
-}
-/**
- * JavaScript API for Oracle type INTERVAL YEAR TO MONTH.
- */
-export class IOracleIntervalYearToMonth {
-    /**
-     * Constructor for IOracleIntervalYearToMonth using year and month. All
-     * arguments must be integral numbers.
-     *
-     * @param yr year value
-     * @param mnth month value
-     * @returns new IOracleIntervalYearToMonth
-     */
-    constructor(yr: number, mnth: number);
-    /**
-     * Parse an interval string into IOracleIntervalYearToMonth. fromString
-     * accepts the same input formats as the Oracle SQL function TO_YMINTERVAL:
-     *
-     * - SQL interval format compatible with the SQL standard (ISO/IEC 9075)
-     * - ISO duration format compatible with the ISO 8601:2004 standard
-     *
-     * @param interval string to parse
-     * @returns new IOracleIntervalYearToMonth
-     */
-    fromString(interval: string): IOracleIntervalYearToMonth;
-    /**
-     * Returns an IOracleIntervalYearToMonth for the given number of years. If
-     * the number of years contains a fractional part, the number of months will
-     * be set accordingly.
-     *
-     * @param days - number of months
-     * @returns new IOracleIntervalYearToMonth for the given number of years.
-     */
-    fromNumberOfYears(years: number | OracleNumber): IOracleIntervalYearToMonth;
-    /**
-     * Compares two intervals.
-     * Returns -1 if i1 < i2, 0 if they are equal, and 1 if i1 > i2.
-     * @param i1 - first interval to use for the comparison
-     * @param i2 - second interval to use for the comparison
-     * @returns the result of the comparison as a number between -1 and +1.
-     */
-    compare(i1: IOracleIntervalYearToMonth, i2: IOracleIntervalYearToMonth): number;
-    /**
-     * Returns the number of years from the interval
-     *
-     * @returns the number of years from the interval
-     */
-    getYears(): number;
-    /**
-     * Returns the total number of months from the interval
-     *
-     * @returns the total number of months from the interval
-     */
-    getMonths(): number;
-    /**
-     * Adds the interval to another interval and returns the resulting interval
-     *
-     * @param other - the other interval
-     * @returns the resulting interval as IOracleIntervalYearToMonth
-     */
-    add(other: IOracleIntervalYearToMonth): IOracleIntervalYearToMonth;
-    /**
-     * Subtracts another interval from the interval and returns the resulting
-     * interval
-     *
-     * @param other - the other interval
-     * @returns the resulting interval as IOracleIntervalYearToMonth
-     */
-    subtract(other: IOracleIntervalYearToMonth): IOracleIntervalYearToMonth;
-    /**
-     * Divides the interval by an OracleNumber or JavaScript number and returns
-     * the resulting interval
-     *
-     * @param dividend - the dividend used in the division
-     * @returns the resulting interval
-     */
-    divide(dividend: OracleNumber | number): IOracleIntervalYearToMonth;
-    /**
-     * Multiplies the interval with an OracleNumber or a JavaScript number and
-     * returns the resulting interval
-     *
-     * @param nfactor - the factor used in the multiplication
-     * @returns the resulting interval
-     */
-    multiply(nfactor: OracleNumber | number): IOracleIntervalYearToMonth;
-    /**
-     * Given an interval, produces a string representing the interval. The
-     * string is formatted with at least 2 digits for the number of years.
-     *
-     * @returns a string representing the year-to-month interval
-     */
-    toString(): string;
-    /**
-     * Produces a string representing the interval. The string is formatted
-     * according to the specified precision for days and fractional seconds.
-     *
-     * @param yearsPrecision - The number of digits used to represent years in the interval string.
-     * @returns a string representing the interval
-     */
-    toStringWithPrecision(yearsPrecision: number): string;
-}
-/**
- * Optional arguments for the compare method of OracleBlob and OracleClob.
- */
-export interface CompareOptionalArguments {
-    /**
-     * Number of bytes/characters to compare.
-     */
-    amount?: number;
-    /**
-     * Offset (bytes/characters) into the first LOB. Defaults to 1.
-     */
-    offset1?: number;
-    /**
-     * Offset (bytes/characters) into the second LOB. Defaults to 1.
-     */
-    offset2?: number;
-}
-/**
- * JavaScript API for Oracle type Binary Large Object (BLOB).
- */
-export class OracleBlob {
-    private delegate;
-    /**
-     * Constant for read-only mode.
-     */
-    static LOB_READONLY: number;
-    /**
-     * Constant for read/write mode.
-     */
-    static LOB_READWRITE: number;
-    private static checkArgPresent;
-    private static checkNoArgs;
-    /**
-     * This constructor creates a temporary BLOB and its corresponding index in
-     * your default temporary tablespace. The temporary BLOB is created with
-     * SESSION duration.
-     *
-     * @param cache Specifies if BLOB should be read into buffer cache or not.
-     */
-    static createTemporary(cache: boolean): OracleBlob;
-    constructor(delegate: any);
-    /**
-     * This method compares two entire BLOBs or parts of two BLOBs.
-     *
-     * @param lob1 First target for comparison.
-     * @param lob2 Second target for comparison.
-     * @param optArgs Optional arguments that specify amount and offsets.
-     * @returns 0 if the compared portions are equal, non-zero if not
-     * @throws Error if offset1 or offset2 is not a valid BLOB offset value.
-     */
-    static compare(lob1: OracleBlob, lob2: OracleBlob, optArgs?: CompareOptionalArguments): number;
-    /**
-     * When creating the table, you can specify the chunking factor, a multiple
-     * of tablespace blocks in bytes. This corresponds to the chunk size used
-     * by the BLOB data layer when accessing or modifying the BLOB value. Part of
-     * the chunk is used to store system-related information, and the rest
-     * stores the BLOB value. This method returns the amount of space used in
-     * the BLOB chunk to store the BLOB value.
-     */
-    getChunkSize(...args: any[]): number;
-    /**
-     * This method gets the length of the specified BLOB. The length in bytes
-     * is returned.
-     */
-    length(...args: any[]): number;
-    /**
-     * This method checks to see if the BLOB was already opened using the
-     * input locator.
-     */
-    isOpen(...args: any[]): boolean;
-    /**
-     * This method determines whether a BLOB instance is temporary.
-     */
-    isTemporary(...args: any[]): boolean;
-    /**
-     * This method opens a BLOB in the indicated mode. Valid modes include
-     * read-only and read/write.
-     *
-     * @param mode
-     */
-    open(mode: number): void;
-    /**
-     * This method closes a previously opened BLOB.
-     */
-    close(...args: any[]): void;
-    /**
-     * This method frees the temporary BLOB in the default temporary
-     * tablespace.
-     */
-    freeTemporary(...args: any[]): void;
-    /**
-     * Returns all the BLOB data as Uint8Array.
-     *
-     * For queries returning LOB columns, it can be more efficient to use
-     * fetchAsUint8Array, or fetchInfo instead of lob.getData().
-     *
-     * @throws Error if blob is too large.
-     */
-    getData(): Uint8Array;
-    /**
-     * This method reads a piece of a BLOB, and returns the specified amount
-     * into the buffer parameter, starting from an absolute offset from the
-     * beginning of the BLOB. If the input offset points past the End of BLOB, a
-     * NO_DATA_FOUND exception is raised.
-     *
-     * @param amount Number of bytes to read.
-     * @param offset Offset in bytes from the start of the BLOB (origin: 1).
-     * @returns a Uint8Array that contains the bytes actually read.
-     */
-    read(amount: number, offset: number): Uint8Array;
-    /**
-     * This method writes data into an internal BLOB, starting from an absolute
-     * offset from the beginning of the BLOB. The data is written from the buffer
-     * parameter. WRITE replaces (overwrites) any data that already exists in
-     * the BLOB at the offset.
-     *
-     * @param offset Offset in bytes from the start of the BLOB (origin: 1) for the write operation.
-     * @param buffer Data to write.
-     */
-    write(offset: number, buffer: Uint8Array): void;
-    getDelegate(): any;
-    isOracleBlob(): boolean;
-}
-/**
- * JavaScript API for Oracle type Character Large Object (CLOB).
- */
-export class IOracleClob {
-    /**
-     * Constant for read-only mode.
-     */
-    LOB_READONLY: number;
-    /**
-     * Constant for read/write mode.
-     */
-    LOB_READWRITE: number;
-    /**
-     * createTemporary creates a temporary CLOB and its corresponding index in
-     * your default temporary tablespace. The temporary CLOB is created with
-     * SESSION duration.
-     *
-     * @param cache Specifies if CLOB should be read into buffer cache or not.
-     * @param isNClob If set to true will create a temporary NCLOB instead of regular CLOB.
-     */
-    createTemporary(cache: boolean, isNClob?: boolean): any;
-    /**
-     * This method compares two entire CLOBs or parts of two CLOBs.
-     *
-     * @param lob1 First target for comparison.
-     * @param lob2 Second target for comparison.
-     * @param optArgs Optional arguments that specify amount and offsets.
-     * @returns 0 if the compared portions are equal, non-zero if not
-     * @throws Error if offset1 or offset2 is not a valid CLOB offset value.
-     */
-    compare(lob1: IOracleClob, lob2: IOracleClob, optArgs?: CompareOptionalArguments): number;
-    /**
-     * When creating the table, you can specify the chunking factor, a multiple
-     * of tablespace blocks in characters. This corresponds to the chunk size used
-     * by the CLOB data layer when accessing or modifying the CLOB value. Part of
-     * the chunk is used to store system-related information, and the rest
-     * stores the CLOB value. This method returns the amount of space used in
-     * the CLOB chunk to store the CLOB value.
-     */
-    getChunkSize(): number;
-    /**
-     * This method gets the length of the specified CLOB. The length in
-     * characters is returned.
-     */
-    length(): number;
-    /**
-     * This method checks to see if the CLOB was already opened using the
-     * input locator.
-     */
-    isOpen(): boolean;
-    /**
-     * This method determines whether a CLOB instance is temporary.
-     */
-    isTemporary(): boolean;
-    /**
-     * This method opens a CLOB in the indicated mode. Valid modes include
-     * read-only and read/write.
-     *
-     * @param mode
-     */
-    open(mode: number): any;
-    /**
-     * This method closes a previously opened CLOB.
-     */
-    close(): any;
-    /**
-     * This method frees the temporary CLOB in the default temporary
-     * tablespace.
-     */
-    freeTemporary(): any;
-    /**
-     * This method reads a piece of a CLOB and returns the specified amount
-     * into the buffer parameter, starting from an absolute offset from the
-     * beginning of the CLOB. If the input offset points past the End of CLOB, a
-     * NO_DATA_FOUND exception is raised.
-     *
-     * @param amount Number of characters to read.
-     * @param offset Offset in characters from the start of the CLOB (origin: 1).
-     * @returns a string that contains the characters actually read.
-     */
-    read(amount: number, offset: number): string;
-    /**
-     * This method writes data into an internal CLOB, starting from an absolute
-     * offset from the beginning of the CLOB. The data is written from the buffer
-     * parameter. WRITE replaces (overwrites) any data that already exists in
-     * the CLOB at the offset.
-     *
-     * @param offset Offset in characters from the start of the CLOB (origin: 1) for the write operation.
-     * @param buffer Data to write.
-     */
-    write(offset: number, buffer: string): any;
-    /**
-     * Returns all the CLOB/NCLOB data as string.
-     
-     * For queries returning LOB columns, it can be more efficient to use
-     * fetchAsString, or fetchInfo instead of lob.getData().
-     */
-    getData(): string;
-}
-/**
- * JavaScript API for Oracle type TIMESTAMP WITH TIME ZONE.
- */
-export class IOracleTimestampTZ {
-    /**
-     * Parse a string into an IOracleTimestampTZ. An optional datetime format
-     * model and an optional NLS parameter string can be provided. If no format
-     * model is specified, the string must be in the default format for the
-     * Oracle TIMESTAMP WITH TIME ZONE data type, which is determined by the
-     * NLS_TIMESTAMP_TZ_FORMAT parameter.
-     *
-     * If an NLS parameter string is specified, it has the effect of temporarily
-     * altering the session's NLS settings for the duration of the call to this
-     * method. The NLS parameter string may set the NLS_DATE_LANGUAGE
-     * parameter.
-     *
-     * If a datetime format model is specified, it overrides the datetime format
-     * determined by NLS settings (i.e. the setting of the NLS_TIMESTAMP_TZ
-     * parameter).
-     
-     * The function returns an error if the specified date lies in a DST
-     * transition period and if the Oracle Database parameter
-     * ERROR_ON_OVERLAP_TIME is true for the current session.
-     *
-     * @param date date represented as a string
-     * @param format optional datetime format model
-     * @param nlsParam optional NLS parameter string. Must have the same format
-     * as the NLS argument to the TO_TIMESTAMP_TZ SQL function.
-     * @returns an IOracleTimestampTZ object
-     */
-    fromString(date: string, format?: string, nlsParam?: string): any;
-    /**
-     * Convert to an OracleTimestamp that contains the local date/time of the
-     * IOracleTimestampTZ.
-     */
-    asLocalDateTime(): IOracleTimestamp;
-    /**
-     * Convert this IOracleTimestampTZ to an IOracleTimestampTZ in the specified
-     * time zone. The time zone string has to contain either a time zone offset
-     * of the form '(+|-)HH:MM' or a time zone region name.
-     *
-     * The function returns an error if the date lies in a DST transition period
-     * in the specified time zone and if the Oracle Database parameter
-     * ERROR_ON_OVERLAP_TIME is true for the current session.
-     *
-     * @param timezone The time zone string.
-     */
-    atTimeZone(timezone: string): IOracleTimestampTZ;
-    /**
-     * Compares two datetime values.
-     * Returns -1 if date1 < date2, 0 if they are equal, and 1 if date1 > date2.
-     *
-     * @param other - second timestamp to be compared
-     * @returns the result of the comparison as a number between -1 and +1.
-     */
-    compare(date1: IOracleTimestampTZ, date2: IOracleTimestampTZ): number;
-    /**
-     * Gets the year component in the Gregorian calendar.
-     *
-     * @returns year component as number
-     */
-    getYear(): number;
-    /**
-     * Gets the month component in the Gregorian calendar.
-     *
-     * @returns month component as number
-     */
-    getMonth(): number;
-    /**
-     * Gets the day component in the Gregorian calendar.
-     *
-     * @returns day component as number
-     */
-    getDay(): number;
-    /**
-     * Gets the hour component.
-     *
-     * @returns hour component as number
-     */
-    getHour(): number;
-    /**
-     * Gets the minute component.
-     *
-     * @returns minute component as number
-     */
-    getMinute(): number;
-    /**
-     * Gets the second component.
-     *
-     * @returns second component as number
-     */
-    getSecond(): number;
-    /**
-     * Gets the fractional second component.
-     *
-     * @returns fractional second component as number
-     */
-    getFractionalSecond(): number;
-    /**
-     * Gets the time zone of an IOracleTimestampTZ.
-     *
-     * @returns the time zone name as string
-     */
-    getTimeZone(): string;
-    /**
-     * Adds an interval to the timestamp to obtain a new timestamp
-     * @param interval - the interval used to obtain the new timestamp
-     * @returns resulting timestamp
-     */
-    addInterval(interval: IOracleIntervalDayToSecond | IOracleIntervalYearToMonth): IOracleTimestampTZ;
-    /**
-     * Subtracts an interval from the timestamp to obtain a new timestamp
-     * @param interval - the interval used to obtain the new timestamp
-     * @returns resulting timestamp
-     */
-    subtractInterval(interval: IOracleIntervalDayToSecond | IOracleIntervalYearToMonth): IOracleTimestampTZ;
-    /**
-     * Subtracts another timestamp from the timestamp to obtain a year-to-month interval
-     * @param other - the other timestamp used as subtrahend
-     * @returns year-to-month interval defined by the two timestamps
-     */
-    subtractIntoYearToMonth(other: IOracleTimestampTZ): IOracleIntervalYearToMonth;
-    /**
-     * Subtracts another timestamp from the timestamp to obtain a day-to-second
-     * interval.
-     *
-     * @param other - the other timestamp used as subtrahend
-     * @returns year-to-month interval defined by the two timestamps
-     */
-    subtractIntoDayToSecond(other: IOracleTimestampTZ): IOracleIntervalDayToSecond;
-    /**
-     * Converts the given datetime to a string in a given format. An optional
-     * datetime format model and an optional NLS parameter string can be
-     * provided. If no format model and/or no NLS parameter string is provided,
-     * the respective default values for the session are used.
-     *
-     * If an NLS parameter string is specified, it has the effect of temporarily
-     * altering the session's NLS settings for the duration of the call to this
-     * method. The NLS parameter string may set the NLS_DATE_LANGUAGE
-     * parameter.
-     *
-     * If a datetime format model is specified, it overrides the datetime format
-     * determined by NLS settings.
-     *
-     * @param format datetime format model
-     * @param nlsParam optional NLS parameter string
-     * @returns a string of the timestamp
-     */
-    toString(format?: string, nlsParam?: string): string;
-}
-/**
- * JavaScript API for Oracle type TIMESTAMP.
- */
-export class IOracleTimestamp {
-    /**
-     * Parse a string into an IOracleTimestamp. An optional datetime format model
-     * and an optional NLS parameter string can be provided. If no format model
-     * is specified, the string must be in the default format for the Oracle
-     * TIMESTAMP data type, which is determined by the NLS_TIMESTAMP_FORMAT
-     * parameter.
-     *
-     * If an NLS parameter string is specified, it has the effect of temporarily
-     * altering the session's NLS settings for the duration of the call to this
-     * method. The NLS parameter string may set the NLS_DATE_LANGUAGE
-     * parameter.
-     *
-     * If a datetime format model is specified, it overrides the datetime format
-     * determined by NLS settings (i.e. the setting of the NLS_TIMESTAMP FORMAT
-     * parameter).
-     *
-     * @param date date represented as a string
-     * @param format optional datetime format model
-     * @param nlsParam optional NLS parameter string. Must have the same format
-     * as the NLS argument to the TO_TIMESTAMP SQL function.
-     * @returns an IOracleTimestamp object
-     */
-    fromString(date: string, format?: string, nlsParam?: string): any;
-    /**
-     * Converts to an IOracleTimestampTZ using the session time zone.
-     */
-    atSessionTimeZone(): IOracleTimestampTZ;
-    /**
-     * Converts to an IOracleTimestampTZ in the specified time zone. The time zone
-     * string has to contain either a time zone offset of the form '(+|-)HH:MM'
-     * or a time zone region name.
-     *
-     * @param timezone The time zone string.
-     */
-    atTimeZone(timezone: string): IOracleTimestampTZ;
-    /**
-     * Compares two IOracleTimestamp values.
-     * Returns -1 if date1 < date2, 0 if they are equal, and 1 if date1 > date2.
-     *
-     * @param other - second timestamp to be compared
-     * @returns the result of the comparison as a number between -1 and +1.
-     */
-    compare(date1: IOracleTimestamp, date2: IOracleTimestamp): number;
-    /**
-     * Gets the year component in the Gregorian calendar.
-     *
-     * @returns year component as number
-     */
-    getYear(): number;
-    /**
-     * Gets the month component in the Gregorian calendar.
-     *
-     * @returns month component as number
-     */
-    getMonth(): number;
-    /**
-     * Gets the day component in the Gregorian calendar.
-     *
-     * @returns day component as number
-     */
-    getDay(): number;
-    /**
-     * Gets the hour component.
-     *
-     * @returns hour component as number
-     */
-    getHour(): number;
-    /**
-     * Gets the minute component.
-     *
-     * @returns minute component as number
-     */
-    getMinute(): number;
-    /**
-     * Gets the second component, including the fractional part.
-     *
-     * @returns second component as number
-     */
-    getSecond(): number;
-    /**
-     * Adds an interval to the timestamp to obtain a new timestamp
-     * @param interval - the interval used to obtain the new timestamp
-     * @returns resulting timestamp
-     */
-    addInterval(interval: IOracleIntervalDayToSecond | IOracleIntervalYearToMonth): IOracleTimestamp;
-    /**
-     * Subtracts an interval from the timestamp to obtain a new timestamp
-     * @param interval - the interval used to obtain the new timestamp
-     * @returns resulting timestamp
-     */
-    subtractInterval(interval: IOracleIntervalDayToSecond | IOracleIntervalYearToMonth): IOracleTimestamp;
-    /**
-     * Subtracts another timestamp from the timestamp to obtain a year-to-month interval
-     * @param other - the other timestamp used as subtrahend
-     * @returns year-to-month interval defined by the two timestamps
-     */
-    subtractIntoYearToMonth(other: IOracleTimestamp): IOracleIntervalYearToMonth;
-    /**
-     * Subtracts another timestamp from the timestamp to obtain a day-to-second
-     * interval.
-     *
-     * @param other - the other timestamp used as subtrahend
-     * @returns year-to-month interval defined by the two timestamps
-     */
-    subtractIntoDayToSecond(other: IOracleTimestamp): IOracleIntervalDayToSecond;
-    /**
-     * Converts the given datetime to a string in a certain format. An optional
-     * datetime format model and an optional NLS parameter string can be
-     * provided. If no format model and/or no NLS parameter string is provided,
-     * the respective default values for the session are used.
-     *
-     * If an NLS parameter string is specified, it has the effect of temporarily
-     * altering the session's NLS settings for the duration of the call to this
-     * method. The NLS parameter string may set the NLS_DATE_LANGUAGE
-     * parameter.
-     *
-     * If a datetime format model is specified, it overrides the datetime format
-     * determined by NLS settings.
-     *
-     * @param format datetime format model
-     * @param nlsParam optional NLS parameter string
-     * @returns a string of the timestamp
-     */
-    toString(format?: string, nlsParam?: string): string;
-}
-/**
- * JavaScript API for Oracle type DATE.
- */
-export class IOracleDate {
-    /**
-     * Construct a new IOracleDate object from date and time components
-     * (Gregorian calendar).
-     *
-     * @param year year component (-4712 <= y <= 9999)
-     * @param month month component (1 <= m <= 12)
-     * @param day day component (1 <= d <= 31)
-     * @param hour hour component (0 <= h <= 23)
-     * @param minute minute component (0 <= m <= 59)
-     * @param second second component (0 <= s <= 59)
-     */
-    constructor(year: number, month: number, day: number, hour: number, minute: number, second: number);
-    /**
-     * Construct a new IOracleDate object from date components (Gregorian
-     * calendar).
-     *
-     * @param year year component (-4712 <= y <= 9999)
-     * @param month month component (1 <= m <= 12)
-     * @param day day component (1 <= d <= 31)
-     */
-    constructor(year: number, month: number, day: number);
-    /**
-     * Parse a date string into an IOracleDate. An optional datetime format
-     * model and an optional NLS parameter string can be provided. If no format
-     * model and/or no NLS parameter string is provided, the respective default
-     * values for the session are used.
-     *
-     * If an NLS parameter string is specified, it has the effect of temporarily
-     * altering the session's NLS settings for the duration of the call to this
-     * method. The NLS parameter string may only set the NLS_DATE_LANGUAGE
-     * parameter.
-     *
-     * If a datetime format model is specified, it overrides the date format
-     * determined by NLS settings.
-     *
-     * @param date date represented as a string
-     * @param fmt optional datetime format model
-     * @param nlsParam optional NLS parameter string. Must have the same format
-     * as the NLS argument to the TO_DATE SQL function.
-     * @returns the new date as IOracleDate object
-     */
-    fromString(date: string, fmt?: string, nlsParam?: string): IOracleDate;
-    /**
-     * Gets the current system date and time as an IOracleDate.
-     * @returns the system date and time as IOracleDate
-     */
-    sysDate(): IOracleDate;
-    /**
-     * Converts an IOracleDate to a string and returns it. An optional datetime
-     * format model and an optional NLS parameter string can be provided. If no
-     * format model and/or no NLS parameter string is provided, the respective
-     * default values for the session are used.
-     *
-     * If an NLS parameter string is specified, it has the effect of temporarily
-     * altering the session's NLS settings for the duration of the call to this
-     * method. The NLS parameter string may only set the NLS_DATE_LANGUAGE
-     * parameter.
-     *
-     * If a datetime format model is specified, it overrides the date format
-     * determined by NLS settings.
-     *
-     * @param fmt optional datetime format model
-     * @param nlsParam optional NLS parameter string. Must have the same format
-     * as the NLS argument to the TO_DATE SQL function.
-     * @returns the date as string
-     */
-    toString(fmt?: string, nlsParam?: string): string;
-    /**
-     * Construct a new IOracleDate object by adding number of months to this
-     * date. The result of this function is sensitive to the setting for the
-     * NLS_CALENDAR parameter in the current session.
-     *
-     * @param numberOfMonths number of months to add
-     * @returns the new date as IOracleDate object
-     */
-    addMonths(numberOfMonths: number): IOracleDate;
-    /**
-     * Construct a new IOracleDate object by adding number of days to this date.
-     * The result of this function is sensitive to the setting for the
-     * NLS_CALENDAR parameter in the current session.
-     *
-     * @param numberOfDays - number of days to add
-     * @returns the new date as IOracleDate object
-     */
-    addDays(numberOfDays: number): IOracleDate;
-    /**
-     * Compares two dates.
-     * Returns -1 if d1 < d2, 0 if they are equal, and 1 if d1 > d2.
-     *
-     * @param d1 - first date value
-     * @param d2 - second date value
-     * @returns the result of the comparison as a number between -1 and +1.
-     */
-    compare(d1: IOracleDate, d2: IOracleDate): number;
-    /**
-     * Gets the number of days between two dates. The result of this function
-     * is sensitive to the setting for the NLS_CALENDAR parameter in the
-     * current session.
-     *
-     * @param d1 - first date value
-     * @param d2 - date value to compare with
-     * @returns number of days between d1 and d2
-     */
-    daysBetween(d1: IOracleDate, d2: IOracleDate): number;
-    /**
-     * Gets the date of the last day of the month specified by this date. The
-     * result of this function is sensitive to the setting for the NLS_CALENDAR
-     * parameter of the current session.
-     *
-     * @returns a new date set set to the last day of the month
-     */
-    lastDayOfMonth(): IOracleDate;
-    /**
-     * Gets the date of the first weekday named by dayOfTheWeek that is later
-     * than this date. The result of this method is sensitive to the
-     * NLS_DATE_LANGUAGE parameter of the current session.
-     *
-     * @returns a new date set to the first weekday name by dayOfTheWeek that
-     * is later than this date.
-     */
-    nextDay(dayOfTheWeek: string): IOracleDate;
-    /**
-     * Gets the year component according to the Gregorian calendar.
-     *
-     * @returns year component (-4712 <= y <= 9999)
-     */
-    getYear(): number;
-    /**
-     * Gets the month component according to the Gregorian calendar.
-     * @returns month component (1 <= m <= 12)
-     */
-    getMonth(): number;
-    /**
-     * Gets the day component according to the Gregorian calendar.
-     * @returns day component (1 <= d <= 31)
-     */
-    getDay(): number;
-    /**
-     * Gets the hour component.
-     * @returns our component (0 <= h <= 23)
-     */
-    getHour(): number;
-    /**
-     * Gets the minute component.
-     * @returns minute component (0 <= m <= 59)
-     */
-    getMinute(): number;
-    /**
-     * Gets the second component.
-     * @returns second component (0 <= s <= 59)
-     */
-    getSecond(): number;
-    /**
-     * Checks if this has a valid date.
-     * @returns true iff the date is valid
-     */
-    isValid(): boolean;
-}
-
-}
-
-declare module "mle-js-plsqltypes" {
-
-export const OracleTimestamp: __mlejsplsqltypes.IOracleTimestamp;
-export const OracleTimestampTZ: __mlejsplsqltypes.IOracleTimestampTZ;
-export const OracleIntervalDayToSecond: __mlejsplsqltypes.IOracleIntervalDayToSecond;
-export const OracleIntervalYearToMonth: __mlejsplsqltypes.IOracleIntervalYearToMonth;
-export const OracleClob: __mlejsplsqltypes.IOracleClob;
-export const OracleDate: __mlejsplsqltypes.IOracleDate;
-export const OracleNumber: __mlejsplsqltypes.OracleNumber;
-export const OracleBlob: __mlejsplsqltypes.OracleBlob;
-
-}
-
-/**
- * CAUTION: This namespace is used for TYPE DECLARATIONS ONLY and does not have
- * an equivalent in the actual implementation in MLE. Please either use the
- * corresponding module or global symbols instead.
- */
-declare namespace __mlejsfetch {
 
 /**
  * Interface to represent types that provide a view into an ArrayBuffer e.g. DataView
  *
  * @since Oracle 23.3
  */
-interface IBufferWrapper {
+export interface IBufferWrapper {
     buffer: ArrayBuffer;
 }
-
-
 
 /**
  * Type alias for the types the body can be
@@ -3098,7 +3217,8 @@ interface IBufferWrapper {
  * @since Oracle 23.3
  */
 export type BodyType = IBufferWrapper | ArrayBuffer | string | null;
-class Body {
+
+export class Body {
     #private;
     /**
      * Check if the contents of the body have been consumed.
@@ -3129,9 +3249,9 @@ class Body {
     protected _cloneBodyContent(): BodyType;
 }
 
-
 export type HeadersInit = string[][] | Record<string, string> | Headers;
-class Headers {
+
+export class Headers {
     #private;
     /**
      * Create a new instance given initial header values.
@@ -3174,20 +3294,19 @@ class Headers {
     forEach(func: (value: unknown, key: unknown, object: unknown) => void, thisValue?: unknown): void;
 }
 
-
-
-
 export type RequestInfo = Request | string;
+
 export interface RequestInit {
     method?: string;
     body?: BodyType;
     headers?: HeadersInit;
     credentials?: string;
 }
+
 /**
  * Configures the way a resource is retrieved.
  */
-class Request extends Body {
+export class Request extends Body {
     readonly method: string;
     readonly url: string | null;
     readonly headers: Headers;
@@ -3205,19 +3324,18 @@ class Request extends Body {
     clone(): Request;
 }
 
-
-
-
 export type ResponseType = 'basic' | 'cors' | 'default' | 'error' | 'opaque' | 'opaqueredirect';
-interface ResponseInit {
+
+export interface ResponseInit {
     status?: number;
     statusText?: string;
     headers?: Headers;
 }
+
 /**
  * The result of a resource retrieval.
  */
-class Response extends Body {
+export class Response extends Body {
     #private;
     readonly url: string | null;
     readonly statusText: string;
@@ -3257,9 +3375,6 @@ class Response extends Body {
     clone(): Response;
 }
 
-
-
-
 /**
  * Make a request to the specified resource.
  *
@@ -3270,22 +3385,52 @@ class Response extends Body {
  * @param init additional configuration for the retrieval
  * @returns a {@link Response} that contains the result of resource retrieval
  */
-function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
-
-export { fetch, Headers, Request, Response };
+export function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 }
 
 declare module "mle-js-fetch" {
 
-export const Headers: __mlejsfetch.Headers;
-export const Request: __mlejsfetch.Request;
-export const Response: __mlejsfetch.Response;
-export function fetch(input: __mlejsfetch.RequestInfo, init?: __mlejsfetch.RequestInit): Promise<__mlejsfetch.Response>;
+export const IBufferWrapper: __mle_js_fetch.IBufferWrapper;
+type IBufferWrapper = __mle_js_fetch.IBufferWrapper;
+
+
+export const BodyType: __mle_js_fetch.BodyType;
+type BodyType = __mle_js_fetch.BodyType;
+export const Body: __mle_js_fetch.Body;
+type Body = __mle_js_fetch.Body;
+
+
+export const HeadersInit: __mle_js_fetch.HeadersInit;
+type HeadersInit = __mle_js_fetch.HeadersInit;
+export const Headers: __mle_js_fetch.Headers;
+type Headers = __mle_js_fetch.Headers;
+
+
+export const RequestInfo: __mle_js_fetch.RequestInfo;
+type RequestInfo = __mle_js_fetch.RequestInfo;
+export const RequestInit: __mle_js_fetch.RequestInit;
+type RequestInit = __mle_js_fetch.RequestInit;
+export const Request: __mle_js_fetch.Request;
+type Request = __mle_js_fetch.Request;
+
+
+export const ResponseType: __mle_js_fetch.ResponseType;
+type ResponseType = __mle_js_fetch.ResponseType;
+export const ResponseInit: __mle_js_fetch.ResponseInit;
+type ResponseInit = __mle_js_fetch.ResponseInit;
+export const Response: __mle_js_fetch.Response;
+type Response = __mle_js_fetch.Response;
+
+
+export const fetch: typeof __mle_js_fetch.fetch;
+type fetch = typeof __mle_js_fetch.fetch;
+
+
+
 
 }
-
-/** @since Oracle 23.3 */
 declare module "mle-encode-base64" {
+
 
 /**
  * Encode a string or a byte buffer into base64.
@@ -3300,6 +3445,7 @@ declare module "mle-encode-base64" {
  * @since Oracle 23.3
  */
 export function encode(input: string | ArrayBuffer | Uint8Array): string;
+
 /**
  * Decode a base64 encoded string.
  *
@@ -3310,6 +3456,7 @@ export function encode(input: string | ArrayBuffer | Uint8Array): string;
  */
 export function decode(input: string): ArrayBuffer;
 
+
 }
 
 /**
@@ -3317,11 +3464,13 @@ export function decode(input: string): ArrayBuffer;
  * an equivalent in the actual implementation in MLE. Please either use the
  * corresponding module or global symbols instead.
  */
-declare namespace __mlejsencodings {
+declare namespace __mle_js_encodings {
+
 
 interface TextEncoderCommon {
     readonly encoding: string;
 }
+
 /**
  * The object returned by encodeInto.
  * It reports on the progress of the encoder.
@@ -3332,6 +3481,7 @@ export type TextEncoderEncodeIntoResult = {
     /** The number of bytes written to the given buffer. */
     written: number;
 };
+
 /**
  * TextEncoder takes code points and returns UTF-8 bytes.
  */
@@ -3360,12 +3510,12 @@ export class TextEncoder implements TextEncoderCommon {
     encodeInto(input: string, destination: Uint8Array): TextEncoderEncodeIntoResult;
 }
 
-
 interface TextDecoderCommon {
     readonly encoding: string;
     readonly fatal: boolean;
     readonly ignoreBOM: boolean;
 }
+
 /**
  * Options given to the constructor of TextDecoder.
  */
@@ -3384,6 +3534,7 @@ export type TextDecoderOptions = {
      */
     ignoreBOM?: boolean;
 };
+
 /**
  * Options given to decode.
  */
@@ -3396,7 +3547,9 @@ export type TextDecodeOptions = {
      */
     stream?: boolean;
 };
+
 export type AllowSharedBufferSource = ArrayBuffer | SharedArrayBuffer | ArrayBufferView;
+
 /**
  * TextDecoder represents a decoder for specific text encoding, such UTF-8, UTF-16, etc.
  * A decoder takes as input bytes and returns as output code points.
@@ -3431,18 +3584,34 @@ export class TextDecoder implements TextDecoderCommon {
      */
     decode(input?: AllowSharedBufferSource, options?: TextDecodeOptions): string;
 }
-
 }
 
-/** @since Oracle 23.4 */
 declare module "mle-js-encodings" {
 
-export const TextEncoder: __mlejsencodings.TextEncoder;
-export const TextDecoder: __mlejsencodings.TextDecoder;
+export const TextEncoderCommon: __mle_js_encodings.TextEncoderCommon;
+type TextEncoderCommon = __mle_js_encodings.TextEncoderCommon;
+export const TextEncoderEncodeIntoResult: __mle_js_encodings.TextEncoderEncodeIntoResult;
+type TextEncoderEncodeIntoResult = __mle_js_encodings.TextEncoderEncodeIntoResult;
+export const TextEncoder: __mle_js_encodings.TextEncoder;
+type TextEncoder = __mle_js_encodings.TextEncoder;
+
+
+export const TextDecoderCommon: __mle_js_encodings.TextDecoderCommon;
+type TextDecoderCommon = __mle_js_encodings.TextDecoderCommon;
+export const TextDecoderOptions: __mle_js_encodings.TextDecoderOptions;
+type TextDecoderOptions = __mle_js_encodings.TextDecoderOptions;
+export const TextDecodeOptions: __mle_js_encodings.TextDecodeOptions;
+type TextDecodeOptions = __mle_js_encodings.TextDecodeOptions;
+export const AllowSharedBufferSource: __mle_js_encodings.AllowSharedBufferSource;
+type AllowSharedBufferSource = __mle_js_encodings.AllowSharedBufferSource;
+export const TextDecoder: __mle_js_encodings.TextDecoder;
+type TextDecoder = __mle_js_encodings.TextDecoder;
+
+
+
 
 }
 
-/* Copyright (c) 2022, 2024, Oracle and/or its affiliates. */
 
 /*
  * TypeScript declarations for JavaScript builtins in Oracle Database
@@ -3636,7 +3805,6 @@ interface IConsole {
 declare const console: IConsole;
 
 
-/* Copyright (c) 2023, 2024, Oracle and/or its affiliates. */
 
 /*
  * TypeScript declarations for JavaScript globals in Oracle Database
@@ -3644,24 +3812,24 @@ declare const console: IConsole;
  * - https://oracle-samples.github.io/mle-modules
  */
 
-declare const oracledb: __mlejsoracledb.OracleDb;
-declare const session: __mlejsoracledb.IConnection;
-declare const soda: __mlejsoracledb.ISodaDatabase;
-declare const OracleNumber: __mlejsplsqltypes.OracleNumber;
-declare const OracleBlob: __mlejsplsqltypes.OracleBlob;
-declare const OracleClob: __mlejsplsqltypes.IOracleClob;
-declare const OracleDate: __mlejsplsqltypes.IOracleDate;
-declare const OracleTimestampTZ: __mlejsplsqltypes.IOracleTimestampTZ;
-declare const OracleTimestamp: __mlejsplsqltypes.IOracleTimestamp;
+declare const oracledb: __mle_js_oracledb.OracleDb;
+declare const session: __mle_js_oracledb.IConnection;
+declare const soda: __mle_js_oracledb.ISodaDatabase;
+declare const OracleNumber: __mle_js_plsqltypes.OracleNumber;
+declare const OracleBlob: __mle_js_plsqltypes.OracleBlob;
+declare const OracleClob: __mle_js_plsqltypes.IOracleClob;
+declare const OracleDate: __mle_js_plsqltypes.IOracleDate;
+declare const OracleTimestampTZ: __mle_js_plsqltypes.IOracleTimestampTZ;
+declare const OracleTimestamp: __mle_js_plsqltypes.IOracleTimestamp;
 /* @since Oracle 23.3 */
-declare const OracleIntervalDayToSecond: __mlejsplsqltypes.IOracleIntervalDayToSecond;
+declare const OracleIntervalDayToSecond: __mle_js_plsqltypes.IOracleIntervalDayToSecond;
 /* @since Oracle 23.3 */
-declare const OracleIntervalYearToMonth: __mlejsplsqltypes.IOracleIntervalYearToMonth;
-declare const Headers: __mlejsfetch.Headers;
-declare const Request: __mlejsfetch.Request;
-declare const Response: __mlejsfetch.Response;
-declare function fetch(input: __mlejsfetch.RequestInfo, init?: __mlejsfetch.RequestInit): Promise<__mlejsfetch.Response>;
+declare const OracleIntervalYearToMonth: __mle_js_plsqltypes.IOracleIntervalYearToMonth;
+declare const Headers: __mle_js_fetch.Headers;
+declare const Request: __mle_js_fetch.Request;
+declare const Response: __mle_js_fetch.Response;
+declare const __fetch: typeof __mle_js_fetch.fetch;
+declare type fetch = typeof __fetch;
 /* @since Oracle 23.4 */
-declare const TextEncoder: __mlejsencodings.TextEncoder;
-declare const TextDecoder: __mlejsencodings.TextDecoder;
-
+declare const TextEncoder: __mle_js_encodings.TextEncoder;
+declare const TextDecoder: __mle_js_encodings.TextDecoder;
