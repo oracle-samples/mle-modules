@@ -135,9 +135,16 @@ declare namespace __mle_js_plsqltypes {
 
 
 /**
+ * declare Operators object
+ *
+ * @since Oracle 23.5
+ */
+const OracleNumberOperators: any;
+
+/**
  * JavaScript API for Oracle type NUMBER.
  */
-export class OracleNumber {
+export class OracleNumber extends OracleNumberOperators {
     private impl;
     /**
      * Construct an OracleNumber from a JavaScript number or a string.
@@ -1279,10 +1286,21 @@ export class IOracleDate {
      */
     isValid(): boolean;
 }
+
+/**
+ * JsonId class is used to represent "_id" field in soda document
+ *
+ * @since Oracle 23.5
+ */
+export class JsonId extends Uint8Array {
+    toJSON(): string;
+}
 }
 
 declare module "mle-js-plsqltypes" {
 
+export const OracleNumberOperators: typeof __mle_js_plsqltypes.OracleNumberOperators;
+type OracleNumberOperators = typeof __mle_js_plsqltypes.OracleNumberOperators;
 
 /**
  * JavaScript API for Oracle type TIMESTAMP.
@@ -1331,6 +1349,8 @@ export const IOracleTimestamp: __mle_js_plsqltypes.IOracleTimestamp;
 type IOracleTimestamp = __mle_js_plsqltypes.IOracleTimestamp;
 export const IOracleDate: __mle_js_plsqltypes.IOracleDate;
 type IOracleDate = __mle_js_plsqltypes.IOracleDate;
+export const JsonId: __mle_js_plsqltypes.JsonId;
+type JsonId = __mle_js_plsqltypes.JsonId;
 
 
 }
@@ -2255,17 +2275,29 @@ export abstract class IConnection {
      * affected by the execution of DML statements, see {@link IExecuteReturn}.
      *
      * See
-     * https://github.com/oracle/node-oracledb/blob/v3.1.0/doc/api.md#-426-connectionexecute
+     * https://node-oracledb.readthedocs.io/en/v6.4.0/api_manual/connection.html#connection.execute
      * for more details.
      *
-     * @param sql SQL statement that is executed. The statement may contain bind
-     * parameters.
+     * @param sql This parameter can either be a string or an object.
+     * If the parameter is a string, then it is the SQL statement to be executed.
+     * The statement may contain bind parameters.
+     *
+     * If the parameter is an object (possible since Oracle 23.5),
+     * it conforms to the {@link IExecuteArgs} interface
+     * and contains the SQL statement to be executed and the bind values.
+     *
+     * This object exposes the SQL statement and values properties to retrieve the SQL string and bind values
+     * The statement may contain bind parameters.
      * @param bindParams needed if there are bind parameters in the SQL
      * statement, see {@link BindParameters}.
      * @param options an optional parameter to execute() that may be used to
      * control statement execution.
      */
     abstract execute(sql: string): IExecuteReturn;
+    /**
+     * @since Oracle 23.5
+     */
+    abstract execute(sql: IExecuteArgs, options?: IExecuteOptions): IExecuteReturn;
     abstract execute(sql: string, bindParams: BindParameters, options?: IExecuteOptions): IExecuteReturn;
     /**
      * This method allows sets of data values to be bound to one DML or PL/SQL
@@ -2352,6 +2384,22 @@ export abstract class IConnection {
      * @since Oracle 23.3
      */
     abstract getDbObjectClass(className: string): IDbObjectClass;
+}
+
+/**
+ * Interface for representing {@link execute} 's argument.
+ *
+ * @since Oracle 23.5
+ */
+interface IExecuteArgs {
+    /**
+     * The sql text of the statement to be executed.
+     */
+    statement: string;
+    /**
+     * An array that contains bind values.
+     */
+    values: [];
 }
 
 /**
@@ -2684,6 +2732,18 @@ export class OracleDb {
     ORACLE_TIMESTAMP: number;
     ORACLE_TIMESTAMP_TZ: number;
     UINT8ARRAY: number;
+    /**
+     * @since Oracle 23.4
+     */
+    INT8ARRAY: number;
+    /**
+     * @since Oracle 23.4
+     */
+    FLOAT32ARRAY: number;
+    /**
+     * @since Oracle 23.4
+     */
+    FLOAT64ARRAY: number;
     DB_TYPE_VARCHAR: number;
     DB_TYPE_NUMBER: number;
     DB_TYPE_LONG: number;
@@ -2706,6 +2766,10 @@ export class OracleDb {
     DB_TYPE_NCHAR: number;
     DB_TYPE_NCLOB: number;
     DB_TYPE_JSON: number;
+    /**
+     * @since Oracle 23.3
+     */
+    DB_TYPE_OBJECT: number;
     /**
      * @since Oracle 23.4
      */
@@ -2826,6 +2890,7 @@ type PosBinds = __mle_js_oracledb.PosBinds;
 type BindParameters = __mle_js_oracledb.BindParameters;
 type IStatementInfo = __mle_js_oracledb.IStatementInfo;
 type IConnection = __mle_js_oracledb.IConnection;
+type IExecuteArgs = __mle_js_oracledb.IExecuteArgs;
 type IDbObjectAttributes = __mle_js_oracledb.IDbObjectAttributes;
 type IDbObjectClass = __mle_js_oracledb.IDbObjectClass;
 type OutFormatType = __mle_js_oracledb.OutFormatType;
@@ -3821,15 +3886,21 @@ declare const OracleClob: __mle_js_plsqltypes.IOracleClob;
 declare const OracleDate: __mle_js_plsqltypes.IOracleDate;
 declare const OracleTimestampTZ: __mle_js_plsqltypes.IOracleTimestampTZ;
 declare const OracleTimestamp: __mle_js_plsqltypes.IOracleTimestamp;
-/* @since Oracle 23.3 */
-declare const OracleIntervalDayToSecond: __mle_js_plsqltypes.IOracleIntervalDayToSecond;
-/* @since Oracle 23.3 */
-declare const OracleIntervalYearToMonth: __mle_js_plsqltypes.IOracleIntervalYearToMonth;
+
+/* only after importing "mle-js-fetch"
 declare const Headers: __mle_js_fetch.Headers;
 declare const Request: __mle_js_fetch.Request;
 declare const Response: __mle_js_fetch.Response;
 declare const __fetch: typeof __mle_js_fetch.fetch;
 declare type fetch = typeof __fetch;
+
+/* @since Oracle 23.3 */
+declare const OracleIntervalDayToSecond: __mle_js_plsqltypes.IOracleIntervalDayToSecond;
+declare const OracleIntervalYearToMonth: __mle_js_plsqltypes.IOracleIntervalYearToMonth;
+
 /* @since Oracle 23.4 */
-declare const TextEncoder: __mle_js_encodings.TextEncoder;
-declare const TextDecoder: __mle_js_encodings.TextDecoder;
+declare const TextEncoder: _mle_globals.TextEncoder;
+declare const TextDecoder: _mle_globals.TextDecoder;
+
+/* @since Oracle 23.5 */
+declare const JsonId: __mle_js_plsqltypes.JsonId;

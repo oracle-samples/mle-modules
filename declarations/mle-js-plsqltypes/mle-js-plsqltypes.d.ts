@@ -36,6 +36,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 /**
+ * declare Operators object
+ *
+ * @since Oracle 23.5
+ */
+declare const OracleNumberOperators: any;
+/**
  * JavaScript API for Oracle type TIMESTAMP.
  */
 export declare const OracleTimestamp: IOracleTimestamp;
@@ -62,7 +68,7 @@ export declare const OracleDate: IOracleDate;
 /**
  * JavaScript API for Oracle type NUMBER.
  */
-export declare class OracleNumber {
+export declare class OracleNumber extends OracleNumberOperators {
     private impl;
     /**
      * Construct an OracleNumber from a JavaScript number or a string.
@@ -1196,3 +1202,12 @@ export declare class IOracleDate {
      */
     isValid(): boolean;
 }
+/**
+ * JsonId class is used to represent "_id" field in soda document
+ *
+ * @since Oracle 23.5
+ */
+export declare class JsonId extends Uint8Array {
+    toJSON(): string;
+}
+export {};

@@ -3,7 +3,7 @@
   "description": "MLE Bindings for Oracle Database DBMS_MLE",
   "types": "mle-js-bindings.d.ts",
   "author": "Oracle",
-  "version": "23.4.0",
+  "version": "23.5.0",
   "license": "UPL-1.0",
   "homepage": "https://oracle-samples.github.io/mle-modules",
   "repository": {
