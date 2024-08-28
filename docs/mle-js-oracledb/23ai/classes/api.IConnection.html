@@ -88,7 +88,7 @@ values or variables, which are bound using either an object or an array.</p>
 values of any OUT and IN OUT bind variables, and the number of rows
 affected by the execution of DML statements, see <a href="../interfaces/api.IExecuteReturn.html">IExecuteReturn</a>.</p>
 <p>See
-<a href="https://github.com/oracle/node-oracledb/blob/v3.1.0/doc/api.md#-426-connectionexecute">https://github.com/oracle/node-oracledb/blob/v3.1.0/doc/api.md#-426-connectionexecute</a>
+<a href="https://node-oracledb.readthedocs.io/en/v6.4.0/api_manual/connection.html#connection.execute">https://node-oracledb.readthedocs.io/en/v6.4.0/api_manual/connection.html#connection.execute</a>
 for more details.</p>
 </div>
 <div class="tsd-parameters">
@@ -96,11 +96,30 @@ for more details.</p>
 <ul class="tsd-parameter-list">
 <li>
 <h5>sql: <span class="tsd-signature-type">string</span></h5>
-<div class="tsd-comment tsd-typography"><p>SQL statement that is executed. The statement may contain bind
-parameters.</p>
+<div class="tsd-comment tsd-typography"><p>This parameter can either be a string or an object.
+If the parameter is a string, then it is the SQL statement to be executed.
+The statement may contain bind parameters.</p>
+<p>If the parameter is an object (possible since Oracle 23.5),
+it conforms to the <a href="../interfaces/api.IExecuteArgs.html">IExecuteArgs</a> interface
+and contains the SQL statement to be executed and the bind values.</p>
+<p>This object exposes the SQL statement and values properties to retrieve the SQL string and bind values
+The statement may contain bind parameters.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="../interfaces/api.IExecuteReturn.html" class="tsd-signature-type" data-tsd-kind="Interface">IExecuteReturn</a></h4></li>
-<li class="tsd-signature tsd-anchor-link" id="execute.execute-2">execute<span class="tsd-signature-symbol">(</span>sql<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, bindParams<span class="tsd-signature-symbol">: </span><a href="../types/api.BindParameters.html" class="tsd-signature-type" data-tsd-kind="Type alias">BindParameters</a>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/api.IExecuteOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">IExecuteOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/api.IExecuteReturn.html" class="tsd-signature-type" data-tsd-kind="Interface">IExecuteReturn</a><a href="#execute.execute-2" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="execute.execute-2">execute<span class="tsd-signature-symbol">(</span>sql<span class="tsd-signature-symbol">: </span><a href="../interfaces/api.IExecuteArgs.html" class="tsd-signature-type" data-tsd-kind="Interface">IExecuteArgs</a>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/api.IExecuteOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">IExecuteOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/api.IExecuteReturn.html" class="tsd-signature-type" data-tsd-kind="Interface">IExecuteReturn</a><a href="#execute.execute-2" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-comment tsd-typography">
+<h3>Since</h3><p>Oracle 23.5</p>
+</div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>sql: <a href="../interfaces/api.IExecuteArgs.html" class="tsd-signature-type" data-tsd-kind="Interface">IExecuteArgs</a></h5></li>
+<li>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> options: <a href="../interfaces/api.IExecuteOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">IExecuteOptions</a></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <a href="../interfaces/api.IExecuteReturn.html" class="tsd-signature-type" data-tsd-kind="Interface">IExecuteReturn</a></h4></li>
+<li class="tsd-signature tsd-anchor-link" id="execute.execute-3">execute<span class="tsd-signature-symbol">(</span>sql<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, bindParams<span class="tsd-signature-symbol">: </span><a href="../types/api.BindParameters.html" class="tsd-signature-type" data-tsd-kind="Type alias">BindParameters</a>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/api.IExecuteOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">IExecuteOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/api.IExecuteReturn.html" class="tsd-signature-type" data-tsd-kind="Interface">IExecuteReturn</a><a href="#execute.execute-3" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
