@@ -1,7 +1,7 @@
 Third Party Attributions for Code
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-TypeDoc 0.23.19 TypeDoc Contributors
+TypeDoc 0.23.28 TypeDoc Contributors
 (https://github.com/TypeStrong/typedoc/graphs/contributors)
 Apache 2.0
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
