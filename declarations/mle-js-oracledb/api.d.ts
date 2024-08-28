@@ -467,17 +467,29 @@ export declare abstract class IConnection {
      * affected by the execution of DML statements, see {@link IExecuteReturn}.
      *
      * See
-     * https://github.com/oracle/node-oracledb/blob/v3.1.0/doc/api.md#-426-connectionexecute
+     * https://node-oracledb.readthedocs.io/en/v6.4.0/api_manual/connection.html#connection.execute
      * for more details.
      *
-     * @param sql SQL statement that is executed. The statement may contain bind
-     * parameters.
+     * @param sql This parameter can either be a string or an object.
+     * If the parameter is a string, then it is the SQL statement to be executed.
+     * The statement may contain bind parameters.
+     *
+     * If the parameter is an object (possible since Oracle 23.5),
+     * it conforms to the {@link IExecuteArgs} interface
+     * and contains the SQL statement to be executed and the bind values.
+     *
+     * This object exposes the SQL statement and values properties to retrieve the SQL string and bind values
+     * The statement may contain bind parameters.
      * @param bindParams needed if there are bind parameters in the SQL
      * statement, see {@link BindParameters}.
      * @param options an optional parameter to execute() that may be used to
      * control statement execution.
      */
     abstract execute(sql: string): IExecuteReturn;
+    /**
+     * @since Oracle 23.5
+     */
+    abstract execute(sql: IExecuteArgs, options?: IExecuteOptions): IExecuteReturn;
     abstract execute(sql: string, bindParams: BindParameters, options?: IExecuteOptions): IExecuteReturn;
     /**
      * This method allows sets of data values to be bound to one DML or PL/SQL
@@ -564,6 +576,21 @@ export declare abstract class IConnection {
      * @since Oracle 23.3
      */
     abstract getDbObjectClass(className: string): IDbObjectClass;
+}
+/**
+ * Interface for representing {@link execute} 's argument.
+ *
+ * @since Oracle 23.5
+ */
+export interface IExecuteArgs {
+    /**
+     * The sql text of the statement to be executed.
+     */
+    statement: string;
+    /**
+     * An array that contains bind values.
+     */
+    values: [];
 }
 /**
  * Interface for representing a DbObject attribute.

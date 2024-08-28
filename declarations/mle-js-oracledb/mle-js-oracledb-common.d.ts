@@ -55,6 +55,18 @@ export declare class OracleDb {
     ORACLE_TIMESTAMP: number;
     ORACLE_TIMESTAMP_TZ: number;
     UINT8ARRAY: number;
+    /**
+     * @since Oracle 23.4
+     */
+    INT8ARRAY: number;
+    /**
+     * @since Oracle 23.4
+     */
+    FLOAT32ARRAY: number;
+    /**
+     * @since Oracle 23.4
+     */
+    FLOAT64ARRAY: number;
     DB_TYPE_VARCHAR: number;
     DB_TYPE_NUMBER: number;
     DB_TYPE_LONG: number;
@@ -77,6 +89,10 @@ export declare class OracleDb {
     DB_TYPE_NCHAR: number;
     DB_TYPE_NCLOB: number;
     DB_TYPE_JSON: number;
+    /**
+     * @since Oracle 23.3
+     */
+    DB_TYPE_OBJECT: number;
     /**
      * @since Oracle 23.4
      */
