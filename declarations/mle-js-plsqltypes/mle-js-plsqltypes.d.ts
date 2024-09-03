@@ -36,7 +36,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 /**
- * declare Operators object
+ * Class which implements infix operators for Oracle Number
+ * arithmetics: +, -, /, *, etc.
  *
  * @since Oracle 23.5
  */
@@ -66,7 +67,8 @@ export declare const OracleClob: IOracleClob;
  */
 export declare const OracleDate: IOracleDate;
 /**
- * JavaScript API for Oracle type NUMBER.
+ * JavaScript API for Oracle type NUMBER. Since Oracle 23.5, this class also
+ * supports infix operator arithmetics: +, -, /, *, etc.
  */
 export declare class OracleNumber extends OracleNumberOperators {
     private impl;
@@ -117,30 +119,40 @@ export declare class OracleNumber extends OracleNumberOperators {
      * Adds an Oracle number to another Oracle number
      * @param other - the other Oracle number
      * @returns returns the sum of the two Oracle NUMBERs
+     *
+     * Note: since Oracle 23.5, `this + other` can be used instead.
      */
     add(other: OracleNumber): OracleNumber;
     /**
      * Subtracts an Oracle number from the Oracle number and returns the resulting Oracle number
      * @param other - the other number to be subtracted from the OracleNumber
      * @returns the result of the subtraction as OracleNumber
+     *
+     * Note: since Oracle 23.5, `this - other` can be used instead.
      */
     sub(other: OracleNumber): OracleNumber;
     /**
      * Multiplies the Oracle number with another Oracle number
      * @param other - the other Oracle number
      * @returns the result of the multiplication as Oracle number
+     *
+     * Note: since Oracle 23.5, `this * other` can be used instead.
      */
     mul(other: OracleNumber): OracleNumber;
     /**
      * Divides two Oracle numbers
      * @param other - divisor
      * @returns the result of the division as Oracle number
+     *
+     * Note: since Oracle 23.5, `this / other` can be used instead.
      */
     div(other: OracleNumber): OracleNumber;
     /**
      * Computes the modulus of two Oracle numbers.
      * @param other - the other Oracle number
      * @returns this number modulo the other number
+     *
+     * Note: since Oracle 23.5, `this % other` can be used instead.
      */
     mod(other: OracleNumber): OracleNumber;
     /**
@@ -198,12 +210,16 @@ export declare class OracleNumber extends OracleNumberOperators {
      * Compares two Oracle numbers.
      * Returns -1 if this < other, 0 if they are equal, and 1 if this > other.
      * @returns the result of the comparison as a number between -1 and +1.
+     *
+     * Note: since Oracle 23.5, `<, <=, >=, >` can be used instead.
      */
     compare(other: OracleNumber): number;
     /**
      * Checks if the Oracle number is equal to another Oracle number
      * @param other - the other Oracle number
      * @returns true if both Oracle numbers are equal, otherwise false
+     *
+     * Note: since Oracle 23.5, `==` or `!=` can be used instead.
      */
     equals(other: OracleNumber): boolean;
     /**
@@ -214,6 +230,8 @@ export declare class OracleNumber extends OracleNumberOperators {
     /**
      * Raises this Oracle number to the given exponent
      * @returns the result of the exponentiation
+     *
+     * Note: since Oracle 23.5, `this ** other` can be used instead.
      */
     power(exp: OracleNumber | number): OracleNumber;
     /**
@@ -250,6 +268,8 @@ export declare class OracleNumber extends OracleNumberOperators {
     /**
      * Negates the number
      * @returns the negated Oracle number
+     *
+     * Note: since Oracle 23.5, `-this` can be used instead.
      */
     neg(): OracleNumber;
     /**
@@ -278,6 +298,8 @@ export declare class OracleNumber extends OracleNumberOperators {
      * Shifts the number by the specified number of decimal places
      * @param digits - number of decimal places to shift. It can be negative. Positive values shift the decimal place to the right and negative values to the left. For example, if NUMBER corresponds to 1234.5 and digits == -1, the new NUMBER object will correspond to 123.45.
      * @returns an Oracle number containing the shifted result
+     *
+     * Note: since Oracle 23.5, `this >> other` or `this << -other` can be used instead.
      */
     shift(digits: OracleNumber | number): OracleNumber;
     /**
