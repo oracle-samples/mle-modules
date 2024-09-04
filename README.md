@@ -111,7 +111,7 @@ async function run() {
     const query = "SELECT 9007199254740992 AS n FROM dual";
     const options = { fetchInfo: { N: { type: oracledb.ORACLE_NUMBER } } };
     const queryResult = session.execute(query, [], options);
-    const result = queryResult.rows[0].N.add(new OracleNumber(7));
+    const result = queryResult.rows[0].N + new OracleNumber(7);
 
     // print result to the console before exporting it
     console.log(result);
@@ -131,7 +131,7 @@ Integration Pipelines][4].
 ## Changelog
 - **Oracle 23.5**
     - support for
-    (sql-template-tag)[https://www.npmjs.com/package/sql-template-tag#oracledb]
+    [sql-template-tag](https://www.npmjs.com/package/sql-template-tag#oracledb)
     in SQL execution in `mle-js-oracledb` / `session.execute` by allowing the
     first argument to be of new type
     [IExecuteArgs](https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/23ai/interfaces/api.IExecuteArgs.html)
