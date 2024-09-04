@@ -111,7 +111,7 @@ async function run() {
     const query = "SELECT 9007199254740992 AS n FROM dual";
     const options = { fetchInfo: { N: { type: oracledb.ORACLE_NUMBER } } };
     const queryResult = session.execute(query, [], options);
-    const result = queryResult.rows[0].N.add(new OracleNumber(7));
+    const result = queryResult.rows[0].N + new OracleNumber(7);
 
     // print result to the console before exporting it
     console.log(result);
@@ -127,6 +127,34 @@ run();
 If you plan to use database-side JavaScript at a larger scale, we highly
 recommend to read our blog post on [Linting MLE JavaScript Modules in Continuous
 Integration Pipelines][4].
+
+## Changelog
+- **Oracle 23.5**
+    - support for
+    [sql-template-tag](https://www.npmjs.com/package/sql-template-tag#oracledb)
+    in SQL execution in `mle-js-oracledb` / `session.execute` by allowing the
+    first argument to be of new type
+    [IExecuteArgs](https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/23ai/interfaces/api.IExecuteArgs.html)
+- **Oracle 23.4 (first release of Oracle 23ai)**
+    - support for VECTOR type (INT8ARRAY, FLOAT32ARRAY, FLOAT64, DB_TYPE_VECTOR) in
+    [mle-js-oracledb](https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/23ai/modules/api.html)
+    and
+    [mle-js-bindings](https://oracle-samples.github.io/mle-modules/docs/mle-js-bindings/23ai/enums/JSTypes.html)
+    including new
+    [vectorDimensions](https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/23ai/interfaces/api.IMetaData.html#vectorDimensions)
+    and
+    [vectorFormat](https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/23ai/interfaces/api.IMetaData.html#vectorFormat)
+    meta data properties
+    - support for binding collection types, including new properties
+    [elementTypeClass](https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/23ai/classes/api.IDbObjectClass.html#elementTypeClass)
+    and
+    [packageName](https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/23ai/classes/api.IDbObjectClass.html#packageName)
+    of `DBObjectClass` and
+    [maxArraySize](https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/23ai/interfaces/api.IBindObjectValue.html#maxArraySize)
+    of bind definitions in `mle-js-oracledb`.
+    - support for
+    [keepInStmtCache](https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/23ai/interfaces/api.IExecuteOptions.html#keepInStmtCache)
+    option in SQL execution in `mle-js-oracledb` / `session.execute`
 
 ## Help
 If you have questions or change requests about MLE, please [create a ticket](./CONTRIBUTING.md) or contact [Oracle Support](https://support.oracle.com).
