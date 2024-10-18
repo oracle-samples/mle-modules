@@ -478,8 +478,6 @@ export declare abstract class IConnection {
      * it conforms to the {@link IExecuteArgs} interface
      * and contains the SQL statement to be executed and the bind values.
      *
-     * This object exposes the SQL statement and values properties to retrieve the SQL string and bind values
-     * The statement may contain bind parameters.
      * @param bindParams needed if there are bind parameters in the SQL
      * statement, see {@link BindParameters}.
      * @param options an optional parameter to execute() that may be used to

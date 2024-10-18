@@ -129,6 +129,9 @@ recommend to read our blog post on [Linting MLE JavaScript Modules in Continuous
 Integration Pipelines][4].
 
 ## Changelog
+- **Oracle 23.6**
+    - improved documentation for OracleNumber
+    [infix operators](https://oracle-samples.github.io/mle-modules/docs/mle-js-plsqltypes/23ai/classes/OracleNumber.html).
 - **Oracle 23.5**
     - support for
     [sql-template-tag](https://www.npmjs.com/package/sql-template-tag#oracledb)
