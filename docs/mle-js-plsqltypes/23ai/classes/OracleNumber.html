@@ -16,7 +16,8 @@
 <li><a href="OracleNumber.html">OracleNumber</a></li></ul>
 <h1>Class OracleNumber</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>JavaScript API for Oracle type NUMBER.</p>
+<div class="tsd-comment tsd-typography"><p>JavaScript API for Oracle type NUMBER. Since Oracle 23.5, this class also
+supports infix operator arithmetics: +, -, /, *, etc.</p>
 </div></section>
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
@@ -141,6 +142,7 @@
 <div class="tsd-comment tsd-typography"><p>Adds an Oracle number to another Oracle number</p>
 
 <h3>Returns</h3><p>returns the sum of the two Oracle NUMBERs</p>
+<p>Note: since Oracle 23.5, <code>this + other</code> can be used instead.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -222,6 +224,7 @@
 Returns -1 if this &lt; other, 0 if they are equal, and 1 if this &gt; other.</p>
 
 <h3>Returns</h3><p>the result of the comparison as a number between -1 and +1.</p>
+<p>Note: since Oracle 23.5, <code>&lt;, &lt;=, &gt;=, &gt;</code> can be used instead.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -247,6 +250,7 @@ Returns -1 if this &lt; other, 0 if they are equal, and 1 if this &gt; other.</p
 <div class="tsd-comment tsd-typography"><p>Divides two Oracle numbers</p>
 
 <h3>Returns</h3><p>the result of the division as Oracle number</p>
+<p>Note: since Oracle 23.5, <code>this / other</code> can be used instead.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -264,6 +268,7 @@ Returns -1 if this &lt; other, 0 if they are equal, and 1 if this &gt; other.</p
 <div class="tsd-comment tsd-typography"><p>Checks if the Oracle number is equal to another Oracle number</p>
 
 <h3>Returns</h3><p>true if both Oracle numbers are equal, otherwise false</p>
+<p>Note: since Oracle 23.5, <code>==</code> or <code>!=</code> can be used instead.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -384,6 +389,7 @@ Returns -1 if this &lt; other, 0 if they are equal, and 1 if this &gt; other.</p
 <div class="tsd-comment tsd-typography"><p>Computes the modulus of two Oracle numbers.</p>
 
 <h3>Returns</h3><p>this number modulo the other number</p>
+<p>Note: since Oracle 23.5, <code>this % other</code> can be used instead.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -401,6 +407,7 @@ Returns -1 if this &lt; other, 0 if they are equal, and 1 if this &gt; other.</p
 <div class="tsd-comment tsd-typography"><p>Multiplies the Oracle number with another Oracle number</p>
 
 <h3>Returns</h3><p>the result of the multiplication as Oracle number</p>
+<p>Note: since Oracle 23.5, <code>this * other</code> can be used instead.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -418,6 +425,7 @@ Returns -1 if this &lt; other, 0 if they are equal, and 1 if this &gt; other.</p
 <div class="tsd-comment tsd-typography"><p>Negates the number</p>
 
 <h3>Returns</h3><p>the negated Oracle number</p>
+<p>Note: since Oracle 23.5, <code>-this</code> can be used instead.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <a href="OracleNumber.html" class="tsd-signature-type" data-tsd-kind="Class">OracleNumber</a></h4></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="power" class="tsd-anchor"></a>
@@ -428,6 +436,7 @@ Returns -1 if this &lt; other, 0 if they are equal, and 1 if this &gt; other.</p
 <div class="tsd-comment tsd-typography"><p>Raises this Oracle number to the given exponent</p>
 
 <h3>Returns</h3><p>the result of the exponentiation</p>
+<p>Note: since Oracle 23.5, <code>this ** other</code> can be used instead.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -500,6 +509,7 @@ Returns -1 if this &lt; other, 0 if they are equal, and 1 if this &gt; other.</p
 <div class="tsd-comment tsd-typography"><p>Shifts the number by the specified number of decimal places</p>
 
 <h3>Returns</h3><p>an Oracle number containing the shifted result</p>
+<p>Note: since Oracle 23.5, <code>this &gt;&gt; other</code> or <code>this &lt;&lt; -other</code> can be used instead.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -547,6 +557,7 @@ Returns -1 if this &lt; other, 0 if they are equal, and 1 if this &gt; other.</p
 <div class="tsd-comment tsd-typography"><p>Subtracts an Oracle number from the Oracle number and returns the resulting Oracle number</p>
 
 <h3>Returns</h3><p>the result of the subtraction as OracleNumber</p>
+<p>Note: since Oracle 23.5, <code>this - other</code> can be used instead.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
