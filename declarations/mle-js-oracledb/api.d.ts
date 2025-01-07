@@ -113,6 +113,14 @@ export interface IExecuteOptions {
      * @since Oracle 23.4
      */
     keepInStmtCache?: boolean;
+    /**
+     * Overrides parameters.{@link fetchTypeHandler}.
+     *
+     * @since Oracle 23.7
+     */
+    fetchTypeHandler?: {
+        (v: any): any | void;
+    };
 }
 /**
  * Interface for representing an entry in {@link IObjectBindDefs} or {@link ArrayBindDefs}.
@@ -207,6 +215,13 @@ export interface IMetaData {
      * One of the mle-js-oracledb Database Type Constants, see {@link DbType}.
      */
     dbType?: number;
+    /**
+     * The class associated with the database type.
+     * This is only set if the database type is an object type.
+     *
+     * @since Oracle 23.7
+     */
+    dbTypeClass?: IDbObjectClass;
     /**
      * Database byte size. This is only set for {@link DB_TYPE_VARCHAR}, {@link
      * DB_TYPE_CHAR} and {@link DB_TYPE_RAW} column types.
@@ -1028,10 +1043,29 @@ export declare const STMT_TYPE_COMMIT = 21;
  */
 export declare const SODA_COLL_MAP_MODE = 5001;
 /**
+ * Type for converter
+ *
+ * @since Oracle 23.7
+ */
+export type Converter = (v: any) => object | void;
+/**
+ * Type for fetch type handler
+ *
+ * @since Oracle 23.7
+ */
+export type FetchTypeHandler = void | {
+    type: number;
+    converter: Converter;
+} | {
+    type: number;
+} | {
+    converter: Converter;
+};
+/**
  * Class for representing global mle-js-oracledb properties.
  */
 export declare class Parameters {
-    private _maxRows;
+    #private;
     get maxRows(): number;
     /**
      * The maximum number of rows that are fetched by a query with
@@ -1054,7 +1088,6 @@ export declare class Parameters {
      * maxRows limit.
      */
     set maxRows(value: number);
-    private _outFormat;
     get outFormat(): OutFormatType;
     /**
      * The format of query rows fetched when using connection.{@link execute}().
@@ -1077,7 +1110,6 @@ export declare class Parameters {
      * This property may be overridden in an {@link execute}() call.
      */
     set outFormat(value: OutFormatType);
-    private _fetchArraySize;
     get fetchArraySize(): number;
     /**
      * This property sets the size of an internal buffer used for fetching query
@@ -1103,6 +1135,7 @@ export declare class Parameters {
      * fetchArraySize.
      */
     set fetchArraySize(value: number);
+    get extendedMetaData(): boolean;
     /**
      * Determines whether additional metadata is available for queries.
      *
@@ -1112,10 +1145,7 @@ export declare class Parameters {
      *
      * This property may be overridden in an execute() call.
      */
-    private _extendedMetaData;
-    get extendedMetaData(): boolean;
     set extendedMetaData(value: boolean);
-    private _fetchAsString;
     get fetchAsString(): JsType[];
     /**
      * An array of mle-js-oracledb JS Type values. The valid types are {@link
@@ -1142,7 +1172,6 @@ export declare class Parameters {
      * fetchAsString global property by using {@link fetchInfo}.
      */
     set fetchAsString(value: JsType[]);
-    private _fetchAsUint8Array;
     get fetchAsUint8Array(): JsType[];
     /**
      * An array of mle-js-oracledb JS Type values. Currently, the only valid type
@@ -1158,7 +1187,6 @@ export declare class Parameters {
      * fetchAsUint8Array global property by using {@link fetchInfo}.
      */
     set fetchAsUint8Array(value: JsType[]);
-    private _fetchAsPlsqlWrapper;
     get fetchAsPlsqlWrapper(): JsType[];
     /**
      * An array of mle-js-oracledb JS Type values. The valid types are {@link
@@ -1179,4 +1207,33 @@ export declare class Parameters {
      * fetchAsPlsqlWrapper global property by using {@link fetchInfo}.
      */
     set fetchAsPlsqlWrapper(value: JsType[]);
+    get fetchTypeHandler(): (metaData: object) => FetchTypeHandler;
+    /**
+     * This property is a function that allows applications to examine and modify queried column data
+     * before it is returned to the user. This function is called once for each column that is being
+     * fetched with a single object argument containing the following attributes:
+     *
+     * annotations: The object representing the annotations.
+     * maxSize: The maximum size in bytes. This is only set if dbType is oracledb.DB_TYPE_VARCHAR, oracledb.DB_TYPE_CHAR, or oracledb.DB_TYPE_RAW.
+     * dbType: The database type, that is, one of the Oracle Database Type Objects.
+     * dbTypeName: The name of the database type, such as "NUMBER" or "VARCHAR2".
+     * dbTypeClass: The class associated with the database type. This is only set if dbType is oracledb.DB_TYPE_OBJECT.
+     * name: The name of the column.
+     * nullable: Indicates whether NULL values are permitted for this column.
+     * precision: Set only when the dbType is oracledb.DB_TYPE_NUMBER.
+     * scale: Set only when the dbType is oracledb.DB_TYPE_NUMBER.
+     *
+     * By default, this property is "undefined", that is, it is not set.
+     * The function is expected to return either nothing or an object containing:
+     * the type attribute
+     * or the converter attribute
+     * or both the type and converter attributes.
+     * The converter function is a function which can be used with fetch type handlers to change the returned data.
+     * This function accepts the value that will be returned by connection.execute() for a particular row and column
+     * and returns the value that will actually be returned by connection.execute().
+     * This property can be overridden by the fetchTypeHandler option in execute().
+     *
+     * @since Oracle 23.7
+     */
+    set fetchTypeHandler(value: (metaData: IMetaData) => FetchTypeHandler);
 }

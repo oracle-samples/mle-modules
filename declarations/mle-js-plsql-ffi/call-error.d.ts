@@ -1,4 +1,5 @@
-Copyright (c) 2023, 2024, Oracle and/or its affiliates.
+/**
+Copyright (c) 2024, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -33,3 +34,25 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+/**
+ * This class represents a PL/SQL exception that occurred during the execution
+ * of a PL/SQL subprogram.
+ * @extends Error
+ */
+export declare class CallError extends Error {
+    #private;
+    /**
+     * The Error type returned by the FFI if an issue occurs.
+     * @param code the Oracle error code
+     * @param msg the error message
+     * @private
+     */
+    constructor(code: number, msg: string);
+    /**
+     * Returns true if this CallError is the given PL/SQL exception.
+     * @param errorCode the Oracle error code of the exception.
+     * @returns whether this instance represents the given PL/SQL exception.
+     */
+    is(errorCode: number): boolean;
+}

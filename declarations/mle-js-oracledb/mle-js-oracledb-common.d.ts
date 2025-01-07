@@ -35,9 +35,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-import { Parameters, IConnection, IResultSet, OutFormatType, JsType } from './api';
+import { Parameters, IConnection, IResultSet, OutFormatType, JsType, FetchTypeHandler } from './api';
 import { ISodaCollection, ISodaDatabase, ISodaDocument, ISodaDocumentCursor, ISodaOperation } from './soda-api';
 export declare class OracleDb {
+    #private;
     OUT_FORMAT_ARRAY: number;
     ARRAY: number;
     OUT_FORMAT_OBJECT: number;
@@ -119,7 +120,6 @@ export declare class OracleDb {
     STMT_TYPE_COMMIT: number;
     SODA_COLL_MAP_MODE: number;
     parameters: Parameters;
-    private _connection;
     SodaCollection: typeof ISodaCollection;
     SodaDatabase: typeof ISodaDatabase;
     SodaDocument: typeof ISodaDocument;
@@ -148,6 +148,14 @@ export declare class OracleDb {
     set fetchAsString(value: JsType[]);
     get maxRows(): number;
     set maxRows(value: number);
+    /**
+     * @since Oracle 23.7
+     */
+    get fetchTypeHandler(): (metaData: object) => FetchTypeHandler;
+    /**
+     * @since Oracle 23.7
+     */
+    set fetchTypeHandler(value: (metaData: object) => FetchTypeHandler);
     /**
      * Returns the default connection object for executing SQL queries in the Oracle
      * Database using mle-js-oracledb. Note that with MLE, because JavaScript is

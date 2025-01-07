@@ -1,7 +1,7 @@
 {
-  "name": "mle-js",
-  "description": "Bundle of all declarations of pre-defined JavaScript modules that ship with Oracle Database",
-  "types": "mle-js.d.ts",
+  "name": "mle-js-plsql-ffi",
+  "description": "MLE Foreign Function Interface (FFI): API for calling PL/SQL functionality directly",
+  "types": "index.d.ts",
   "author": "Oracle",
   "version": "23.7.0",
   "license": "UPL-1.0",
