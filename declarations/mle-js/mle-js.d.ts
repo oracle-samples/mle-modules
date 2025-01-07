@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2019, 2024, Oracle and/or its affiliates.
+Copyright (c) 2019, 2025, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -147,7 +147,7 @@ const OracleNumberOperators: any;
  * supports infix operator arithmetics: +, -, /, *, etc.
  */
 export class OracleNumber extends OracleNumberOperators {
-    private impl;
+    #private;
     /**
      * Construct an OracleNumber from a JavaScript number or a string.
      *
@@ -662,7 +662,7 @@ export interface CompareOptionalArguments {
  * JavaScript API for Oracle type Binary Large Object (BLOB).
  */
 export class OracleBlob {
-    private delegate;
+    #private;
     /**
      * Constant for read-only mode.
      */
@@ -671,8 +671,6 @@ export class OracleBlob {
      * Constant for read/write mode.
      */
     static LOB_READWRITE: number;
-    private static checkArgPresent;
-    private static checkNoArgs;
     /**
      * This constructor creates a temporary BLOB and its corresponding index in
      * your default temporary tablespace. The temporary BLOB is created with
@@ -1927,6 +1925,14 @@ interface IExecuteOptions {
      * @since Oracle 23.4
      */
     keepInStmtCache?: boolean;
+    /**
+     * Overrides parameters.{@link fetchTypeHandler}.
+     *
+     * @since Oracle 23.7
+     */
+    fetchTypeHandler?: {
+        (v: any): any | void;
+    };
 }
 
 /**
@@ -2027,6 +2033,13 @@ interface IMetaData {
      * One of the mle-js-oracledb Database Type Constants, see {@link DbType}.
      */
     dbType?: number;
+    /**
+     * The class associated with the database type.
+     * This is only set if the database type is an object type.
+     *
+     * @since Oracle 23.7
+     */
+    dbTypeClass?: IDbObjectClass;
     /**
      * Database byte size. This is only set for {@link DB_TYPE_VARCHAR}, {@link
      * DB_TYPE_CHAR} and {@link DB_TYPE_RAW} column types.
@@ -2581,10 +2594,31 @@ type OutFormatType = number;
 type JsType = number;
 
 /**
+ * Type for converter
+ *
+ * @since Oracle 23.7
+ */
+type Converter = (v: any) => object | void;
+
+/**
+ * Type for fetch type handler
+ *
+ * @since Oracle 23.7
+ */
+type FetchTypeHandler = void | {
+    type: number;
+    converter: Converter;
+} | {
+    type: number;
+} | {
+    converter: Converter;
+};
+
+/**
  * Class for representing global mle-js-oracledb properties.
  */
 class Parameters {
-    private _maxRows;
+    #private;
     get maxRows(): number;
     /**
      * The maximum number of rows that are fetched by a query with
@@ -2607,7 +2641,6 @@ class Parameters {
      * maxRows limit.
      */
     set maxRows(value: number);
-    private _outFormat;
     get outFormat(): OutFormatType;
     /**
      * The format of query rows fetched when using connection.{@link execute}().
@@ -2630,7 +2663,6 @@ class Parameters {
      * This property may be overridden in an {@link execute}() call.
      */
     set outFormat(value: OutFormatType);
-    private _fetchArraySize;
     get fetchArraySize(): number;
     /**
      * This property sets the size of an internal buffer used for fetching query
@@ -2656,6 +2688,7 @@ class Parameters {
      * fetchArraySize.
      */
     set fetchArraySize(value: number);
+    get extendedMetaData(): boolean;
     /**
      * Determines whether additional metadata is available for queries.
      *
@@ -2665,10 +2698,7 @@ class Parameters {
      *
      * This property may be overridden in an execute() call.
      */
-    private _extendedMetaData;
-    get extendedMetaData(): boolean;
     set extendedMetaData(value: boolean);
-    private _fetchAsString;
     get fetchAsString(): JsType[];
     /**
      * An array of mle-js-oracledb JS Type values. The valid types are {@link
@@ -2695,7 +2725,6 @@ class Parameters {
      * fetchAsString global property by using {@link fetchInfo}.
      */
     set fetchAsString(value: JsType[]);
-    private _fetchAsUint8Array;
     get fetchAsUint8Array(): JsType[];
     /**
      * An array of mle-js-oracledb JS Type values. Currently, the only valid type
@@ -2711,7 +2740,6 @@ class Parameters {
      * fetchAsUint8Array global property by using {@link fetchInfo}.
      */
     set fetchAsUint8Array(value: JsType[]);
-    private _fetchAsPlsqlWrapper;
     get fetchAsPlsqlWrapper(): JsType[];
     /**
      * An array of mle-js-oracledb JS Type values. The valid types are {@link
@@ -2732,9 +2760,39 @@ class Parameters {
      * fetchAsPlsqlWrapper global property by using {@link fetchInfo}.
      */
     set fetchAsPlsqlWrapper(value: JsType[]);
+    get fetchTypeHandler(): (metaData: object) => FetchTypeHandler;
+    /**
+     * This property is a function that allows applications to examine and modify queried column data
+     * before it is returned to the user. This function is called once for each column that is being
+     * fetched with a single object argument containing the following attributes:
+     *
+     * annotations: The object representing the annotations.
+     * maxSize: The maximum size in bytes. This is only set if dbType is oracledb.DB_TYPE_VARCHAR, oracledb.DB_TYPE_CHAR, or oracledb.DB_TYPE_RAW.
+     * dbType: The database type, that is, one of the Oracle Database Type Objects.
+     * dbTypeName: The name of the database type, such as "NUMBER" or "VARCHAR2".
+     * dbTypeClass: The class associated with the database type. This is only set if dbType is oracledb.DB_TYPE_OBJECT.
+     * name: The name of the column.
+     * nullable: Indicates whether NULL values are permitted for this column.
+     * precision: Set only when the dbType is oracledb.DB_TYPE_NUMBER.
+     * scale: Set only when the dbType is oracledb.DB_TYPE_NUMBER.
+     *
+     * By default, this property is "undefined", that is, it is not set.
+     * The function is expected to return either nothing or an object containing:
+     * the type attribute
+     * or the converter attribute
+     * or both the type and converter attributes.
+     * The converter function is a function which can be used with fetch type handlers to change the returned data.
+     * This function accepts the value that will be returned by connection.execute() for a particular row and column
+     * and returns the value that will actually be returned by connection.execute().
+     * This property can be overridden by the fetchTypeHandler option in execute().
+     *
+     * @since Oracle 23.7
+     */
+    set fetchTypeHandler(value: (metaData: IMetaData) => FetchTypeHandler);
 }
 
 export class OracleDb {
+    #private;
     OUT_FORMAT_ARRAY: number;
     ARRAY: number;
     OUT_FORMAT_OBJECT: number;
@@ -2816,7 +2874,6 @@ export class OracleDb {
     STMT_TYPE_COMMIT: number;
     SODA_COLL_MAP_MODE: number;
     parameters: Parameters;
-    private _connection;
     SodaCollection: typeof ISodaCollection;
     SodaDatabase: typeof ISodaDatabase;
     SodaDocument: typeof ISodaDocument;
@@ -2845,6 +2902,14 @@ export class OracleDb {
     set fetchAsString(value: JsType[]);
     get maxRows(): number;
     set maxRows(value: number);
+    /**
+     * @since Oracle 23.7
+     */
+    get fetchTypeHandler(): (metaData: object) => FetchTypeHandler;
+    /**
+     * @since Oracle 23.7
+     */
+    set fetchTypeHandler(value: (metaData: object) => FetchTypeHandler);
     /**
      * Returns the default connection object for executing SQL queries in the Oracle
      * Database using mle-js-oracledb. Note that with MLE, because JavaScript is
@@ -3265,6 +3330,8 @@ const STMT_TYPE_COMMIT = 21;
  * SODA_COLL_MAP_MODE
  */
 const SODA_COLL_MAP_MODE = 5001;
+type Converter = __mle_js_oracledb.Converter;
+type FetchTypeHandler = __mle_js_oracledb.FetchTypeHandler;
 type Parameters = __mle_js_oracledb.Parameters;
 
 
@@ -3697,6 +3764,250 @@ type TextDecoder = __mle_js_encodings.TextDecoder;
 
 }
 
+/**
+ * CAUTION: This namespace is used for TYPE DECLARATIONS ONLY and does not have
+ * an equivalent in the actual implementation in MLE. Please either use the
+ * corresponding module or global symbols instead.
+ */
+declare namespace __mle_js_plsql_ffi {
+
+
+/**
+ * Return type override options.
+ */
+export type ReturnInfo = {
+    /**
+     * The same as {@link ArgInfo.maxSize}.
+     */
+    maxSize?: number;
+    /**
+     * The same as {@link ArgInfo.type}.
+     */
+    type?: number | string;
+    /**
+     * The same as {@link ArgInfo.maxArraySize}.
+     */
+    maxArraySize?: number;
+};
+
+/**
+ * JavaScript representation of a PL/SQL subprogram.
+ */
+export interface DBSubprogram {
+    (...arg: any[]): any;
+    /**
+     * Override the return type of the subprogram.
+     * If the subprogram being represented is a procedure this has no effect.
+     * @param dbType the database type. This needs to be either an oracledb
+     * type constant or a string containing the name of a user defined database
+     * type (only for named types like records and objects).
+     * If more info needs to be specified {@link ReturnInfo} can be used.
+     * @remarks
+     * Type names are case-sensitive.
+     */
+    overrideReturnType(dbType: number | string | ReturnInfo): DBSubprogram;
+}
+
+/**
+ * @categoryDescription Resolve Functions
+ * These functions resolve PL/SQL objects by name.
+ * The name can optionally contain the schema divided by a dot e.g. SCOTT.THING.
+ * If the schema is not given the usual PL/SQL name resolution rules apply.
+ * @module
+ */
+/**
+ * Resolve a PL/SQL package by name.
+ *
+ * @returns a representation of the given package that can be used to interact
+ *          with the PL/SQL package.
+ *
+ * @category Resolve Functions
+ *
+ * @example
+ * ```ts
+ * // Get the JS represenation.
+ * const dbmsRandom = resolvePackage('DBMS_RANDOM');
+ *
+ * // Use the representation.
+ * dbmsRandom.seed(42);
+ * console.log(dbmsRandom.normal());
+ * ```
+ */
+export function resolvePackage(name: string): any;
+
+/**
+ * Resolve a PL/SQL top-level function by name.
+ *
+ * @returns a JavaScript function that will execute the PL/SQL function when
+ * called and returns the PL/SQL return value.
+ *
+ * @category Resolve Functions
+ *
+ * @remarks
+ * Similarly to the SQL driver this package has to deal with translating types
+ * between PL/SQL and JavaScript. Some PL/SQL types can be translated into
+ * multiple JavaScript types, so the return type can be overridden.
+ *
+ * @example
+ * ```ts
+ * // Resolve top-level function.
+ * const exampleFunc = resolveFunction('my_func');
+ * // Execute the PL/SQL function simply by calling the JS function.
+ * const numberResult = exampleFunc(42);
+ * // Override the return type of the function.
+ * const oracleNumberResult = exampleFunc.returns(oracledb.ORACLE_NUMBER)(42);
+ * ```
+ */
+export function resolveFunction(name: string): DBSubprogram;
+
+/**
+ * Resolve a PL/SQL top-level procedure.
+ *
+ * @returns a JavaScript function that will execute the given PL/SQL procedure
+ * when called.
+ *
+ * @category Resolve Functions
+ *
+ * @example
+ * ```ts
+ * // Resolve the procedure
+ * const exampleProcedure = resolveProcedure('my_procedure');
+ * exampleProcedure(42, 23);
+ * ```
+ */
+export function resolveProcedure(name: string): DBSubprogram;
+
+/**
+ * Argument description.
+ */
+export type ArgInfo = {
+    /**
+     * The value of the argument.
+     */
+    val?: any;
+    /**
+     * The maximum number of bytes an argument with OUT values can take up.
+     * Default: 200.
+     */
+    maxSize?: number;
+    /**
+     * The argument direction. In almost all cases this is not necessary and the
+     * direction chosen by the FFI should be used.
+     * Accepted values:
+     *  - oracledb.BIND_IN
+     *  - oracledb.BIND_OUT
+     *  - oracledb.BIND_INOUT.
+     */
+    dir?: number;
+    /**
+     * If the type chosen by FFI needs to be changed this property can be used.
+     * This property needs to be set to either an oracledb type constant or to
+     * the name of the database type in case of a user defined named type (e.g.
+     * record or object).
+     * This can be useful to ensure no precision loss when e.g. retrieving
+     * a number (by specifying the oracledb.ORACLE_NUMBER override).
+     * It can also be useful to specify the correct overload if the FFI cannot
+     * determine the correct subprogram to use in a package.
+     * @remarks
+     * Named types are case sensitive.
+     */
+    type?: number | string;
+    /**
+     * The number of array elements to be allocated for a PL/SQL INDEX BY associative array.
+     * @remarks
+     * Needed for all OUT associative array arguments.
+     * INDEX BY VARCHAR2 associative arrays are **not** supported.
+     */
+    maxArraySize?: number;
+};
+
+/**
+ * This interface represents an argument for a PL/SQL call.
+ * It can act as a value holder for arguments that have an OUT value.
+ * It can also act as an extra information store about the given values.
+ * This could be the type, maxSize, direction or maxArraySize.
+ */
+export interface DBArgument {
+    /**
+     * The JavaScript value of the PL/SQL argument.
+     */
+    val: any;
+}
+
+/**
+ * Create a new argument, to be used in a subsequent PL/SQL call.
+ * @param info optional argument description.
+ * @returns the JavaScript representation of a PL/SQL argument.
+ */
+export function arg(info?: ArgInfo): DBArgument;
+
+/**
+ * Create a new argument with the given value.
+ * @param value the value of the argument.
+ * @param info optional argument description.
+ * @returns the JavaScript representation of a PL/SQL argument.
+ * @remarks
+ * If info contains a val property it will be ignored.
+ */
+export function argOf(value: any, info?: ArgInfo): DBArgument;
+
+/**
+ * This class represents a PL/SQL exception that occurred during the execution
+ * of a PL/SQL subprogram.
+ * @extends Error
+ */
+export class CallError extends Error {
+    #private;
+    /**
+     * The Error type returned by the FFI if an issue occurs.
+     * @param code the Oracle error code
+     * @param msg the error message
+     * @private
+     */
+    constructor(code: number, msg: string);
+    /**
+     * Returns true if this CallError is the given PL/SQL exception.
+     * @param errorCode the Oracle error code of the exception.
+     * @returns whether this instance represents the given PL/SQL exception.
+     */
+    is(errorCode: number): boolean;
+}
+}
+
+declare module "mle-js-plsql-ffi" {
+
+export const ReturnInfo: __mle_js_plsql_ffi.ReturnInfo;
+type ReturnInfo = __mle_js_plsql_ffi.ReturnInfo;
+export const DBSubprogram: __mle_js_plsql_ffi.DBSubprogram;
+type DBSubprogram = __mle_js_plsql_ffi.DBSubprogram;
+
+
+export const resolvePackage: typeof __mle_js_plsql_ffi.resolvePackage;
+type resolvePackage = typeof __mle_js_plsql_ffi.resolvePackage;
+export const resolveFunction: typeof __mle_js_plsql_ffi.resolveFunction;
+type resolveFunction = typeof __mle_js_plsql_ffi.resolveFunction;
+export const resolveProcedure: typeof __mle_js_plsql_ffi.resolveProcedure;
+type resolveProcedure = typeof __mle_js_plsql_ffi.resolveProcedure;
+
+
+export const ArgInfo: __mle_js_plsql_ffi.ArgInfo;
+type ArgInfo = __mle_js_plsql_ffi.ArgInfo;
+export const DBArgument: __mle_js_plsql_ffi.DBArgument;
+type DBArgument = __mle_js_plsql_ffi.DBArgument;
+export const arg: typeof __mle_js_plsql_ffi.arg;
+type arg = typeof __mle_js_plsql_ffi.arg;
+export const argOf: typeof __mle_js_plsql_ffi.argOf;
+type argOf = typeof __mle_js_plsql_ffi.argOf;
+
+
+export const CallError: __mle_js_plsql_ffi.CallError;
+type CallError = __mle_js_plsql_ffi.CallError;
+
+
+
+
+}
+
 
 /*
  * TypeScript declarations for JavaScript builtins in Oracle Database
@@ -3907,7 +4218,7 @@ declare const OracleDate: __mle_js_plsqltypes.IOracleDate;
 declare const OracleTimestampTZ: __mle_js_plsqltypes.IOracleTimestampTZ;
 declare const OracleTimestamp: __mle_js_plsqltypes.IOracleTimestamp;
 
-/* only after importing "mle-js-fetch"
+/* only after importing "mle-js-fetch" */
 declare const Headers: __mle_js_fetch.Headers;
 declare const Request: __mle_js_fetch.Request;
 declare const Response: __mle_js_fetch.Response;
@@ -3919,8 +4230,18 @@ declare const OracleIntervalDayToSecond: __mle_js_plsqltypes.IOracleIntervalDayT
 declare const OracleIntervalYearToMonth: __mle_js_plsqltypes.IOracleIntervalYearToMonth;
 
 /* @since Oracle 23.4 */
-declare const TextEncoder: _mle_globals.TextEncoder;
-declare const TextDecoder: _mle_globals.TextDecoder;
+declare const TextEncoder: __mle_js_encodings.TextEncoder;
+declare const TextDecoder: __mle_js_encodings.TextDecoder;
 
 /* @since Oracle 23.5 */
 declare const JsonId: __mle_js_plsqltypes.JsonId;
+
+/* @since Oracle 23.7 */
+declare const plsffi: {
+    arg: typeof __mle_js_plsql_ffi.arg,
+    argOf: typeof __mle_js_plsql_ffi.argOf,
+    CallError: typeof __mle_js_plsql_ffi.CallError,
+    resolvePackage: typeof __mle_js_plsql_ffi.resolvePackage,
+    resolveFunction: typeof __mle_js_plsql_ffi.resolveFunction,
+    resolveProcedure: typeof __mle_js_plsql_ffi.resolveProcedure,
+};

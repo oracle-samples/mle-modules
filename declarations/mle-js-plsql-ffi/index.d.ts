@@ -1,4 +1,5 @@
-Copyright (c) 2023, 2024, Oracle and/or its affiliates.
+/**
+Copyright (c) 2024, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -33,3 +34,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+import { DBArgument, arg, argOf } from './args';
+import { CallError } from './call-error';
+import { resolvePackage, resolveFunction, resolveProcedure } from './resolvers';
+export type { DBArgument };
+export { arg, argOf, CallError, resolvePackage, resolveFunction, resolveProcedure, };

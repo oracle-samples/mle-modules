@@ -71,7 +71,7 @@ export declare const OracleDate: IOracleDate;
  * supports infix operator arithmetics: +, -, /, *, etc.
  */
 export declare class OracleNumber extends OracleNumberOperators {
-    private impl;
+    #private;
     /**
      * Construct an OracleNumber from a JavaScript number or a string.
      *
@@ -582,7 +582,7 @@ export declare interface CompareOptionalArguments {
  * JavaScript API for Oracle type Binary Large Object (BLOB).
  */
 export declare class OracleBlob {
-    private delegate;
+    #private;
     /**
      * Constant for read-only mode.
      */
@@ -591,8 +591,6 @@ export declare class OracleBlob {
      * Constant for read/write mode.
      */
     static LOB_READWRITE: number;
-    private static checkArgPresent;
-    private static checkNoArgs;
     /**
      * This constructor creates a temporary BLOB and its corresponding index in
      * your default temporary tablespace. The temporary BLOB is created with

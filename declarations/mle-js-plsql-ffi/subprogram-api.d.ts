@@ -1,4 +1,5 @@
-Copyright (c) 2023, 2024, Oracle and/or its affiliates.
+/**
+Copyright (c) 2024, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -33,3 +34,38 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+/**
+ * Return type override options.
+ */
+export type ReturnInfo = {
+    /**
+     * The same as {@link ArgInfo.maxSize}.
+     */
+    maxSize?: number;
+    /**
+     * The same as {@link ArgInfo.type}.
+     */
+    type?: number | string;
+    /**
+     * The same as {@link ArgInfo.maxArraySize}.
+     */
+    maxArraySize?: number;
+};
+/**
+ * JavaScript representation of a PL/SQL subprogram.
+ */
+export interface DBSubprogram {
+    (...arg: any[]): any;
+    /**
+     * Override the return type of the subprogram.
+     * If the subprogram being represented is a procedure this has no effect.
+     * @param dbType the database type. This needs to be either an oracledb
+     * type constant or a string containing the name of a user defined database
+     * type (only for named types like records and objects).
+     * If more info needs to be specified {@link ReturnInfo} can be used.
+     * @remarks
+     * Type names are case-sensitive.
+     */
+    overrideReturnType(dbType: number | string | ReturnInfo): DBSubprogram;
+}
