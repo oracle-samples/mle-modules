@@ -1,134 +1,249 @@
 # MLE Modules
-The Oracle Database Multilingual Engine (MLE) enables [JavaScript execution in Oracle Database][1].
-In this database JavaScript environment, there exist some JavaScript modules that are available out of the box.
-This repository contains documentation and interface definitions (in the form of TypeScript declarations) for those predefined modules.
-While the documentation consists of human-readable, linked pages, the TypeScript declaration files are typically consumed by an IDE for improving auto-completion.
-This is particularly useful in a scenario where JavaScript code gets developed locally in an IDE and then deployed to the database.
 
-The following JavaScript modules are currently available:
+Oracle's Multilingual Engine (MLE), powered by GraalVM, enables [JavaScript execution in Oracle Database][1]. Oracle's JavaScript implementation ships with a number of essential JavaScript modules.
+
+This repository contains documentation and interface definitions (in the form of TypeScript declarations) for those predefined modules. While the documentation consists of human-readable, linked pages, the TypeScript declaration files are typically consumed by an IDE. Developers using Oracle's SQL Developer Extension for Visual Studio Code for example benefit from a better developer experience thanks to code-completion, and Typescript checks.
+
+The following JavaScript modules are currently available with Oracle's latest database release:
+
 - MLE SQL Driver: [mle-js-oracledb][mle-js-oracledb]
 - MLE Bindings: [mle-js-bindings][mle-js-bindings]
 - MLE PL/SQL Types: [mle-js-plsqltypes][mle-js-plsqltypes]
 - MLE Fetch API polyfill: [mle-js-fetch][mle-js-fetch]
 - MLE Base64 Encoding: [mle-encode-base64][mle-encode-base64]
 - MLE Encodings: [mle-js-encodings][mle-js-encodings]
+- MLE Foreign Function Interface (FFI): [mle-js-plsql-ffi][mle-js-plsql-ffi]
+
+Apart from the modules shipping with the database listed above, you can optionally install modules from community repositories into the database after carefully vetting them with the relevant teams in your organisation.
 
 ## Installation
-You need an Oracle Database to make use of the JavaScript modules provided in the Oracle Database Multilingual Engine (MLE).
-A very convenient way of getting an Oracle Database instance is to create an always-free Oracle Cloud account and use it to set up a free autonomous database instance as our [blog article][2] explains in great detail.
+
+This section details the both the installing and how to use the supplied typescript declarations in your Project.
+
+You need access to an Oracle Database 23ai system running either on Linux x86-64 or aarch64 to make use of the JavaScript modules provided in Oracle Database Multilingual Engine (MLE). Developers wishing to experiment with MLE can choose from cloud solutions such as Oracle's Always-Free Autonomous Database (Serverless) [see this blog article][2] or use the container images available from [container-registry.oracle.com](https://container-registry.oracle.com/ords/ocr/ba/database/free). You can find more details [described in this blog post][5].
+
+The following sections describe how to use the Typescript declarations with your project.
 
 ### All-In-One Installation (recommended)
-You can install all relevant declarations of these modules plus the declarations of all global symbols (`Polyglot`, `console`, `session`, `soda`, `oracledb`, `OracleNumber`, etc.) in one bundle.
-You can conveniently install `mle-js` from NPM and then reference it in the beginning of your JavaScript code using the `<reference>` tag:
 
-```
-npm install mle-js
+You can install all relevant module declarations including the declarations of all global symbols (`Polyglot`, `console`, `session`, `soda`, `oracledb`, `OracleNumber`, etc.) in one bundle. You can conveniently install `mle-js` using Node Package Manager (NPM) or a comparable tool.
+
+Once the declarations have been downloaded and configured you can use them in your Typescript project using the `<reference>` tag as shown:
+
+```typescript
 /// <reference types="mle-js" />
+
+/* more Typescript code ... */
 ```
+
+Provided your project's `tsconfig.json` has been configured correctly you should immediately see a benefit when writing server-side JavaScript code.
 
 ### Installing Individual Modules
-If you only need declarations of a few particular modules, you may also install their declarations individually:
 
-```
+If you only need declarations of a particular module, you may also install declarations individually:
+
+```sh
 npm install mle-js-oracledb
 npm install mle-js-bindings
 npm install mle-js-plsqltypes
 npm install mle-js-fetch
 npm install mle-encode-base64
 npm install mle-js-encodings
+npm install mle-js-plsql-ffi
 ```
 
 ## Documentation
 
+The following sections cover each declaration file's content, the module it documents, and what you can expect when referencing them in your code.
+
 ### All-In-One bundle for MLE modules (mle-js)
-This bundle contains all relevant declarations of predefined JavaScript modules that ship with the database plus the declarations of all global symbols.
+
+This bundle contains all relevant declarations of predefined JavaScript modules that ship with the database plus the declarations of all global symbols. Most users should start with this file
 
 [Continue reading...][mle-js]
 
 ### MLE SQL Driver (mle-js-oracledb)
-If JavaScript is executed inside the database, SQL statements can be executed using an easy to use SQL driver.
-This driver is built-in into the JavaScript engine in the database.
+
+You use the SQL Driver to interact with the database. You can perform any operation with the MLE SQL Driver that you would SQL and PL/SQL for. If you prefer a more JavaScript-like experience working with the Database API [see PL/SQL Packages and Types Reference][6] you should also have a look at the Foreign Function Interface (FFI) below.
 
 [Continue reading...][mle-js-oracledb]
 
 ### MLE Bindings for Oracle Database `DBMS_MLE` (mle-js-bindings)
-The MLE Bindings module can be used to exchange values between PL/SQL and JavaScript.
+
+The MLE Bindings module can be used to exchange values between PL/SQL and JavaScript and is mostly used for Dynamic MLE Execution based on `DBMS_MLE`.
 The module also takes care of converting values from PL/SQL types to JavaScript types and vice-versa automatically as required.
 
 [Continue reading...][mle-js-bindings]
 
 ### MLE PL/SQL Types (mle-js-plsqltypes)
+
 MLE allows importing SQL values from PL/SQL as well as fetching them from a SQL statement.
-By default, SQL values get converted to JavaScript values during that process, e.g. an Oracle `NUMBER` gets converted to a JavaScript `number`.
+
+By default, SQL values are converted to JavaScript values during that process, e.g. an Oracle `NUMBER` is implicitly converted to a JavaScript `number`.
 Sometimes it is required to have JavaScript values that behave exactly as if they were SQL values.
-The mle-js-plsqltypes module contains JavaScript APIs for such JavaScript objects that wrap PL/SQL objects.
+The `mle-js-plsqltypes` module contains JavaScript APIs for such JavaScript objects that wrap PL/SQL objects.
 
 [Continue reading...][mle-js-plsqltypes]
 
 ### MLE Fetch API polyfill (mle-js-fetch)
+
 MLE offers the following functionality to fetch and upload resources asynchronously across the network: fetch, Headers, Request, Response.
 In order to make the Fetch API available, it needs to be imported first.
 
 [Continue reading...][mle-js-fetch]
 
 ### MLE functions to work with base64 encoded data (mle-encode-base64)
+
 This module contains code to work with base64-encoded data.
 
 [Continue reading...][mle-encode-base64]
 
 ### MLE text encoding API (mle-js-encodings)
-This module is a partial implementation of the Encoding API that ships with the database as of version 23.4.
+
+This module is a partial implementation of the Encoding API.
 By default, TextDecoder and TextEncoder are available in the global namespace and can be used directly.
 
 [Continue reading...][mle-js-encodings]
 
+### MLE Foreign Function Interface (FFI): API for calling PL/SQL functionality directly (mle-js-plsql-ffi)
 
-### Oracle Database
-Oracle Database is the world's most popular database.
-Oracle Database 23ai, the next Generation Oracle Database, is now available as a Base Database Service delivering the most complete and simple converged database for developers looking to build new microservice, graph, document and relational applications. Oracle Database 23ai Free is also available for free as a simple download for ease of use.
+This module offers a simple, straight-forward way for interacting with PL/SQL code from within JavaScript.
 
-[Continue reading...][3]
+[Continue reading...][mle-js-plsql-ffi]
 
 ### Version Mapping
+
 The following table shows which version of module documentation and declarations work with which version of Oracle Database:
 
 | Oracle Database  | Declarations | Documentation |
 | ---------------- | ------------ | ------------- |
-| 23ai | [mle-js@23.5.0][mle-js-types-235] for Oracle 23.5 <br/> [mle-js@23.4.0][mle-js-types-234] for Oracle 23.4 <br/> [mle-js@23.3.0][mle-js-types-233] for Oracle 23.3 <br/> [mle-js@23.2.0][mle-js-types-232] for Oracle 23.2 - Free | **[mle-js (23ai)][mle-js]** <br/> [mle-js-oracledb (23ai)][mle-js-oracledb] <br/> [mle-js-bindings (23ai)][mle-js-bindings] <br/> [mle-js-plsqltypes (23ai)][mle-js-plsqltypes] <br/> [mle-js-fetch (23ai)][mle-js-fetch] <br/> [mle-encode-base64 (23ai)][mle-encode-base64]|
+| 23ai | [mle-js@23.7.0][mle-js-types-237] for Oracle 23.7 <br/> [mle-js@23.6.0][mle-js-types-236] for Oracle 23.6 <br/> [mle-js@23.5.0][mle-js-types-235] for Oracle 23.5 <br/> [mle-js@23.4.0][mle-js-types-234] for Oracle 23.4 <br/> [mle-js@23.3.0][mle-js-types-233] for Oracle 23.3 <br/> [mle-js@23.2.0][mle-js-types-232] for Oracle 23.2 - Free | **[mle-js (23ai)][mle-js]** <br/> [mle-js-oracledb (23ai)][mle-js-oracledb] <br/> [mle-js-bindings (23ai)][mle-js-bindings] <br/> [mle-js-plsqltypes (23ai)][mle-js-plsqltypes] <br/> [mle-js-fetch (23ai)][mle-js-fetch] <br/> [mle-encode-base64 (23ai)][mle-encode-base64]|
 | 21c | [mle-js@21.3.1][mle-js-types-213] | [mle-js-oracledb (21c)][mle-js-oracledb-21c] <br/> [mle-js-bindings (21c)][mle-js-bindings-21c] <br/> [mle-js-plsqltypes (21c)][mle-js-plsqltypes-21c] |
 
 ## Examples
-The following code snippet exemplifies the usage of some of these MLE modules combined.
-For additional examples, please check the module documentation pages or have a look at our [blog article][2].
 
-```JavaScript
-async function run() {
-    // import modules that do not have global symbols
-    const bindings = await import('mle-js-bindings');
+This section describes how to use the Typescript declarations with MLE/JavaScript as well as some interactive, ad-hoc JavaScript execution.
 
-    // Read a large number as an Oracle NUMBER from SQL and add another ORACLE NUMBER to it.
-    // mle-js-oracledb (session) is used for reading from SQL and mle-js-plsqltypes (OracleNumber) is used to construct the second Oracle NUMBER.
-    const query = "SELECT 9007199254740992 AS n FROM dual";
-    const options = { fetchInfo: { N: { type: oracledb.ORACLE_NUMBER } } };
-    const queryResult = session.execute(query, [], options);
-    const result = queryResult.rows[0].N + new OracleNumber(7);
+### Typescript
 
-    // print result to the console before exporting it
-    console.log(result);
+Using the Typescript declarations you can create an MLE module as follows.
 
-    // Use mle-js-bindings to export the result of the computation.
-    // On the database side, this result could be retrieved using something like `dbms_mle.import_from_mle(ctx, 'result', result);`.
-    bindings.exportValue("result", result);
+```typescript
+/// <reference types="mle-js" />
+
+interface ISessionMetaData {
+    username: string;
+    oracleVersion: string;
 }
-run();
+
+/**
+ * A simple JavaScript function fetches the username and database
+ * release using the MLE JavaScript SQL driver.
+ * 
+ * @returns an instance of ISessionMetaData
+ */
+export function sessionAndDBInfo(): ISessionMetaData {
+    // instantiate the session meta data
+    const mySession: ISessionMetaData = {
+        username: "unknown",
+        oracleVersion: "unknown",
+    };
+
+    let sql = `select
+            user`;
+
+    let result = session.execute(sql, [], { outFormat: oracledb.OUT_FORMAT_OBJECT });
+
+    if (result.rows?.length === 1) {
+        mySession.username = result.rows[0].USER;
+    }
+
+    sql = `select
+            version_full
+        from
+            product_component_version`;
+
+    result = session.execute(sql, [], { outFormat: oracledb.OUT_FORMAT_OBJECT });
+
+    if (result.rows?.length === 1) {
+        mySession.oracleVersion = result.rows[0].VERSION_FULL;
+    }
+
+    return mySession;
+}
+```
+
+In the next step you need to transpile the Typescript code to JavaScript. The resulting file can be imported to the Oracle database. [SQL Command Line](https://www.oracle.com/database/sqldeveloper/technologies/sqlcl/) provides a nice way to do that
+
+```
+$ sql /nolog
+
+SQLcl: Release 24.3 Production on Wed Jan 15 14:16:01 2025
+
+Copyright (c) 1982, 2025, Oracle.  All rights reserved.
+
+SQL> connect app_user@localhost:5432/freepdb1
+Password? (**********?) ***********
+
+Connected.
+
+SQL> mle create-module -filename ./dist/demo.js -module-name demo_module
+MLE Module demo_module created
+```
+
+### Ad-hoc execution
+
+The following snippet can be run in SQLcl, SQL*Plus, and Oracle SQL Developer Extension for Visual Studio Code. The invocation of the SQL code differs from the Typescript example by using the objects stored in the global scope.
+
+```sql
+set serveroutput on;
+declare
+    l_ctx           dbms_mle.context_handle_t;
+    l_source_code   clob;
+begin
+    -- Create execution context for MLE execution and provide an environment_
+    l_ctx    := dbms_mle.create_context();
+
+    -- using q-quotes to avoid problems with unwanted string termination
+    l_source_code := 
+q'~
+    const result = session.execute(
+        `select 'hello, world'`,
+        [],
+        {
+            outFormat: oracledb.OUT_FORMAT_ARRAY
+        }
+    );
+
+    const message = result.rows[0][0];
+    console.log(message);
+~';
+    dbms_mle.eval(
+        context_handle => l_ctx,
+        language_id => 'JAVASCRIPT',
+        source => l_source_code
+    );
+
+    dbms_mle.drop_context(l_ctx);
+exception
+    when others then
+        dbms_mle.drop_context(l_ctx);
+        raise;
+end;
+/
 ```
 
 ## Building and deploying larger JavaScript projects
-If you plan to use database-side JavaScript at a larger scale, we highly
-recommend to read our blog post on [Linting MLE JavaScript Modules in Continuous
-Integration Pipelines][4].
+
+If you plan to use database-side JavaScript at a larger scale, we highly recommend to read our blog post on [Linting MLE JavaScript Modules in Continuous Integration Pipelines][4].
 
 ## Changelog
+
+- **Oracle 23.7**
+    - MLE Foreign Function Interface (FFI) for calling PL/SQL functionality directly from JavaScript:
+    [mle-js-plsql-ffi](https://oracle-samples.github.io/mle-modules/docs/mle-js-plsql-ffi/23ai/)
+    - support for setting the [fetchTypeHandler](https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/23ai/classes/api.Parameters.html#fetchTypeHandler)
+    in `mle-js-oracledb` / `session.execute` for custom handler functions during result fetching
 - **Oracle 23.6**
     - improved documentation for OracleNumber
     [infix operators](https://oracle-samples.github.io/mle-modules/docs/mle-js-plsqltypes/23ai/classes/OracleNumber.html).
@@ -160,9 +275,11 @@ Integration Pipelines][4].
     option in SQL execution in `mle-js-oracledb` / `session.execute`
 
 ## Help
-If you have questions or change requests about MLE, please [create a ticket](./CONTRIBUTING.md) or contact [Oracle Support](https://support.oracle.com).
+
+If you have questions or change requests about MLE, please [create a ticket](./CONTRIBUTING.md) or contact [Oracle Support](https://support.oracle.com). Users of [Oracle Database 23ai Free](https://www.oracle.com/database/free/) can refer to the [Database Free forum](https://forums.oracle.com/ords/apexds/domain/dev-community/category/oracle-database-free).
 
 ## Contributing
+
 This project welcomes contributions from the community.
 Before submitting a pull request, please [review our contribution guide](./CONTRIBUTING.md).
 
@@ -171,7 +288,8 @@ Before submitting a pull request, please [review our contribution guide](./CONTR
 Please consult the [security guide](./SECURITY.md) for our responsible security vulnerability disclosure process.
 
 ## License
-Copyright (c) 2022, 2024, Oracle and/or its affiliates.
+
+Copyright (c) 2022, 2025, Oracle and/or its affiliates.
 
 Released under the Universal Permissive License v1.0 as shown at <https://oss.oracle.com/licenses/upl/>.
 
@@ -182,15 +300,20 @@ Released under the Universal Permissive License v1.0 as shown at <https://oss.or
 [mle-js-fetch]: https://oracle-samples.github.io/mle-modules/docs/mle-js-fetch/23ai "mle-js-fetch 23ai"
 [mle-encode-base64]: https://oracle-samples.github.io/mle-modules/docs/mle-encode-base64/23ai "mle-encode-base64 23ai"
 [mle-js-encodings]: https://oracle-samples.github.io/mle-modules/docs/mle-js-encodings/23ai "mle-js-encodings 23ai"
+[mle-js-plsql-ffi]: https://oracle-samples.github.io/mle-modules/docs/mle-js-plsql-ffi/23ai "mle-js-plsql-ffi 23ai"
 [mle-js-oracledb-21c]: https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/21c "mle-js-oracledb 21c"
 [mle-js-bindings-21c]: https://oracle-samples.github.io/mle-modules/docs/mle-js-bindings/21c "mle-js-bindings 21c"
 [mle-js-plsqltypes-21c]: https://oracle-samples.github.io/mle-modules/docs/mle-js-plsqltypes/21c "mle-js-plsqltypes 21c"
+[mle-js-types-237]: https://www.npmjs.com/package/mle-js/v/23.7.0 "mle-js@23.7.0"
+[mle-js-types-236]: https://www.npmjs.com/package/mle-js/v/23.6.0 "mle-js@23.6.0"
 [mle-js-types-235]: https://www.npmjs.com/package/mle-js/v/23.5.0 "mle-js@23.5.0"
 [mle-js-types-234]: https://www.npmjs.com/package/mle-js/v/23.4.0 "mle-js@23.4.0"
 [mle-js-types-233]: https://www.npmjs.com/package/mle-js/v/23.3.0 "mle-js@23.3.0"
 [mle-js-types-232]: https://www.npmjs.com/package/mle-js/v/23.2.0 "mle-js@23.2.0"
 [mle-js-types-213]: https://www.npmjs.com/package/mle-js/v/21.3.1 "mle-js@21.3.1"
-[1]: https://blogs.oracle.com/developers/post/introduction-javascript-oracle-database-23c-free-developer-release "Introduction to JavaScript in Oracle Database 23c Free - Developer Release"
+[1]: https://docs.oracle.com/en/database/oracle/oracle-database/23/mlejs/index.html#Oracle%C2%AE-Database "Oracle Database JavaScript Developer's Guide"
 [2]: https://blogs.oracle.com/apex/post/mle-and-the-future-of-server-side-programming-in-oracle-apex "MLE and the Future of Server-Side Programming in Oracle APEX"
 [3]: https://docs.oracle.com/en/database/oracle/oracle-database "Oracle Database"
 [4]: https://blogs.oracle.com/developers/post/linting-mle-javascript-modules-in-continuous-integration-pipelines "JavaScript CI/CD blog"
+[5]: https://blogs.oracle.com/developers/post/fastpath-to-developing-with-oracle-application-express-and-multilingual-engine "Fast-path to developing with Oracle Application Express and Multilingual Engine"
+[6]: https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/index.html "Oracle Database PL/SQL Packages and Types Reference"

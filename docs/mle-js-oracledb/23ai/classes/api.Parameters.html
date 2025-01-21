@@ -35,6 +35,7 @@
 <a href="api.Parameters.html#fetchAsPlsqlWrapper" class="tsd-index-link tsd-kind-accessor tsd-parent-kind-class"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-262144-path"></use><use href="#icon-262144-text"></use></svg><span>fetch<wbr/>As<wbr/>Plsql<wbr/>Wrapper</span></a>
 <a href="api.Parameters.html#fetchAsString" class="tsd-index-link tsd-kind-accessor tsd-parent-kind-class"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-262144-path"></use><use href="#icon-262144-text"></use></svg><span>fetch<wbr/>As<wbr/>String</span></a>
 <a href="api.Parameters.html#fetchAsUint8Array" class="tsd-index-link tsd-kind-accessor tsd-parent-kind-class"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-262144-path"></use><use href="#icon-262144-text"></use></svg><span>fetch<wbr/>As<wbr/>Uint8<wbr/>Array</span></a>
+<a href="api.Parameters.html#fetchTypeHandler" class="tsd-index-link tsd-kind-accessor tsd-parent-kind-class"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-262144-path"></use><use href="#icon-262144-text"></use></svg><span>fetch<wbr/>Type<wbr/>Handler</span></a>
 <a href="api.Parameters.html#maxRows" class="tsd-index-link tsd-kind-accessor tsd-parent-kind-class"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-262144-path"></use><use href="#icon-262144-text"></use></svg><span>max<wbr/>Rows</span></a>
 <a href="api.Parameters.html#outFormat" class="tsd-index-link tsd-kind-accessor tsd-parent-kind-class"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-262144-path"></use><use href="#icon-262144-text"></use></svg><span>out<wbr/>Format</span></a>
 </div></section></div></details></section></section>
@@ -48,6 +49,12 @@
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4></li>
 <li class="tsd-signature" id="extendedMetaData.extendedMetaData-2"><span class="tsd-signature-symbol">set</span> extendedMetaData<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Determines whether additional metadata is available for queries.</p>
+<p>The default value is false. With this value, the result.metaData
+and result.resultSet.metaData objects only include column
+names.</p>
+<p>This property may be overridden in an execute() call.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
@@ -167,6 +174,66 @@ fetchAsUint8Array global property by using fetchInfo.</p>
 <li>
 <h5>value: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4></li></ul></section>
+<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class"><a id="fetchTypeHandler" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>fetch<wbr/>Type<wbr/>Handler</span><a href="#fetchTypeHandler" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
+<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+<li class="tsd-signature" id="fetchTypeHandler.fetchTypeHandler-1"><span class="tsd-signature-symbol">get</span> fetchTypeHandler<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>metaData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../types/api.FetchTypeHandler.html" class="tsd-signature-type" data-tsd-kind="Type alias">FetchTypeHandler</a><span class="tsd-signature-symbol">)</span></li>
+<li class="tsd-description">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>metaData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../types/api.FetchTypeHandler.html" class="tsd-signature-type" data-tsd-kind="Type alias">FetchTypeHandler</a><span class="tsd-signature-symbol">)</span></h4>
+<ul class="tsd-parameters">
+<li class="tsd-parameter-signature">
+<ul class="tsd-signatures tsd-kind-type-literal">
+<li class="tsd-signature" id="fetchTypeHandler.fetchTypeHandler-1.__type.__type-1"><span class="tsd-signature-symbol">(</span>metaData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../types/api.FetchTypeHandler.html" class="tsd-signature-type" data-tsd-kind="Type alias">FetchTypeHandler</a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>metaData: <span class="tsd-signature-type">object</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <a href="../types/api.FetchTypeHandler.html" class="tsd-signature-type" data-tsd-kind="Type alias">FetchTypeHandler</a></h4></li></ul></li></ul></li>
+<li class="tsd-signature" id="fetchTypeHandler.fetchTypeHandler-2"><span class="tsd-signature-symbol">set</span> fetchTypeHandler<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>metaData<span class="tsd-signature-symbol">: </span><a href="../interfaces/api.IMetaData.html" class="tsd-signature-type" data-tsd-kind="Interface">IMetaData</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../types/api.FetchTypeHandler.html" class="tsd-signature-type" data-tsd-kind="Type alias">FetchTypeHandler</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+<li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>This property is a function that allows applications to examine and modify queried column data
+before it is returned to the user. This function is called once for each column that is being
+fetched with a single object argument containing the following attributes:</p>
+<p>annotations: The object representing the annotations.
+maxSize: The maximum size in bytes. This is only set if dbType is oracledb.DB_TYPE_VARCHAR, oracledb.DB_TYPE_CHAR, or oracledb.DB_TYPE_RAW.
+dbType: The database type, that is, one of the Oracle Database Type Objects.
+dbTypeName: The name of the database type, such as &quot;NUMBER&quot; or &quot;VARCHAR2&quot;.
+dbTypeClass: The class associated with the database type. This is only set if dbType is oracledb.DB_TYPE_OBJECT.
+name: The name of the column.
+nullable: Indicates whether NULL values are permitted for this column.
+precision: Set only when the dbType is oracledb.DB_TYPE_NUMBER.
+scale: Set only when the dbType is oracledb.DB_TYPE_NUMBER.</p>
+<p>By default, this property is &quot;undefined&quot;, that is, it is not set.
+The function is expected to return either nothing or an object containing:
+the type attribute
+or the converter attribute
+or both the type and converter attributes.
+The converter function is a function which can be used with fetch type handlers to change the returned data.
+This function accepts the value that will be returned by connection.execute() for a particular row and column
+and returns the value that will actually be returned by connection.execute().
+This property can be overridden by the fetchTypeHandler option in execute().</p>
+
+<h3>Since</h3><p>Oracle 23.7</p>
+</div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>value: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>metaData<span class="tsd-signature-symbol">: </span><a href="../interfaces/api.IMetaData.html" class="tsd-signature-type" data-tsd-kind="Interface">IMetaData</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../types/api.FetchTypeHandler.html" class="tsd-signature-type" data-tsd-kind="Type alias">FetchTypeHandler</a><span class="tsd-signature-symbol">)</span></h5>
+<ul class="tsd-parameters">
+<li class="tsd-parameter-signature">
+<ul class="tsd-signatures tsd-kind-type-literal">
+<li class="tsd-signature"><span class="tsd-signature-symbol">(</span>metaData<span class="tsd-signature-symbol">: </span><a href="../interfaces/api.IMetaData.html" class="tsd-signature-type" data-tsd-kind="Interface">IMetaData</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../types/api.FetchTypeHandler.html" class="tsd-signature-type" data-tsd-kind="Type alias">FetchTypeHandler</a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>metaData: <a href="../interfaces/api.IMetaData.html" class="tsd-signature-type" data-tsd-kind="Interface">IMetaData</a></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <a href="../types/api.FetchTypeHandler.html" class="tsd-signature-type" data-tsd-kind="Type alias">FetchTypeHandler</a></h4></li></ul></li></ul></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class"><a id="maxRows" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>max<wbr/>Rows</span><a href="#maxRows" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
@@ -258,6 +325,7 @@ create tables using unquoted, case-insensitive names.</p>
 <li class="tsd-kind-accessor tsd-parent-kind-class"><a href="api.Parameters.html#fetchAsPlsqlWrapper" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-262144-path"></use><use href="#icon-262144-text"></use></svg>fetch<wbr/>As<wbr/>Plsql<wbr/>Wrapper</a></li>
 <li class="tsd-kind-accessor tsd-parent-kind-class"><a href="api.Parameters.html#fetchAsString" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-262144-path"></use><use href="#icon-262144-text"></use></svg>fetch<wbr/>As<wbr/>String</a></li>
 <li class="tsd-kind-accessor tsd-parent-kind-class"><a href="api.Parameters.html#fetchAsUint8Array" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-262144-path"></use><use href="#icon-262144-text"></use></svg>fetch<wbr/>As<wbr/>Uint8<wbr/>Array</a></li>
+<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="api.Parameters.html#fetchTypeHandler" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-262144-path"></use><use href="#icon-262144-text"></use></svg>fetch<wbr/>Type<wbr/>Handler</a></li>
 <li class="tsd-kind-accessor tsd-parent-kind-class"><a href="api.Parameters.html#maxRows" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-262144-path"></use><use href="#icon-262144-text"></use></svg>max<wbr/>Rows</a></li>
 <li class="tsd-kind-accessor tsd-parent-kind-class"><a href="api.Parameters.html#outFormat" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-262144-path"></use><use href="#icon-262144-text"></use></svg>out<wbr/>Format</a></li></ul></li></ul></nav></div></div>
 <div class="overlay"></div><script src="../assets/main.js"></script></body></html>
