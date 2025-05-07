@@ -359,7 +359,7 @@ export declare class IOracleIntervalDayToSecond {
      * @param interval string to parse.
      * @returns new IOracleIntervalDayToSecond
      */
-    fromString(interval: string): IOracleIntervalDayToSecond;
+    static fromString(interval: string): IOracleIntervalDayToSecond;
     /**
      * Returns an IOracleIntervalDayToSecond for a given timezone offset or
      * timezone name. The input string must be of the form [+/-]TZH:TZM or
@@ -368,7 +368,7 @@ export declare class IOracleIntervalDayToSecond {
      * @param tz - timezone offset or timezone name as string
      * @returns new IOracleIntervalDayToSecond that contains the current absolute offset
      */
-    fromTimeZone(tz: string): IOracleIntervalDayToSecond;
+    static fromTimeZone(tz: string): IOracleIntervalDayToSecond;
     /**
      * Returns an IOracleIntervalDayToSecond for the given number of days. If the
      * number of days contains a fractional part, the number of hours, minutes
@@ -377,7 +377,7 @@ export declare class IOracleIntervalDayToSecond {
      * @param days - number of days
      * @returns new IOracleIntervalDayToSecond for the given number of days.
      */
-    fromNumberOfDays(days: number | OracleNumber): IOracleIntervalDayToSecond;
+    static fromNumber(days: number | OracleNumber): IOracleIntervalDayToSecond;
     /**
      * Compares two intervals.
      * Returns -1 if i1 < i2, 0 if they are equal, and 1 if i1 > i2.
@@ -385,7 +385,7 @@ export declare class IOracleIntervalDayToSecond {
      * @param i2 - second interval to use for the comparison
      * @returns the result of the comparison as a number between -1 and +1.
      */
-    compare(i1: IOracleIntervalDayToSecond, i2: IOracleIntervalDayToSecond): any;
+    static compare(i1: IOracleIntervalDayToSecond, i2: IOracleIntervalDayToSecond): number;
     /**
      * Returns the number of days from the interval
      *
@@ -484,7 +484,7 @@ export declare class IOracleIntervalYearToMonth {
      * @param interval string to parse
      * @returns new IOracleIntervalYearToMonth
      */
-    fromString(interval: string): IOracleIntervalYearToMonth;
+    static fromString(interval: string): IOracleIntervalYearToMonth;
     /**
      * Returns an IOracleIntervalYearToMonth for the given number of years. If
      * the number of years contains a fractional part, the number of months will
@@ -493,7 +493,7 @@ export declare class IOracleIntervalYearToMonth {
      * @param days - number of months
      * @returns new IOracleIntervalYearToMonth for the given number of years.
      */
-    fromNumberOfYears(years: number | OracleNumber): IOracleIntervalYearToMonth;
+    static fromNumber(years: number | OracleNumber): IOracleIntervalYearToMonth;
     /**
      * Compares two intervals.
      * Returns -1 if i1 < i2, 0 if they are equal, and 1 if i1 > i2.
@@ -501,7 +501,7 @@ export declare class IOracleIntervalYearToMonth {
      * @param i2 - second interval to use for the comparison
      * @returns the result of the comparison as a number between -1 and +1.
      */
-    compare(i1: IOracleIntervalYearToMonth, i2: IOracleIntervalYearToMonth): number;
+    static compare(i1: IOracleIntervalYearToMonth, i2: IOracleIntervalYearToMonth): number;
     /**
      * Returns the number of years from the interval
      *
@@ -689,11 +689,11 @@ export declare class IOracleClob {
     /**
      * Constant for read-only mode.
      */
-    LOB_READONLY: number;
+    static LOB_READONLY: number;
     /**
      * Constant for read/write mode.
      */
-    LOB_READWRITE: number;
+    static LOB_READWRITE: number;
     /**
      * createTemporary creates a temporary CLOB and its corresponding index in
      * your default temporary tablespace. The temporary CLOB is created with
@@ -702,7 +702,7 @@ export declare class IOracleClob {
      * @param cache Specifies if CLOB should be read into buffer cache or not.
      * @param isNClob If set to true will create a temporary NCLOB instead of regular CLOB.
      */
-    createTemporary(cache: boolean, isNClob?: boolean): any;
+    static createTemporary(cache: boolean, isNClob?: boolean): any;
     /**
      * This method compares two entire CLOBs or parts of two CLOBs.
      *
@@ -712,7 +712,7 @@ export declare class IOracleClob {
      * @returns 0 if the compared portions are equal, non-zero if not
      * @throws Error if offset1 or offset2 is not a valid CLOB offset value.
      */
-    compare(lob1: IOracleClob, lob2: IOracleClob, optArgs?: CompareOptionalArguments): number;
+    static compare(lob1: IOracleClob, lob2: IOracleClob, optArgs?: CompareOptionalArguments): number;
     /**
      * When creating the table, you can specify the chunking factor, a multiple
      * of tablespace blocks in characters. This corresponds to the chunk size used
@@ -811,7 +811,7 @@ export declare class IOracleTimestampTZ {
      * as the NLS argument to the TO_TIMESTAMP_TZ SQL function.
      * @returns an IOracleTimestampTZ object
      */
-    fromString(date: string, format?: string, nlsParam?: string): any;
+    static fromString(date: string, format?: string, nlsParam?: string): IOracleTimestampTZ;
     /**
      * Convert to an OracleTimestamp that contains the local date/time of the
      * IOracleTimestampTZ.
@@ -836,7 +836,7 @@ export declare class IOracleTimestampTZ {
      * @param other - second timestamp to be compared
      * @returns the result of the comparison as a number between -1 and +1.
      */
-    compare(date1: IOracleTimestampTZ, date2: IOracleTimestampTZ): number;
+    static compare(date1: IOracleTimestampTZ, date2: IOracleTimestampTZ): number;
     /**
      * Gets the year component in the Gregorian calendar.
      *
@@ -957,7 +957,7 @@ export declare class IOracleTimestamp {
      * as the NLS argument to the TO_TIMESTAMP SQL function.
      * @returns an IOracleTimestamp object
      */
-    fromString(date: string, format?: string, nlsParam?: string): any;
+    static fromString(date: string, format?: string, nlsParam?: string): any;
     /**
      * Converts to an IOracleTimestampTZ using the session time zone.
      */
@@ -977,7 +977,7 @@ export declare class IOracleTimestamp {
      * @param other - second timestamp to be compared
      * @returns the result of the comparison as a number between -1 and +1.
      */
-    compare(date1: IOracleTimestamp, date2: IOracleTimestamp): number;
+    static compare(date1: IOracleTimestamp, date2: IOracleTimestamp): number;
     /**
      * Gets the year component in the Gregorian calendar.
      *
@@ -1105,12 +1105,12 @@ export declare class IOracleDate {
      * as the NLS argument to the TO_DATE SQL function.
      * @returns the new date as IOracleDate object
      */
-    fromString(date: string, fmt?: string, nlsParam?: string): IOracleDate;
+    static fromString(date: string, fmt?: string, nlsParam?: string): IOracleDate;
     /**
      * Gets the current system date and time as an IOracleDate.
      * @returns the system date and time as IOracleDate
      */
-    sysDate(): IOracleDate;
+    static sysDate(): IOracleDate;
     /**
      * Converts an IOracleDate to a string and returns it. An optional datetime
      * format model and an optional NLS parameter string can be provided. If no
@@ -1157,7 +1157,7 @@ export declare class IOracleDate {
      * @param d2 - second date value
      * @returns the result of the comparison as a number between -1 and +1.
      */
-    compare(d1: IOracleDate, d2: IOracleDate): number;
+    static compare(d1: IOracleDate, d2: IOracleDate): number;
     /**
      * Gets the number of days between two dates. The result of this function
      * is sensitive to the setting for the NLS_CALENDAR parameter in the
@@ -1167,7 +1167,7 @@ export declare class IOracleDate {
      * @param d2 - date value to compare with
      * @returns number of days between d1 and d2
      */
-    daysBetween(d1: IOracleDate, d2: IOracleDate): number;
+    static daysBetween(d1: IOracleDate, d2: IOracleDate): number;
     /**
      * Gets the date of the last day of the month specified by this date. The
      * result of this function is sensitive to the setting for the NLS_CALENDAR
