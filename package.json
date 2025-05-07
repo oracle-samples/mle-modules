@@ -1,6 +1,6 @@
 {
-  "name": "mle-js-fetch",
-  "description": "MLE Fetch API polyfill",
+  "name": "@types/mle-js",
+  "description": "TypeScript definitions for Bundle of all declarations of pre-defined JavaScript modules that ship with Oracle Database",
   "types": "index.d.ts",
   "author": "Oracle",
   "version": "23.8.0",

@@ -1,0 +1,10 @@
+{
+  "name": "mle-js-tests",
+  "description": "Testing typings for mle-js",
+  "author": "Oracle",
+  "version": "23.8.0",
+  "license": "UPL-1.0",
+  "devDependencies": {
+    "@types/mle-js": "file:.."
+  }
+}

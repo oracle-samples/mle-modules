@@ -151,11 +151,11 @@ export declare class OracleDb {
     /**
      * @since Oracle 23.7
      */
-    get fetchTypeHandler(): (metaData: object) => FetchTypeHandler;
+    get fetchTypeHandler(): FetchTypeHandler;
     /**
      * @since Oracle 23.7
      */
-    set fetchTypeHandler(value: (metaData: object) => FetchTypeHandler);
+    set fetchTypeHandler(value: FetchTypeHandler);
     /**
      * Returns the default connection object for executing SQL queries in the Oracle
      * Database using mle-js-oracledb. Note that with MLE, because JavaScript is

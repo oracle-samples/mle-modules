@@ -118,9 +118,7 @@ export interface IExecuteOptions {
      *
      * @since Oracle 23.7
      */
-    fetchTypeHandler?: {
-        (v: any): any | void;
-    };
+    fetchTypeHandler?: FetchTypeHandler;
 }
 /**
  * Interface for representing an entry in {@link IObjectBindDefs} or {@link ArrayBindDefs}.
@@ -408,7 +406,7 @@ export interface IBindObjectValue extends IBindDef {
  * Interface for a single bind parameter as used in {@link execute}(). Can
  * either be a bind object or a scalar value.
  */
-export type BindValue = IBindObjectValue | any;
+export type BindValue = IBindObjectValue | object | number | string | boolean | null | undefined;
 /**
  * Interface for object binds (also called "named binds").
  */
@@ -1047,13 +1045,13 @@ export declare const SODA_COLL_MAP_MODE = 5001;
  *
  * @since Oracle 23.7
  */
-export type Converter = (v: any) => object | void;
+export type Converter = (v: any) => object | string | number | boolean;
 /**
  * Type for fetch type handler
  *
  * @since Oracle 23.7
  */
-export type FetchTypeHandler = void | {
+export type FetchTypeHandler = (metaData?: IMetaData) => null | {
     type: number;
     converter: Converter;
 } | {
@@ -1207,7 +1205,7 @@ export declare class Parameters {
      * fetchAsPlsqlWrapper global property by using {@link fetchInfo}.
      */
     set fetchAsPlsqlWrapper(value: JsType[]);
-    get fetchTypeHandler(): (metaData: object) => FetchTypeHandler;
+    get fetchTypeHandler(): FetchTypeHandler;
     /**
      * This property is a function that allows applications to examine and modify queried column data
      * before it is returned to the user. This function is called once for each column that is being
@@ -1235,5 +1233,5 @@ export declare class Parameters {
      *
      * @since Oracle 23.7
      */
-    set fetchTypeHandler(value: (metaData: IMetaData) => FetchTypeHandler);
+    set fetchTypeHandler(value: FetchTypeHandler);
 }
