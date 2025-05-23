@@ -26,30 +26,23 @@ The following sections describe how to use the Typescript declarations with your
 
 ### All-In-One Installation (recommended)
 
-You can install all relevant module declarations including the declarations of all global symbols (`Polyglot`, `console`, `session`, `soda`, `oracledb`, `OracleNumber`, etc.) in one bundle. You can conveniently install `mle-js` using Node Package Manager (NPM) or a comparable tool.
-
-Once the declarations have been downloaded and configured you can use them in your Typescript project using the `<reference>` tag as shown:
-
-```typescript
-/// <reference types="mle-js" />
-
-/* more Typescript code ... */
+You can install all relevant module declarations including the declarations of all global symbols (`Polyglot`, `console`, `session`, `soda`, `oracledb`, `OracleNumber`, etc.) in one bundle named `@types/mle-js` by using Node Package Manager (NPM) or a comparable tool:
+```sh
+npm install --saveDev "https://github.com/oracle-samples/mle-modules#main"
 ```
-
-Provided your project's `tsconfig.json` has been configured correctly you should immediately see a benefit when writing server-side JavaScript code.
 
 ### Installing Individual Modules
 
 If you only need declarations of a particular module, you may also install declarations individually:
 
 ```sh
-npm install mle-js-oracledb
-npm install mle-js-bindings
-npm install mle-js-plsqltypes
-npm install mle-js-fetch
-npm install mle-encode-base64
-npm install mle-js-encodings
-npm install mle-js-plsql-ffi
+npm --saveDev install mle-js-oracledb
+npm --saveDev install mle-js-bindings
+npm --saveDev install mle-js-plsqltypes
+npm --saveDev install mle-js-fetch
+npm --saveDev install mle-encode-base64
+npm --saveDev install mle-js-encodings
+npm --saveDev install mle-js-plsql-ffi
 ```
 
 ## Documentation
@@ -117,7 +110,7 @@ The following table shows which version of module documentation and declarations
 
 | Oracle Database  | Declarations | Documentation |
 | ---------------- | ------------ | ------------- |
-| 23ai | [mle-js@23.7.0][mle-js-types-237] for Oracle 23.7 <br/> [mle-js@23.6.0][mle-js-types-236] for Oracle 23.6 <br/> [mle-js@23.5.0][mle-js-types-235] for Oracle 23.5 <br/> [mle-js@23.4.0][mle-js-types-234] for Oracle 23.4 <br/> [mle-js@23.3.0][mle-js-types-233] for Oracle 23.3 <br/> [mle-js@23.2.0][mle-js-types-232] for Oracle 23.2 - Free | **[mle-js (23ai)][mle-js]** <br/> [mle-js-oracledb (23ai)][mle-js-oracledb] <br/> [mle-js-bindings (23ai)][mle-js-bindings] <br/> [mle-js-plsqltypes (23ai)][mle-js-plsqltypes] <br/> [mle-js-fetch (23ai)][mle-js-fetch] <br/> [mle-encode-base64 (23ai)][mle-encode-base64]|
+| 23ai | [@types/mle-js@23.8.0][mle-js-types-238] for Oracle 23.8 <br/> [mle-js@23.7.0][mle-js-types-237] for Oracle 23.7 <br/> [mle-js@23.6.0][mle-js-types-236] for Oracle 23.6 <br/> [mle-js@23.5.0][mle-js-types-235] for Oracle 23.5 <br/> [mle-js@23.4.0][mle-js-types-234] for Oracle 23.4 <br/> [mle-js@23.3.0][mle-js-types-233] for Oracle 23.3 <br/> [mle-js@23.2.0][mle-js-types-232] for Oracle 23.2 - Free | **[mle-js (23ai)][mle-js]** <br/> [mle-js-oracledb (23ai)][mle-js-oracledb] <br/> [mle-js-bindings (23ai)][mle-js-bindings] <br/> [mle-js-plsqltypes (23ai)][mle-js-plsqltypes] <br/> [mle-js-fetch (23ai)][mle-js-fetch] <br/> [mle-encode-base64 (23ai)][mle-encode-base64] <br/> [mle-js-encodings (23ai)][mle-js-encodings] <br/> [mle-js-plsql-ffi (23ai)][mle-js-plsql-ffi]|
 | 21c | [mle-js@21.3.1][mle-js-types-213] | [mle-js-oracledb (21c)][mle-js-oracledb-21c] <br/> [mle-js-bindings (21c)][mle-js-bindings-21c] <br/> [mle-js-plsqltypes (21c)][mle-js-plsqltypes-21c] |
 
 ## Examples
@@ -129,8 +122,6 @@ This section describes how to use the Typescript declarations with MLE/JavaScrip
 Using the Typescript declarations you can create an MLE module as follows.
 
 ```typescript
-/// <reference types="mle-js" />
-
 interface ISessionMetaData {
     username: string;
     oracleVersion: string;
@@ -239,6 +230,9 @@ If you plan to use database-side JavaScript at a larger scale, we highly recomme
 
 ## Changelog
 
+- **Oracle 23.8**
+    - The all-in-one bundle package is now available also under the `@types` scope as `@types/mle-js` through installation directly from GitHub.
+    - Added testing for TypeScript declarations and fixed a number of type bugs and inconsistencies.
 - **Oracle 23.7**
     - MLE Foreign Function Interface (FFI) for calling PL/SQL functionality directly from JavaScript:
     [mle-js-plsql-ffi](https://oracle-samples.github.io/mle-modules/docs/mle-js-plsql-ffi/23ai/)
@@ -304,6 +298,7 @@ Released under the Universal Permissive License v1.0 as shown at <https://oss.or
 [mle-js-oracledb-21c]: https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/21c "mle-js-oracledb 21c"
 [mle-js-bindings-21c]: https://oracle-samples.github.io/mle-modules/docs/mle-js-bindings/21c "mle-js-bindings 21c"
 [mle-js-plsqltypes-21c]: https://oracle-samples.github.io/mle-modules/docs/mle-js-plsqltypes/21c "mle-js-plsqltypes 21c"
+[mle-js-types-238]: https://www.npmjs.com/package/mle-js/v/23.8.0 "mle-js@23.8.0"
 [mle-js-types-237]: https://www.npmjs.com/package/mle-js/v/23.7.0 "mle-js@23.7.0"
 [mle-js-types-236]: https://www.npmjs.com/package/mle-js/v/23.6.0 "mle-js@23.6.0"
 [mle-js-types-235]: https://www.npmjs.com/package/mle-js/v/23.5.0 "mle-js@23.5.0"
