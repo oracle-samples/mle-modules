@@ -8,7 +8,7 @@
   "homepage": "https://oracle-samples.github.io/mle-modules",
   "repository": {
     "type": "git",
-    "url": "git://github.com/oracle-samples/mle-modules"
+    "url": "git://github.com/oracle-samples/mle-modules.git"
   },
   "bugs": "https://github.com/oracle-samples/mle-modules/issues"
 }
