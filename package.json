@@ -10,5 +10,11 @@
     "type": "git",
     "url": "git://github.com/oracle-samples/mle-modules.git"
   },
-  "bugs": "https://github.com/oracle-samples/mle-modules/issues"
+  "bugs": "https://github.com/oracle-samples/mle-modules/issues",
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  },
+  "scripts": {
+    "test": "./node_modules/typescript/bin/tsc"
+  }
 }
