@@ -3,7 +3,7 @@
   "description": "MLE Foreign Function Interface (FFI): API for calling PL/SQL functionality directly",
   "types": "index.d.ts",
   "author": "Oracle",
-  "version": "23.8.0",
+  "version": "23.9.0",
   "license": "UPL-1.0",
   "homepage": "https://oracle-samples.github.io/mle-modules",
   "repository": {
