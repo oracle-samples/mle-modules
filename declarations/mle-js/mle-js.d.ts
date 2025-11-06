@@ -133,7 +133,6 @@ export function exportValue(name: string, value: any): void;
  */
 declare namespace __mle_js_plsqltypes {
 
-
 /**
  * Class which implements infix operators for Oracle Number
  * arithmetics: +, -, /, *, etc.
@@ -1315,6 +1314,86 @@ export class IOracleDate {
 export class JsonId extends Uint8Array {
     toJSON(): string;
 }
+
+/**
+ * Interface for representing a SparseVectors construction arguments.
+ * @since Oracle 23.26.0
+ */
+export interface ISparseVectorConstructorArgs {
+    /**
+     * This property is a JavaScript array or a 32-bit unsigned integer
+     * (Uint32Array) TypedArray
+     * that specifies the indices (zero-based) of non-zero values in the vector.
+     */
+    indices: number[] | Uint32Array;
+    /**
+     * This property is an integer that specifies the number of dimensions of
+     * the vector.
+     */
+    numDimensions: number;
+    /**
+     * This property is a JavaScript array or TypedArray that specifies the non-
+     * zero values stored in the vector.
+     */
+    values: number[] | Uint8Array | Float32Array | Float64Array;
+}
+
+/**
+ * Interface for representing a SparseVector Class stores information about a sparse vector.
+ * @since Oracle 23.26.0
+ */
+export abstract class ISparseVector {
+    /**
+     * This property is a JavaScript array or a 32-bit unsigned integer (Uint32Array) TypedArray
+     * that specifies the indices (zero-based) of non-zero values in the vector.
+     */
+    indices: number[] | Uint32Array;
+    /**
+     * This property is an integer that specifies the number of dimensions of the vector.
+     */
+    numDimensions: number;
+    /**
+     * This property is a JavaScript array or TypedArray that specifies the non-zero values stored in the vector.
+     */
+    values: number[] | Uint8Array | Float32Array | Float64Array;
+    /**
+     * Constructs a SparseVector.
+     */
+    constructor(input: Uint8Array | Float32Array | Float64Array | number[] | string | ISparseVectorConstructorArgs);
+    /**
+     * Converts a sparse vector to a dense vector and returns a TypedArray of 8-bit signed integers, 32-bit floating-point numbers,
+     * or 64-bit floating-point numbers depending on the storage format of the sparse vector column's
+     * non-zero values in Oracle Database.
+     *
+     * This method is best used with sparse vectors read from Oracle Database.
+     */
+    abstract dense(): Uint8Array | Float32Array | Float64Array;
+}
+
+/**
+ * A SparseVector class stores information about a sparse vector.
+ * This class represents an object that accepts one of the following
+ * types in its constructor: typed array, JavaScript array, object, or string.
+ */
+export class SparseVector extends ISparseVector {
+    static MAX_UINT32: number;
+    constructor(input: Uint8Array | Float32Array | Float64Array | number[] | string | ISparseVectorConstructorArgs);
+    private _validDenseArray;
+    private static _validateLengths;
+    private _updateProperties;
+    private _fromObject;
+    private _convertToTypedArrays;
+    private _fromString;
+    private _fromDense;
+    static create(sparseValue: any): any;
+    toJSON(): {
+        numDimensions: number;
+        indices: number[] | Uint32Array;
+        values: number[] | Uint8Array | Float32Array | Float64Array;
+    };
+    private _createEmptyArray;
+    dense(): any;
+}
 }
 
 declare module "mle-js-plsqltypes" {
@@ -1371,6 +1450,12 @@ export const IOracleDate: __mle_js_plsqltypes.IOracleDate;
 type IOracleDate = __mle_js_plsqltypes.IOracleDate;
 export const JsonId: __mle_js_plsqltypes.JsonId;
 type JsonId = __mle_js_plsqltypes.JsonId;
+export const ISparseVectorConstructorArgs: __mle_js_plsqltypes.ISparseVectorConstructorArgs;
+type ISparseVectorConstructorArgs = __mle_js_plsqltypes.ISparseVectorConstructorArgs;
+export const ISparseVector: __mle_js_plsqltypes.ISparseVector;
+type ISparseVector = __mle_js_plsqltypes.ISparseVector;
+export const SparseVector: __mle_js_plsqltypes.SparseVector;
+type SparseVector = __mle_js_plsqltypes.SparseVector;
 
 
 }
@@ -2019,7 +2104,7 @@ interface IExecuteManyOptions {
  */
 interface IMetaData {
     /**
-     * The column name follows Oracle’s standard name-casing rules. It will commonly be uppercase
+     * The column name follows Oracle's standard name-casing rules. It will commonly be uppercase
      * since most applications create tables using unquoted, case-insensitive names.
      */
     name: string;
@@ -2057,7 +2142,7 @@ interface IMetaData {
      */
     nullable?: boolean;
     /**
-     * Name of the database type, such as “NUMBER” or “VARCHAR2”.
+     * Name of the database type, such as "NUMBER" or "VARCHAR2".
      */
     dbTypeName?: string;
     /**
@@ -2072,6 +2157,17 @@ interface IMetaData {
      * @since Oracle 23.4
      */
     vectorFormat?: number;
+    /**
+     * Indicates if the column is known to contain a sparse vector.
+     * @since Oracle 23.26.0
+     */
+    isSparseVector?: boolean;
+    /**
+     * Indicates if the column is known to
+     * contain binary encoded OSON data.
+     * @since Oracle 23.26.0
+     */
+    isOson?: boolean;
 }
 
 /**
@@ -2481,7 +2577,7 @@ abstract class IDbObjectClass {
     readonly elementTypeClass?: IDbObjectClass;
     /**
      * When dbObject.isCollection is true, this will have the name of the
-     * element type, such as “VARCHAR2” or “NUMBER”.
+     * element type, such as "VARCHAR2" or "NUMBER".
      */
     readonly elementTypeName?: string;
     /**
@@ -2789,6 +2885,61 @@ class Parameters {
     set fetchTypeHandler(value: FetchTypeHandler);
 }
 
+/**
+ * Interface for representing a SparseVectors construction arguments.
+ * @since Oracle 23.26.0
+ */
+interface ISparseVectorConstructorArgs {
+    /**
+     * This property is a JavaScript array or a 32-bit unsigned integer
+     * (Uint32Array) TypedArray
+     * that specifies the indices (zero-based) of non-zero values in the vector.
+     */
+    indices: number[] | Uint32Array;
+    /**
+     * This property is an integer that specifies the number of dimensions of
+     * the vector.
+     */
+    numDimensions: number;
+    /**
+     * This property is a JavaScript array or TypedArray that specifies the non-
+     * zero values stored in the vector.
+     */
+    values: number[] | Uint8Array | Float32Array | Float64Array;
+}
+
+/**
+ * Interface for representing a SparseVector Class stores information about a sparse vector.
+ * @since Oracle 23.26.0
+ */
+export abstract class ISparseVector {
+    /**
+     * This property is a JavaScript array or a 32-bit unsigned integer (Uint32Array) TypedArray
+     * that specifies the indices (zero-based) of non-zero values in the vector.
+     */
+    indices: number[] | Uint32Array;
+    /**
+     * This property is an integer that specifies the number of dimensions of the vector.
+     */
+    numDimensions: number;
+    /**
+     * This property is a JavaScript array or TypedArray that specifies the non-zero values stored in the vector.
+     */
+    values: number[] | Uint8Array | Float32Array | Float64Array;
+    /**
+     * Constructs a SparseVector.
+     */
+    constructor(input: Uint8Array | Float32Array | Float64Array | number[] | string | ISparseVectorConstructorArgs);
+    /**
+     * Converts a sparse vector to a dense vector and returns a TypedArray of 8-bit signed integers, 32-bit floating-point numbers,
+     * or 64-bit floating-point numbers depending on the storage format of the sparse vector column's
+     * non-zero values in Oracle Database.
+     *
+     * This method is best used with sparse vectors read from Oracle Database.
+     */
+    abstract dense(): Uint8Array | Float32Array | Float64Array;
+}
+
 export class OracleDb {
     #private;
     OUT_FORMAT_ARRAY: number;
@@ -2880,6 +3031,7 @@ export class OracleDb {
     OracleDb: typeof OracleDb;
     Connection: typeof IConnection;
     ResultSet: typeof IResultSet;
+    SparseVector: typeof SparseVector;
     /**
      * Construct a new OracleDb object for connecting and querying Oracle Database.
      *
@@ -3331,6 +3483,8 @@ const SODA_COLL_MAP_MODE = 5001;
 type Converter = __mle_js_oracledb.Converter;
 type FetchTypeHandler = __mle_js_oracledb.FetchTypeHandler;
 type Parameters = __mle_js_oracledb.Parameters;
+type ISparseVectorConstructorArgs = __mle_js_oracledb.ISparseVectorConstructorArgs;
+type ISparseVector = __mle_js_oracledb.ISparseVector;
 
 
 type OracleDb = __mle_js_oracledb.OracleDb;
@@ -4256,3 +4410,7 @@ declare const plsffi: {
     resolveFunction: typeof __mle_js_plsql_ffi.resolveFunction;
     resolveProcedure: typeof __mle_js_plsql_ffi.resolveProcedure;
 };
+
+/* @since Oracle 23.26.0 */
+declare const SparseVector: typeof __mle_js_plsqltypes.SparseVector;
+type SparseVector = __mle_js_plsqltypes.SparseVector;
