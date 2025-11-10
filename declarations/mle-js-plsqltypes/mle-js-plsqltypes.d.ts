@@ -1,5 +1,6 @@
 /**
-/**
+
+Copyright (c) 2019, 2025, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -35,6 +36,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
+/**
  * Class which implements infix operators for Oracle Number
  * arithmetics: +, -, /, *, etc.
  *
