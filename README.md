@@ -20,7 +20,7 @@ Apart from the modules shipping with the database listed above, you can optional
 
 This section details the both the installing and how to use the supplied typescript declarations in your Project.
 
-You need access to an Oracle Database 23ai system running either on Linux x86-64 or aarch64 to make use of the JavaScript modules provided in Oracle Database Multilingual Engine (MLE). Developers wishing to experiment with MLE can choose from cloud solutions such as Oracle's Always-Free Autonomous Database (Serverless) [see this blog article][2] or use the container images available from [container-registry.oracle.com](https://container-registry.oracle.com/ords/ocr/ba/database/free). You can find more details [described in this blog post][5].
+You need access to an Oracle Database 23ai or later system running either on Linux x86-64 or aarch64 to make use of the JavaScript modules provided in Oracle Database Multilingual Engine (MLE). Developers wishing to experiment with MLE can choose from cloud solutions such as Oracle's Always-Free Autonomous Database (Serverless) [see this blog article][2] or use the container images available from [container-registry.oracle.com](https://container-registry.oracle.com/ords/ocr/ba/database/free). You can find more details [described in this blog post][5].
 
 The following sections describe how to use the Typescript declarations with your project.
 
@@ -287,14 +287,14 @@ Copyright (c) 2022, 2025, Oracle and/or its affiliates.
 
 Released under the Universal Permissive License v1.0 as shown at <https://oss.oracle.com/licenses/upl/>.
 
-[mle-js]: https://oracle-samples.github.io/mle-modules/docs/mle-js/23ai "mle-js 23ai"
-[mle-js-oracledb]: https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/23ai "mle-js-oracledb 23ai"
-[mle-js-bindings]: https://oracle-samples.github.io/mle-modules/docs/mle-js-bindings/23ai "mle-js-bindings 23ai"
-[mle-js-plsqltypes]: https://oracle-samples.github.io/mle-modules/docs/mle-js-plsqltypes/23ai "mle-js-plsqltypes 23ai"
-[mle-js-fetch]: https://oracle-samples.github.io/mle-modules/docs/mle-js-fetch/23ai "mle-js-fetch 23ai"
-[mle-encode-base64]: https://oracle-samples.github.io/mle-modules/docs/mle-encode-base64/23ai "mle-encode-base64 23ai"
-[mle-js-encodings]: https://oracle-samples.github.io/mle-modules/docs/mle-js-encodings/23ai "mle-js-encodings 23ai"
-[mle-js-plsql-ffi]: https://oracle-samples.github.io/mle-modules/docs/mle-js-plsql-ffi/23ai "mle-js-plsql-ffi 23ai"
+[mle-js]: https://oracle-samples.github.io/mle-modules/docs/mle-js/26ai "mle-js 26ai"
+[mle-js-oracledb]: https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/26ai "mle-js-oracledb 26ai"
+[mle-js-bindings]: https://oracle-samples.github.io/mle-modules/docs/mle-js-bindings/26ai "mle-js-bindings 26ai"
+[mle-js-plsqltypes]: https://oracle-samples.github.io/mle-modules/docs/mle-js-plsqltypes/26ai "mle-js-plsqltypes 26ai"
+[mle-js-fetch]: https://oracle-samples.github.io/mle-modules/docs/mle-js-fetch/26ai "mle-js-fetch 26ai"
+[mle-encode-base64]: https://oracle-samples.github.io/mle-modules/docs/mle-encode-base64/26ai "mle-encode-base64 26ai"
+[mle-js-encodings]: https://oracle-samples.github.io/mle-modules/docs/mle-js-encodings/26ai "mle-js-encodings 26ai"
+[mle-js-plsql-ffi]: https://oracle-samples.github.io/mle-modules/docs/mle-js-plsql-ffi/26ai "mle-js-plsql-ffi 26ai"
 [mle-js-oracledb-21c]: https://oracle-samples.github.io/mle-modules/docs/mle-js-oracledb/21c "mle-js-oracledb 21c"
 [mle-js-bindings-21c]: https://oracle-samples.github.io/mle-modules/docs/mle-js-bindings/21c "mle-js-bindings 21c"
 [mle-js-plsqltypes-21c]: https://oracle-samples.github.io/mle-modules/docs/mle-js-plsqltypes/21c "mle-js-plsqltypes 21c"
