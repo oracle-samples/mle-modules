@@ -341,6 +341,20 @@ function testFetchTypeHandler() {
     });
 }
 
+function testSparseVector() {
+    const v1 = new oracledb.SparseVector({
+        values: new Float64Array([10, 20]),
+        indices: [0, 6],
+        numDimensions: 20
+        });
+    const v2 = new SparseVector({
+        values: new Float64Array([10, 20]),
+        indices: [0, 6],
+        numDimensions: 20
+        });
+    return JSON.stringify(v1.toJSON()) + JSON.stringify(v2.toJSON());
+}
+
 async function mainTest() {
     oracleDBTest();
     sessionTest();
@@ -362,6 +376,7 @@ async function mainTest() {
     testBindingsDoc();
     testSqlDriverDocs();
     testFetchTypeHandler();
+    testSparseVector();
 }
 
 mainTest();

@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2019, 2024, Oracle and/or its affiliates.
+Copyright (c) 2019, 2025, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -201,7 +201,7 @@ export interface IExecuteManyOptions {
  */
 export interface IMetaData {
     /**
-     * The column name follows Oracle’s standard name-casing rules. It will commonly be uppercase
+     * The column name follows Oracle's standard name-casing rules. It will commonly be uppercase
      * since most applications create tables using unquoted, case-insensitive names.
      */
     name: string;
@@ -239,7 +239,7 @@ export interface IMetaData {
      */
     nullable?: boolean;
     /**
-     * Name of the database type, such as “NUMBER” or “VARCHAR2”.
+     * Name of the database type, such as "NUMBER" or "VARCHAR2".
      */
     dbTypeName?: string;
     /**
@@ -254,6 +254,17 @@ export interface IMetaData {
      * @since Oracle 23.4
      */
     vectorFormat?: number;
+    /**
+     * Indicates if the column is known to contain a sparse vector.
+     * @since Oracle 23.26.0
+     */
+    isSparseVector?: boolean;
+    /**
+     * Indicates if the column is known to
+     * contain binary encoded OSON data.
+     * @since Oracle 23.26.0
+     */
+    isOson?: boolean;
 }
 /**
  * Interface for representing result sets as returned by {@link execute}().
@@ -650,7 +661,7 @@ export declare abstract class IDbObjectClass {
     readonly elementTypeClass?: IDbObjectClass;
     /**
      * When dbObject.isCollection is true, this will have the name of the
-     * element type, such as “VARCHAR2” or “NUMBER”.
+     * element type, such as "VARCHAR2" or "NUMBER".
      */
     readonly elementTypeName?: string;
     /**
@@ -1234,4 +1245,57 @@ export declare class Parameters {
      * @since Oracle 23.7
      */
     set fetchTypeHandler(value: FetchTypeHandler);
+}
+/**
+ * Interface for representing a SparseVectors construction arguments.
+ * @since Oracle 23.26.0
+ */
+export interface ISparseVectorConstructorArgs {
+    /**
+     * This property is a JavaScript array or a 32-bit unsigned integer
+     * (Uint32Array) TypedArray
+     * that specifies the indices (zero-based) of non-zero values in the vector.
+     */
+    indices: number[] | Uint32Array;
+    /**
+     * This property is an integer that specifies the number of dimensions of
+     * the vector.
+     */
+    numDimensions: number;
+    /**
+     * This property is a JavaScript array or TypedArray that specifies the non-
+     * zero values stored in the vector.
+     */
+    values: number[] | Uint8Array | Float32Array | Float64Array;
+}
+/**
+ * Interface for representing a SparseVector Class stores information about a sparse vector.
+ * @since Oracle 23.26.0
+ */
+export declare abstract class ISparseVector {
+    /**
+     * This property is a JavaScript array or a 32-bit unsigned integer (Uint32Array) TypedArray
+     * that specifies the indices (zero-based) of non-zero values in the vector.
+     */
+    indices: number[] | Uint32Array;
+    /**
+     * This property is an integer that specifies the number of dimensions of the vector.
+     */
+    numDimensions: number;
+    /**
+     * This property is a JavaScript array or TypedArray that specifies the non-zero values stored in the vector.
+     */
+    values: number[] | Uint8Array | Float32Array | Float64Array;
+    /**
+     * Constructs a SparseVector.
+     */
+    constructor(input: Uint8Array | Float32Array | Float64Array | number[] | string | ISparseVectorConstructorArgs);
+    /**
+     * Converts a sparse vector to a dense vector and returns a TypedArray of 8-bit signed integers, 32-bit floating-point numbers,
+     * or 64-bit floating-point numbers depending on the storage format of the sparse vector column's
+     * non-zero values in Oracle Database.
+     *
+     * This method is best used with sparse vectors read from Oracle Database.
+     */
+    abstract dense(): Uint8Array | Float32Array | Float64Array;
 }

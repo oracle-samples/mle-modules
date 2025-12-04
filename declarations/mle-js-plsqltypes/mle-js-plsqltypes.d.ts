@@ -1,5 +1,6 @@
 /**
-Copyright (c) 2019, 2024, Oracle and/or its affiliates.
+
+Copyright (c) 2019, 2025, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -35,6 +36,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
 /**
  * Class which implements infix operators for Oracle Number
  * arithmetics: +, -, /, *, etc.
@@ -1229,5 +1231,82 @@ export declare class IOracleDate {
  */
 export declare class JsonId extends Uint8Array {
     toJSON(): string;
+}
+/**
+ * Interface for representing a SparseVectors construction arguments.
+ * @since Oracle 23.26.0
+ */
+export interface ISparseVectorConstructorArgs {
+    /**
+     * This property is a JavaScript array or a 32-bit unsigned integer
+     * (Uint32Array) TypedArray
+     * that specifies the indices (zero-based) of non-zero values in the vector.
+     */
+    indices: number[] | Uint32Array;
+    /**
+     * This property is an integer that specifies the number of dimensions of
+     * the vector.
+     */
+    numDimensions: number;
+    /**
+     * This property is a JavaScript array or TypedArray that specifies the non-
+     * zero values stored in the vector.
+     */
+    values: number[] | Uint8Array | Float32Array | Float64Array;
+}
+/**
+ * Interface for representing a SparseVector Class stores information about a sparse vector.
+ * @since Oracle 23.26.0
+ */
+export declare abstract class ISparseVector {
+    /**
+     * This property is a JavaScript array or a 32-bit unsigned integer (Uint32Array) TypedArray
+     * that specifies the indices (zero-based) of non-zero values in the vector.
+     */
+    indices: number[] | Uint32Array;
+    /**
+     * This property is an integer that specifies the number of dimensions of the vector.
+     */
+    numDimensions: number;
+    /**
+     * This property is a JavaScript array or TypedArray that specifies the non-zero values stored in the vector.
+     */
+    values: number[] | Uint8Array | Float32Array | Float64Array;
+    /**
+     * Constructs a SparseVector.
+     */
+    constructor(input: Uint8Array | Float32Array | Float64Array | number[] | string | ISparseVectorConstructorArgs);
+    /**
+     * Converts a sparse vector to a dense vector and returns a TypedArray of 8-bit signed integers, 32-bit floating-point numbers,
+     * or 64-bit floating-point numbers depending on the storage format of the sparse vector column's
+     * non-zero values in Oracle Database.
+     *
+     * This method is best used with sparse vectors read from Oracle Database.
+     */
+    abstract dense(): Uint8Array | Float32Array | Float64Array;
+}
+/**
+ * A SparseVector class stores information about a sparse vector.
+ * This class represents an object that accepts one of the following
+ * types in its constructor: typed array, JavaScript array, object, or string.
+ */
+export declare class SparseVector extends ISparseVector {
+    static MAX_UINT32: number;
+    constructor(input: Uint8Array | Float32Array | Float64Array | number[] | string | ISparseVectorConstructorArgs);
+    private _validDenseArray;
+    private static _validateLengths;
+    private _updateProperties;
+    private _fromObject;
+    private _convertToTypedArrays;
+    private _fromString;
+    private _fromDense;
+    static create(sparseValue: any): any;
+    toJSON(): {
+        numDimensions: number;
+        indices: number[] | Uint32Array;
+        values: number[] | Uint8Array | Float32Array | Float64Array;
+    };
+    private _createEmptyArray;
+    dense(): any;
 }
 export {};

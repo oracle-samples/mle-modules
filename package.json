@@ -3,7 +3,7 @@
   "description": "TypeScript definitions for Bundle of all declarations of pre-defined JavaScript modules that ship with Oracle Database",
   "types": "index.d.ts",
   "author": "Oracle",
-  "version": "23.8.0",
+  "version": "23.26.0",
   "license": "UPL-1.0",
   "homepage": "https://oracle-samples.github.io/mle-modules",
   "repository": {

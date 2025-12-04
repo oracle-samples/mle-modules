@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2017, 2024, Oracle and/or its affiliates.
+Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -37,6 +37,8 @@ SOFTWARE.
 */
 import { Parameters, IConnection, IResultSet, OutFormatType, JsType, FetchTypeHandler } from './api';
 import { ISodaCollection, ISodaDatabase, ISodaDocument, ISodaDocumentCursor, ISodaOperation } from './soda-api';
+import { SparseVector } from 'mle-js-plsqltypes';
+export { SparseVector } from 'mle-js-plsqltypes';
 export declare class OracleDb {
     #private;
     OUT_FORMAT_ARRAY: number;
@@ -128,6 +130,7 @@ export declare class OracleDb {
     OracleDb: typeof OracleDb;
     Connection: typeof IConnection;
     ResultSet: typeof IResultSet;
+    SparseVector: typeof SparseVector;
     /**
      * Construct a new OracleDb object for connecting and querying Oracle Database.
      *
