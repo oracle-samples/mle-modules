@@ -9,10 +9,15 @@ This documentation describes <code>mle-js</code> which contains all relevant dec
 <li>MLE Encoding API: <a href="../../mle-js-encodings/26ai">mle-js-encodings</a></li>
 <li>MLE Base64 Encoding: <a href="../../mle-encode-base64/26ai">mle-encode-base64</a></li>
 <li>MLE Foreign Function Interface (FFI): <a href="../../mle-js-plsql-ffi/26ai">mle-js-plsql-ffi</a></li>
+<li>MLE Web APIs: <a href="../../mle-js-webapis/26ai">mle-js-webapi</a></li>
 </ul>
 <h2 id="global-symbols" class="tsd-anchor-link">Global Symbols<a href="#global-symbols" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The following symbols exist in each JavaScript context in Oracle Database:</p>
 <ul>
-<li><a href="variables/console_.html" class="tsd-kind-variable"> console</a></li>
+<li><a href="variables/console.html" class="tsd-kind-variable"> console</a></li>
+<li><a href="variables/Polyglot.html" class="tsd-kind-variable"> Polyglot</a></li>
+<li><a href="../../mle-js-oracledb/26ai/variables/index_esm.oracledb-1.html">oracledb</a>: shorthand for getting direct access to <code>mle-js-oracledb</code> without importing it</li>
+<li><a href="../../mle-js-oracledb/26ai/classes/api.IConnection.html">session</a>: shorthand for the <code>mle-js-oracledb</code> default connection; is used to issue SQL statements directly</li>
+<li><a href="../../mle-js-oracledb/26ai/classes/soda_api.ISodaDatabase.html">soda</a>: shorthand for the <code>mle-js-oracledb</code> SODA Database object which can be used to create SODA collections</li>
 <li><a href="../../mle-js-plsqltypes/26ai/classes/OracleNumber.html">JsonId</a> (since Oracle 23.5)</li>
 <li><a href="../../mle-js-plsqltypes/26ai/classes/OracleNumber.html">OracleNumber</a></li>
 <li><a href="../../mle-js-plsqltypes/26ai/classes/OracleBlob.html">OracleBlob</a></li>
@@ -22,19 +27,37 @@ This documentation describes <code>mle-js</code> which contains all relevant dec
 <li><a href="../../mle-js-plsqltypes/26ai/variables/OracleTimestamp.html">OracleTimestamp</a></li>
 <li><a href="../../mle-js-plsqltypes/26ai/variables/OracleIntervalDayToSecond.html">OracleIntervalDayToSecond</a> (since Oracle 23.3)</li>
 <li><a href="../../mle-js-plsqltypes/26ai/variables/OracleIntervalYearToMonth.html">OracleIntervalYearToMonth</a> (since Oracle 23.3)</li>
-<li><a href="../../mle-js-oracledb/26ai/variables/index_esm.oracledb-1.html">oracledb</a>: shorthand for getting direct access to <code>mle-js-oracledb</code> without importing it</li>
-<li><a href="variables/Polyglot.html" class="tsd-kind-variable"> Polyglot</a></li>
+<li><a href="../../mle-js-encodings/26ai/classes/encoder.TextEncoder.html">TextEncoder</a> (since Oracle 23.4)</li>
+<li><a href="../../mle-js-encodings/26ai/classes/decoder.TextDecoder.html">TextDecoder</a> (since Oracle 23.4)</li>
 <li><a href="../../mle-js-plsql-ffi/26ai/functions/args.arg.html">plsffi.arg</a> (since Oracle 23.7)</li>
 <li><a href="../../mle-js-plsql-ffi/26ai/functions/args.argOf.html">plsffi.argOf</a> (since Oracle 23.7)</li>
 <li><a href="../../mle-js-plsql-ffi/26ai/classes/call_error.CallError.html">plsffi.CallError</a> (since Oracle 23.7)</li>
 <li><a href="../../mle-js-plsql-ffi/26ai/functions/resolvers.resolvePackage.html">plsffi.resolvePackage</a> (since Oracle 23.7)</li>
 <li><a href="../../mle-js-plsql-ffi/26ai/functions/resolvers.resolveFunction.html">plsffi.resolveFunction</a> (since Oracle 23.7)</li>
 <li><a href="../../mle-js-plsql-ffi/26ai/functions/resolvers.resolveProcedure.html">plsffi.resolveProcedure</a> (since Oracle 23.7)</li>
-<li><a href="../../mle-js-oracledb/26ai/classes/api.IConnection.html">session</a>: shorthand for the <code>mle-js-oracledb</code> default connection; is used to issue SQL statements directly</li>
-<li><a href="../../mle-js-oracledb/26ai/classes/soda_api.ISodaDatabase.html">soda</a>: shorthand for the <code>mle-js-oracledb</code> SODA Database object which can be used to create SODA collections</li>
 <li><a href="../../mle-js-plsqltypes/26ai/classes/SparseVector.html">SparseVector</a>: (since Oracle 23.26.0)</li>
-<li><a href="../../mle-js-encodings/26ai/classes/encoder.TextEncoder.html">TextEncoder</a> (since Oracle 23.4)</li>
-<li><a href="../../mle-js-encodings/26ai/classes/decoder.TextDecoder.html">TextDecoder</a> (since Oracle 23.4)</li>
+<li><a href="../../mle-js-webapis/26ai/interfaces/html-webappapis.Navigator.html">navigator</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/interfaces/performance.Performance.html">performance</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/functions/html-webappapis.atob.html">atob</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/functions/html-webappapis.btoa.html">btoa</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/functions/html-webappapis.queueMicrotask.html">queueMicrotask</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/functions/html-webappapis.structuredClone.html">structuredClone</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/classes/blob.Blob.html">Blob</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/classes/compression.CompressionStream.html">CompressionStream</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/classes/compression.DecompressionStream.html">DecompressionStream</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/classes/dom.AbortController.html">AbortController</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/classes/dom.AbortSignal.html">AbortSignal</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/classes/dom.Event.html">Event</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/classes/dom.EventTarget.html">EventTarget</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/classes/dom_exception.DOMException.html">DOMException</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/classes/streams.ReadableStreamBYOBReader.html">ReadableStreamBYOBReader</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/classes/streams.ReadableStreamDefaultReader.html">ReadableStreamDefaultReader</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/classes/streams.ReadableStream.html">ReadableStream</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/classes/streams.TransformStream.html">TransformStream</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/classes/streams.WritableStreamDefaultWriter.html">WritableStreamDefaultWriter</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/classes/streams.WritableStream.html">WritableStream</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/classes/url.URL.html">URL</a> (since Oracle 23.26.1)</li>
+<li><a href="../../mle-js-webapis/26ai/classes/url.URLSearchParams.html">URLSearchParams</a> (since Oracle 23.26.1)</li>
 </ul>
 <p>The following symbols will get added to a JavaScript context after importing <a href="../../mle-js-fetch/26ai">mle-js-fetch</a>:</p>
 <ul>
