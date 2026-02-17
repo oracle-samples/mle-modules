@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2022, 2023, Oracle and/or its affiliates.
+Copyright (c) 2025, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -35,36 +35,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-import { Body, BodyType } from './body';
-import { Headers, HeadersInit } from './headers';
-export type RequestInfo = Request | string;
-export interface RequestInit {
-    method?: string;
-    body?: BodyType;
-    headers?: HeadersInit;
-    credentials?: string;
-    signal?: AbortSignal;
-    duplex?: 'half' | 'full';
+import { ReadableStream } from './streams';
+export declare class Blob {
+    constructor(blobParts?: BlobPart[], options?: BlobPropertyBag);
+    readonly size: number;
+    readonly type: string;
+    arrayBuffer(): Promise<ArrayBuffer>;
+    bytes(): Promise<Uint8Array>;
+    slice(start?: number, end?: number, contentType?: string): Blob;
+    stream(): ReadableStream<Uint8Array>;
+    text(): Promise<string>;
 }
-/**
- * Configures the way a resource is retrieved.
- */
-export declare class Request extends Body {
-    readonly method: string;
-    readonly url: string | null;
-    readonly headers: Headers;
-    readonly duplex: 'full' | 'half';
-    readonly signal: AbortSignal | undefined;
-    credentials: string;
-    /**
-     * Create a new retrieval request.
-     *
-     * @param input a path to the resource to retrieve or a {@link Request} object to copy
-     * @param init additional configuration of the retrieval
-     */
-    constructor(input: RequestInfo, init?: RequestInit);
-    /**
-     * Create a deep copy of this request.
-     */
-    clone(): Request;
+export interface BlobPropertyBag {
+    endings?: EndingType;
+    type?: string;
 }
+export type EndingType = "native" | "transparent";
+export type BlobPart = ArrayBufferView | ArrayBufferLike | Blob | string;

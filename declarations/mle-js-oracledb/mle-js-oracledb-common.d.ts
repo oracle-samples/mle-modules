@@ -35,7 +35,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-import { Parameters, IConnection, IResultSet, OutFormatType, JsType, FetchTypeHandler } from './api';
+import { Parameters, IConnection, IResultSet, OutFormatType, JsType, FetchTypeHandler, ISparseVector } from './api';
 import { ISodaCollection, ISodaDatabase, ISodaDocument, ISodaDocumentCursor, ISodaOperation } from './soda-api';
 import { SparseVector } from 'mle-js-plsqltypes';
 export { SparseVector } from 'mle-js-plsqltypes';
@@ -169,3 +169,4 @@ export declare class OracleDb {
      */
     defaultConnection(): IConnection;
 }
+export type { ISodaDatabase, IConnection, ISparseVector, };

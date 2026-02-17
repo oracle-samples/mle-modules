@@ -1,6 +1,6 @@
 {
-  "name": "mle-js-fetch",
-  "description": "MLE Fetch API polyfill",
+  "name": "mle-js-webapis",
+  "description": "MLE Implemented Web APIs",
   "types": "index.d.ts",
   "author": "Oracle",
   "version": "23.26.1",

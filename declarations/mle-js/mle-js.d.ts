@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2019, 2025, Oracle and/or its affiliates.
+Copyright (c) 2019, 2026, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -37,7 +37,6 @@ SOFTWARE.
 */
 
 declare module "mle-js-bindings" {
-
 
 export enum JSTypes {
     /** Type String */
@@ -122,7 +121,6 @@ export function importValue(name: string, jstype?: JSTypes): any;
  * @throws an exception (Invalid property name) if name is null, undefined or empty.
  */
 export function exportValue(name: string, value: any): void;
-
 
 }
 
@@ -1400,7 +1398,6 @@ declare module "mle-js-plsqltypes" {
 
 export const OracleNumberOperators: typeof __mle_js_plsqltypes.OracleNumberOperators;
 type OracleNumberOperators = typeof __mle_js_plsqltypes.OracleNumberOperators;
-
 /**
  * JavaScript API for Oracle type TIMESTAMP.
  */
@@ -1430,6 +1427,7 @@ export const OracleClob: IOracleClob;
  * JavaScript API for Oracle type DATE.
  */
 export const OracleDate: IOracleDate;
+
 export const OracleNumber: __mle_js_plsqltypes.OracleNumber;
 type OracleNumber = __mle_js_plsqltypes.OracleNumber;
 export const IOracleIntervalDayToSecond: __mle_js_plsqltypes.IOracleIntervalDayToSecond;
@@ -1456,8 +1454,6 @@ export const ISparseVector: __mle_js_plsqltypes.ISparseVector;
 type ISparseVector = __mle_js_plsqltypes.ISparseVector;
 export const SparseVector: __mle_js_plsqltypes.SparseVector;
 type SparseVector = __mle_js_plsqltypes.SparseVector;
-
-
 }
 
 /**
@@ -3088,9 +3084,6 @@ type ISodaCollection = __mle_js_oracledb.ISodaCollection;
 type ISodaOperation = __mle_js_oracledb.ISodaOperation;
 type ISodaDocumentCursor = __mle_js_oracledb.ISodaDocumentCursor;
 type ISodaDocument = __mle_js_oracledb.ISodaDocument;
-
-
-
 /**
  * Custom class for errors thrown by {@link execute}() or {@link executeMany}().
  */
@@ -3106,6 +3099,7 @@ interface IError extends Error {
      */
     offset?: number;
 }
+
 type IFetchInfoColumnSpec = __mle_js_oracledb.IFetchInfoColumnSpec;
 type IFetchInfo = __mle_js_oracledb.IFetchInfo;
 type IExecuteOptions = __mle_js_oracledb.IExecuteOptions;
@@ -3129,7 +3123,6 @@ type IExecuteArgs = __mle_js_oracledb.IExecuteArgs;
 type IDbObjectAttributes = __mle_js_oracledb.IDbObjectAttributes;
 type IDbObjectClass = __mle_js_oracledb.IDbObjectClass;
 type OutFormatType = __mle_js_oracledb.OutFormatType;
-
 /**
  * Fetch each row as array of column values
  * This constant is deprecated. Use OUT_FORMAT_ARRAY instead.
@@ -3151,8 +3144,8 @@ const OBJECT: OutFormatType;
  * Fetch each row as an object of column values.
  */
 const OUT_FORMAT_OBJECT: OutFormatType;
-type JsType = __mle_js_oracledb.JsType;
 
+type JsType = __mle_js_oracledb.JsType;
 /**
  * Used with fetchInfo to reset the fetch type to the database type
  */
@@ -3480,21 +3473,16 @@ const STMT_TYPE_COMMIT = 21;
  * SODA_COLL_MAP_MODE
  */
 const SODA_COLL_MAP_MODE = 5001;
+
 type Converter = __mle_js_oracledb.Converter;
 type FetchTypeHandler = __mle_js_oracledb.FetchTypeHandler;
 type Parameters = __mle_js_oracledb.Parameters;
 type ISparseVectorConstructorArgs = __mle_js_oracledb.ISparseVectorConstructorArgs;
 type ISparseVector = __mle_js_oracledb.ISparseVector;
-
-
 type OracleDb = __mle_js_oracledb.OracleDb;
-
-
-
 export const oracledb: OracleDb;
 
 export default oracledb;
-
 
 }
 
@@ -3520,7 +3508,7 @@ export interface IBufferWrapper {
  *
  * @since Oracle 23.3
  */
-export type BodyType = IBufferWrapper | ArrayBuffer | string | null;
+export type BodyType = Blob | ReadableStream<Uint8Array> | IBufferWrapper | ArrayBufferView | ArrayBufferLike | string | null;
 
 export class Body {
     #private;
@@ -3531,8 +3519,8 @@ export class Body {
     /**
      * Retrieve the contents of the body.
      */
-    get body(): BodyType;
-    constructor(body?: BodyType | Body);
+    get body(): ReadableStream<Uint8Array>;
+    protected setType(type: string): void;
     /**
      * Consume the contents of the body as JSON.
      */
@@ -3541,11 +3529,18 @@ export class Body {
      * Consume the contents of the body as text.
      */
     text(): Promise<string>;
-    arrayBuffer(): Promise<ArrayBuffer>;
     /**
-     * Unsupported operation (keep protected until implemented)
+     * Consume the body as ArrayBuffer.
      */
-    protected blob(): void;
+    arrayBuffer(): Promise<ArrayBufferLike>;
+    /**
+     * Consume the contents of the body as Uint8Array.
+     */
+    bytes(): Promise<Uint8Array>;
+    /**
+     * Consume the contents of the body as a Blob.
+     */
+    blob(): Promise<Blob>;
     /**
      * Unsupported operation (keep protected until implemented)
      */
@@ -3605,6 +3600,8 @@ export interface RequestInit {
     body?: BodyType;
     headers?: HeadersInit;
     credentials?: string;
+    signal?: AbortSignal;
+    duplex?: 'half' | 'full';
 }
 
 /**
@@ -3614,6 +3611,8 @@ export class Request extends Body {
     readonly method: string;
     readonly url: string | null;
     readonly headers: Headers;
+    readonly duplex: 'full' | 'half';
+    readonly signal: AbortSignal | undefined;
     credentials: string;
     /**
      * Create a new retrieval request.
@@ -3696,45 +3695,30 @@ declare module "mle-js-fetch" {
 
 export const IBufferWrapper: __mle_js_fetch.IBufferWrapper;
 type IBufferWrapper = __mle_js_fetch.IBufferWrapper;
-
-
 export const BodyType: __mle_js_fetch.BodyType;
 type BodyType = __mle_js_fetch.BodyType;
 export const Body: __mle_js_fetch.Body;
 type Body = __mle_js_fetch.Body;
-
-
 export const HeadersInit: __mle_js_fetch.HeadersInit;
 type HeadersInit = __mle_js_fetch.HeadersInit;
 export const Headers: __mle_js_fetch.Headers;
 type Headers = __mle_js_fetch.Headers;
-
-
 export const RequestInfo: __mle_js_fetch.RequestInfo;
 type RequestInfo = __mle_js_fetch.RequestInfo;
 export const RequestInit: __mle_js_fetch.RequestInit;
 type RequestInit = __mle_js_fetch.RequestInit;
 export const Request: __mle_js_fetch.Request;
 type Request = __mle_js_fetch.Request;
-
-
 export const ResponseType: __mle_js_fetch.ResponseType;
 type ResponseType = __mle_js_fetch.ResponseType;
 export const ResponseInit: __mle_js_fetch.ResponseInit;
 type ResponseInit = __mle_js_fetch.ResponseInit;
 export const Response: __mle_js_fetch.Response;
 type Response = __mle_js_fetch.Response;
-
-
 export const fetch: typeof __mle_js_fetch.fetch;
 type fetch = typeof __mle_js_fetch.fetch;
-
-
-
-
 }
 declare module "mle-encode-base64" {
-
 
 /**
  * Encode a string or a byte buffer into base64.
@@ -3760,7 +3744,6 @@ export function encode(input: string | ArrayBuffer | Uint8Array): string;
  */
 export function decode(input: string): ArrayBuffer;
 
-
 }
 
 /**
@@ -3771,7 +3754,7 @@ export function decode(input: string): ArrayBuffer;
 declare namespace __mle_js_encodings {
 
 
-interface TextEncoderCommon {
+export interface TextEncoderCommon {
     readonly encoding: string;
 }
 
@@ -3814,7 +3797,12 @@ export class TextEncoder implements TextEncoderCommon {
     encodeInto(input: string, destination: Uint8Array): TextEncoderEncodeIntoResult;
 }
 
-interface TextDecoderCommon {
+export class TextEncoderStream extends TransformStream<string, Uint8Array> implements TextEncoderCommon {
+    readonly encoding = "utf-8";
+    constructor();
+}
+
+export interface TextDecoderCommon {
     readonly encoding: string;
     readonly fatal: boolean;
     readonly ignoreBOM: boolean;
@@ -3888,6 +3876,14 @@ export class TextDecoder implements TextDecoderCommon {
      */
     decode(input?: AllowSharedBufferSource, options?: TextDecodeOptions): string;
 }
+
+export class TextDecoderStream extends TransformStream<ArrayBuffer | ArrayBufferView, string> implements TextDecoderCommon {
+    #private;
+    constructor(label?: string, options?: TextDecoderOptions);
+    get encoding(): string;
+    get fatal(): boolean;
+    get ignoreBOM(): boolean;
+}
 }
 
 declare module "mle-js-encodings" {
@@ -3898,8 +3894,8 @@ export const TextEncoderEncodeIntoResult: __mle_js_encodings.TextEncoderEncodeIn
 type TextEncoderEncodeIntoResult = __mle_js_encodings.TextEncoderEncodeIntoResult;
 export const TextEncoder: __mle_js_encodings.TextEncoder;
 type TextEncoder = __mle_js_encodings.TextEncoder;
-
-
+export const TextEncoderStream: __mle_js_encodings.TextEncoderStream;
+type TextEncoderStream = __mle_js_encodings.TextEncoderStream;
 export const TextDecoderCommon: __mle_js_encodings.TextDecoderCommon;
 type TextDecoderCommon = __mle_js_encodings.TextDecoderCommon;
 export const TextDecoderOptions: __mle_js_encodings.TextDecoderOptions;
@@ -3910,10 +3906,8 @@ export const AllowSharedBufferSource: __mle_js_encodings.AllowSharedBufferSource
 type AllowSharedBufferSource = __mle_js_encodings.AllowSharedBufferSource;
 export const TextDecoder: __mle_js_encodings.TextDecoder;
 type TextDecoder = __mle_js_encodings.TextDecoder;
-
-
-
-
+export const TextDecoderStream: __mle_js_encodings.TextDecoderStream;
+type TextDecoderStream = __mle_js_encodings.TextDecoderStream;
 }
 
 /**
@@ -4132,16 +4126,12 @@ export const ReturnInfo: __mle_js_plsql_ffi.ReturnInfo;
 type ReturnInfo = __mle_js_plsql_ffi.ReturnInfo;
 export const DBSubprogram: __mle_js_plsql_ffi.DBSubprogram;
 type DBSubprogram = __mle_js_plsql_ffi.DBSubprogram;
-
-
 export const resolvePackage: typeof __mle_js_plsql_ffi.resolvePackage;
 type resolvePackage = typeof __mle_js_plsql_ffi.resolvePackage;
 export const resolveFunction: typeof __mle_js_plsql_ffi.resolveFunction;
 type resolveFunction = typeof __mle_js_plsql_ffi.resolveFunction;
 export const resolveProcedure: typeof __mle_js_plsql_ffi.resolveProcedure;
 type resolveProcedure = typeof __mle_js_plsql_ffi.resolveProcedure;
-
-
 export const ArgInfo: __mle_js_plsql_ffi.ArgInfo;
 type ArgInfo = __mle_js_plsql_ffi.ArgInfo;
 export const DBArgument: __mle_js_plsql_ffi.DBArgument;
@@ -4150,14 +4140,588 @@ export const arg: typeof __mle_js_plsql_ffi.arg;
 type arg = typeof __mle_js_plsql_ffi.arg;
 export const argOf: typeof __mle_js_plsql_ffi.argOf;
 type argOf = typeof __mle_js_plsql_ffi.argOf;
-
-
 export const CallError: __mle_js_plsql_ffi.CallError;
 type CallError = __mle_js_plsql_ffi.CallError;
+}
+
+/**
+ * CAUTION: This namespace is used for TYPE DECLARATIONS ONLY and does not have
+ * an equivalent in the actual implementation in MLE. Please either use the
+ * corresponding module or global symbols instead.
+ */
+declare namespace __mle_js_webapis {
 
 
+export function queueMicrotask(callback: any): void;
 
+export function structuredClone(value: any, options?: any): any;
 
+export function atob(data: string): string;
+
+export function btoa(data: string): string;
+
+export interface Navigator {
+    readonly userAgent: string;
+}
+
+export class URL {
+    constructor(url: string, base?: string);
+    hash: string;
+    host: string;
+    hostname: string;
+    href: string;
+    readonly origin: string;
+    password: string;
+    pathname: string;
+    port: string;
+    protocol: string;
+    search: string;
+    readonly searchParams: URLSearchParams;
+    username: string;
+    toJSON(): string;
+    toString(): string;
+    static canParse(url: string, base?: string): boolean;
+    static parse(url: string, base?: string): URL | null;
+}
+
+export class URLSearchParams {
+    constructor(init?: string[][] | Record<string, string> | string | URLSearchParams);
+    readonly size: number;
+    [Symbol.iterator](): IterableIterator<[string, string]>;
+    entries(): IterableIterator<[string, string]>;
+    keys(): IterableIterator<string>;
+    values(): IterableIterator<string>;
+    append(name: string, value: string): void;
+    get(name: string): string | null;
+    getAll(name: string): string[];
+    has(name: string, value?: string): boolean;
+    set(name: string, value: string): void;
+    sort(): void;
+    toString(): string;
+    forEach(callbackfn: (value: string, key: string, parent: URLSearchParams) => void, thisArg?: any): void;
+}
+
+export class ReadableStream<R = any> {
+    private _disturbed;
+    constructor(underlyingSource: UnderlyingByteSource, strategy?: {
+        highWaterMark?: number;
+    });
+    constructor(underlyingSource: UnderlyingDefaultSource<R>, strategy?: QueuingStrategy<R>);
+    constructor(underlyingSource?: UnderlyingSource<R>, strategy?: QueuingStrategy<R>);
+    readonly locked: boolean;
+    cancel(reason?: any): Promise<void>;
+    getReader(options: {
+        mode: 'byob';
+    }): ReadableStreamBYOBReader;
+    getReader(): ReadableStreamDefaultReader<R>;
+    getReader(options?: ReadableStreamGetReaderOptions): ReadableStreamReader<R>;
+    pipeThrough<T>(transform: ReadableWritablePair<T, R>, options?: StreamPipeOptions): ReadableStream<T>;
+    pipeTo(destination: WritableStream<R>, options?: StreamPipeOptions): Promise<void>;
+    tee(): [ReadableStream<R>, ReadableStream<R>];
+    [Symbol.asyncIterator](options?: ReadableStreamIteratorOptions): AsyncIterableIterator<R>;
+    values(options?: ReadableStreamIteratorOptions): AsyncIterableIterator<R>;
+}
+
+export class WritableStream<W = any> {
+    constructor(underlyingSink?: UnderlyingSink<W>, strategy?: QueuingStrategy<W>);
+    readonly locked: boolean;
+    abort(reason?: any): Promise<void>;
+    close(): Promise<void>;
+    getWriter(): WritableStreamDefaultWriter<W>;
+}
+
+export class TransformStream<I = any, O = any> {
+    constructor(transformer?: Transformer<I, O>, writableStrategy?: QueuingStrategy<I>, readableStrategy?: QueuingStrategy<O>);
+    readonly readable: ReadableStream<O>;
+    readonly writable: WritableStream<I>;
+}
+
+export class ReadableStreamBYOBReader {
+    constructor(stream: ReadableStream);
+    closed: Promise<undefined>;
+    cancel(reason?: any): Promise<void>;
+    read<T extends ArrayBufferView>(view: T): Promise<ReadableStreamReadResult<T>>;
+    releaseLock(): void;
+}
+
+export class ReadableStreamDefaultReader<R = any> {
+    constructor(stream: ReadableStream<R>);
+    closed: Promise<undefined>;
+    cancel(reason?: any): Promise<void>;
+    read(): Promise<ReadableStreamReadResult<R>>;
+    releaseLock(): void;
+}
+
+export class WritableStreamDefaultWriter<W = any> {
+    constructor(stream: WritableStream<W>);
+    readonly closed: Promise<undefined>;
+    readonly desiredSize: number | null;
+    readonly ready: Promise<undefined>;
+    abort(reason?: any): Promise<void>;
+    close(): Promise<void>;
+    releaseLock(): void;
+    write(chunk?: W): Promise<void>;
+}
+
+export interface ReadableStreamDefaultController<R = any> {
+    readonly desiredSize: number | null;
+    close(): void;
+    enqueue(chunk?: R): void;
+    error(e?: any): void;
+}
+
+export interface ReadableByteStreamController {
+    readonly byobRequest: ReadableStreamBYOBRequest | null;
+    readonly desiredSize: number | null;
+    close(): void;
+    enqueue(chunk: ArrayBufferView): void;
+    error(e?: any): void;
+}
+
+export interface ReadableStreamBYOBRequest {
+    readonly view: ArrayBufferView | null;
+    respond(bytesWritten: number): void;
+    respondWithNewView(view: ArrayBufferView): void;
+}
+
+export interface UnderlyingByteSource {
+    autoAllocateChunkSize?: number;
+    cancel?: UnderlyingSourceCancelCallback;
+    pull?: (controller: ReadableByteStreamController) => void | PromiseLike<void>;
+    start?: (controller: ReadableByteStreamController) => any;
+    type: 'bytes';
+}
+
+export interface UnderlyingDefaultSource<R = any> {
+    cancel?: UnderlyingSourceCancelCallback;
+    pull?: (controller: ReadableStreamDefaultController<R>) => void | PromiseLike<void>;
+    start?: (controller: ReadableStreamDefaultController<R>) => any;
+    type?: undefined;
+}
+
+export interface UnderlyingSource<R = any> {
+    autoAllocateChunkSize?: number;
+    cancel?: UnderlyingSourceCancelCallback;
+    pull?: UnderlyingSourcePullCallback<R>;
+    start?: UnderlyingSourceStartCallback<R>;
+    type?: ReadableStreamType;
+}
+
+export interface UnderlyingSourceCancelCallback {
+    (reason?: any): void | PromiseLike<void>;
+}
+
+export interface UnderlyingSourcePullCallback<R> {
+    (controller: ReadableStreamController<R>): void | PromiseLike<void>;
+}
+
+export interface UnderlyingSourceStartCallback<R> {
+    (controller: ReadableStreamController<R>): any;
+}
+
+export interface UnderlyingSink<W = any> {
+    abort?: UnderlyingSinkAbortCallback;
+    close?: UnderlyingSinkCloseCallback;
+    start?: UnderlyingSinkStartCallback;
+    type?: undefined;
+    write?: UnderlyingSinkWriteCallback<W>;
+}
+
+export interface UnderlyingSinkAbortCallback {
+    (reason?: any): void | PromiseLike<void>;
+}
+
+export interface UnderlyingSinkCloseCallback {
+    (): void | PromiseLike<void>;
+}
+
+export interface UnderlyingSinkStartCallback {
+    (controller: WritableStreamDefaultController): any;
+}
+
+export interface UnderlyingSinkWriteCallback<W> {
+    (chunk: W, controller: WritableStreamDefaultController): void | PromiseLike<void>;
+}
+
+export interface WritableStreamDefaultController {
+    readonly signal: AbortSignal;
+    error(e?: any): void;
+}
+
+export interface QueuingStrategy<T = any> {
+    highWaterMark?: number;
+    size?: QueuingStrategySize<T>;
+}
+
+export interface QueuingStrategySize<T = any> {
+    (chunk: T): number;
+}
+
+export interface ReadableStreamReadDoneResult<T> {
+    done: true;
+    value?: T;
+}
+
+export interface ReadableStreamReadValueResult<T> {
+    done: false;
+    value: T;
+}
+
+export interface ReadableStreamGetReaderOptions {
+    mode?: ReadableStreamReaderMode;
+}
+
+export interface ReadableStreamIteratorOptions {
+    preventCancel?: boolean;
+}
+
+export interface StreamPipeOptions {
+    preventAbort?: boolean;
+    preventCancel?: boolean;
+    preventClose?: boolean;
+    signal?: AbortSignal;
+}
+
+export interface ReadableWritablePair<R = any, W = any> {
+    readable: ReadableStream<R>;
+    writable: WritableStream<W>;
+}
+
+export interface GenericTransformStream {
+    readonly readable: ReadableStream;
+    readonly writable: WritableStream;
+}
+
+export interface TransformStreamDefaultController<O = any> {
+    readonly desiredSize: number | null;
+    enqueue(chunk?: O): void;
+    error(reason?: any): void;
+    terminate(): void;
+}
+
+export interface Transformer<I = any, O = any> {
+    flush?: TransformerFlushCallback<O>;
+    readableType?: undefined;
+    start?: TransformerStartCallback<O>;
+    transform?: TransformerTransformCallback<I, O>;
+    writableType?: undefined;
+}
+
+export interface TransformerFlushCallback<O> {
+    (controller: TransformStreamDefaultController<O>): void | PromiseLike<void>;
+}
+
+export interface TransformerStartCallback<O> {
+    (controller: TransformStreamDefaultController<O>): any;
+}
+
+export interface TransformerTransformCallback<I, O> {
+    (chunk: I, controller: TransformStreamDefaultController<O>): void | PromiseLike<void>;
+}
+
+export type ReadableStreamController<T> = ReadableStreamDefaultController<T> | ReadableByteStreamController;
+
+export type ReadableStreamReadResult<T> = ReadableStreamReadValueResult<T> | ReadableStreamReadDoneResult<T>;
+
+export type ReadableStreamReader<T> = ReadableStreamDefaultReader<T> | ReadableStreamBYOBReader;
+
+export type ReadableStreamReaderMode = 'byob';
+
+export type ReadableStreamType = 'bytes';
+
+export type CompressionFormat = 'gzip' | 'deflate';
+
+export type BufferSource = ArrayBufferView | ArrayBuffer;
+
+export class DecompressionStream implements GenericTransformStream {
+    constructor(format: CompressionFormat);
+    readonly readable: ReadableStream<Uint8Array>;
+    readonly writable: WritableStream<BufferSource>;
+}
+
+export class CompressionStream implements GenericTransformStream {
+    constructor(format: CompressionFormat);
+    readonly readable: ReadableStream<Uint8Array>;
+    readonly writable: WritableStream<BufferSource>;
+}
+
+export class EventTarget {
+    constructor();
+    addEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: AddEventListenerOptions | boolean): void;
+    dispatchEvent(event: Event): boolean;
+    removeEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: EventListenerOptions | boolean): void;
+}
+
+export class Event {
+    constructor(type: string, eventInitDict?: EventInit);
+    readonly type: string;
+    readonly target: EventTarget | null;
+    readonly srcElement: EventTarget | null;
+    readonly currentTarget: EventTarget | null;
+    readonly eventPhase: number;
+    readonly bubbles: boolean;
+    readonly cancelable: boolean;
+    readonly defaultPrevented: boolean;
+    readonly composed: boolean;
+    readonly isTrusted: boolean;
+    /**
+     * @deprecated
+     */
+    cancelBubble: boolean;
+    /**
+     * @deprecated
+     */
+    returnValue: boolean;
+    /**
+     * @deprecated
+     */
+    readonly timeStamp: DOMHighResTimeStamp;
+    stopPropagation(): void;
+    stopImmediatePropagation(): void;
+    preventDefault(): void;
+    /**
+     * @deprecated
+     */
+    initEvent(type: string, bubbles?: boolean, cancelable?: boolean): void;
+    static NONE: 0;
+    static CAPTURING_PHASE: 1;
+    static AT_TARGET: 2;
+    static BUBBLING_PHASE: 3;
+}
+
+export interface EventInit {
+    bubbles?: boolean;
+    cancelable?: boolean;
+    composed?: boolean;
+}
+
+export interface EventListenerOptions {
+    capture?: boolean;
+}
+
+export interface AddEventListenerOptions extends EventListenerOptions {
+    once?: boolean;
+    passive?: boolean;
+    signal?: AbortSignal;
+}
+
+export interface EventListener {
+    (evt: Event): void;
+}
+
+export interface EventListenerObject {
+    handleEvent(object: Event): void;
+}
+
+export class AbortSignal extends EventTarget {
+    readonly aborted: boolean;
+    onabort: ((this: AbortSignal, ev: Event) => any) | null;
+    readonly reason: any;
+    throwIfAborted(): void;
+    addEventListener<K extends keyof AbortSignalEventMap>(type: K, listener: (this: AbortSignal, ev: AbortSignalEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof AbortSignalEventMap>(type: K, listener: (this: AbortSignal, ev: AbortSignalEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    static abort(reason?: any): AbortSignal;
+    static any(signals: AbortSignal[]): AbortSignal;
+}
+
+export interface AbortSignalEventMap {
+    "abort": Event;
+}
+
+export class AbortController {
+    constructor();
+    readonly signal: AbortSignal;
+    abort(reason?: any): void;
+}
+
+export type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
+
+export type DOMHighResTimeStamp = number;
+
+export class DOMException extends Error {
+    constructor(message?: string, name?: string);
+    /**
+     * @deprecated
+     */
+    readonly code: number;
+    readonly message: string;
+    readonly name: string;
+    static INDEX_SIZE_ERR: 1;
+    static DOMSTRING_SIZE_ERR: 2;
+    static HIERARCHY_REQUEST_ERR: 3;
+    static WRONG_DOCUMENT_ERR: 4;
+    static INVALID_CHARACTER_ERR: 5;
+    static NO_DATA_ALLOWED_ERR: 6;
+    static NO_MODIFICATION_ALLOWED_ERR: 7;
+    static NOT_FOUND_ERR: 8;
+    static NOT_SUPPORTED_ERR: 9;
+    static INUSE_ATTRIBUTE_ERR: 10;
+    static INVALID_STATE_ERR: 11;
+    static SYNTAX_ERR: 12;
+    static INVALID_MODIFICATION_ERR: 13;
+    static NAMESPACE_ERR: 14;
+    static INVALID_ACCESS_ERR: 15;
+    static VALIDATION_ERR: 16;
+    static TYPE_MISMATCH_ERR: 17;
+    static SECURITY_ERR: 18;
+    static NETWORK_ERR: 19;
+    static ABORT_ERR: 20;
+    static URL_MISMATCH_ERR: 21;
+    static QUOTA_EXCEEDED_ERR: 22;
+    static TIMEOUT_ERR: 23;
+    static INVALID_NODE_TYPE_ERR: 24;
+    static DATA_CLONE_ERR: 25;
+}
+
+export interface Performance extends EventTarget {
+    readonly timeOrigin: number;
+    now(): number;
+    toJSON(): any;
+}
+
+export class Blob {
+    constructor(blobParts?: BlobPart[], options?: BlobPropertyBag);
+    readonly size: number;
+    readonly type: string;
+    arrayBuffer(): Promise<ArrayBuffer>;
+    bytes(): Promise<Uint8Array>;
+    slice(start?: number, end?: number, contentType?: string): Blob;
+    stream(): ReadableStream<Uint8Array>;
+    text(): Promise<string>;
+}
+
+export interface BlobPropertyBag {
+    endings?: EndingType;
+    type?: string;
+}
+
+export type EndingType = "native" | "transparent";
+
+export type BlobPart = ArrayBufferView | ArrayBufferLike | Blob | string;
+}
+
+declare module "mle-js-webapis" {
+
+export const queueMicrotask: typeof __mle_js_webapis.queueMicrotask;
+type queueMicrotask = typeof __mle_js_webapis.queueMicrotask;
+export const structuredClone: typeof __mle_js_webapis.structuredClone;
+type structuredClone = typeof __mle_js_webapis.structuredClone;
+export const atob: typeof __mle_js_webapis.atob;
+type atob = typeof __mle_js_webapis.atob;
+export const btoa: typeof __mle_js_webapis.btoa;
+type btoa = typeof __mle_js_webapis.btoa;
+export const Navigator: __mle_js_webapis.Navigator;
+type Navigator = __mle_js_webapis.Navigator;
+export const URL: __mle_js_webapis.URL;
+type URL = __mle_js_webapis.URL;
+export const URLSearchParams: __mle_js_webapis.URLSearchParams;
+type URLSearchParams = __mle_js_webapis.URLSearchParams;
+export const ReadableStream: __mle_js_webapis.ReadableStream;
+type ReadableStream<R> = __mle_js_webapis.ReadableStream<R>;
+export const WritableStream: __mle_js_webapis.WritableStream;
+type WritableStream<W> = __mle_js_webapis.WritableStream<W>;
+export const TransformStream: __mle_js_webapis.TransformStream;
+type TransformStream<I, O> = __mle_js_webapis.TransformStream<I, O>;
+export const ReadableStreamBYOBReader: __mle_js_webapis.ReadableStreamBYOBReader;
+type ReadableStreamBYOBReader = __mle_js_webapis.ReadableStreamBYOBReader;
+export const ReadableStreamDefaultReader: __mle_js_webapis.ReadableStreamDefaultReader;
+type ReadableStreamDefaultReader<R> = __mle_js_webapis.ReadableStreamDefaultReader<R>;
+export const WritableStreamDefaultWriter: __mle_js_webapis.WritableStreamDefaultWriter;
+type WritableStreamDefaultWriter<W> = __mle_js_webapis.WritableStreamDefaultWriter<W>;
+export type ReadableStreamDefaultController<R> = __mle_js_webapis.ReadableStreamDefaultController<R>;
+export const ReadableByteStreamController: __mle_js_webapis.ReadableByteStreamController;
+type ReadableByteStreamController = __mle_js_webapis.ReadableByteStreamController;
+export const ReadableStreamBYOBRequest: __mle_js_webapis.ReadableStreamBYOBRequest;
+type ReadableStreamBYOBRequest = __mle_js_webapis.ReadableStreamBYOBRequest;
+export const UnderlyingByteSource: __mle_js_webapis.UnderlyingByteSource;
+type UnderlyingByteSource = __mle_js_webapis.UnderlyingByteSource;
+export type UnderlyingDefaultSource<R> = __mle_js_webapis.UnderlyingDefaultSource<R>;
+export type UnderlyingSource<R> = __mle_js_webapis.UnderlyingSource<R>;
+export const UnderlyingSourceCancelCallback: __mle_js_webapis.UnderlyingSourceCancelCallback;
+type UnderlyingSourceCancelCallback = __mle_js_webapis.UnderlyingSourceCancelCallback;
+export type UnderlyingSourcePullCallback<R> = __mle_js_webapis.UnderlyingSourcePullCallback<R>;
+export type UnderlyingSourceStartCallback<R> = __mle_js_webapis.UnderlyingSourceStartCallback<R>;
+export type UnderlyingSink<W> = __mle_js_webapis.UnderlyingSink<W>;
+export const UnderlyingSinkAbortCallback: __mle_js_webapis.UnderlyingSinkAbortCallback;
+type UnderlyingSinkAbortCallback = __mle_js_webapis.UnderlyingSinkAbortCallback;
+export const UnderlyingSinkCloseCallback: __mle_js_webapis.UnderlyingSinkCloseCallback;
+type UnderlyingSinkCloseCallback = __mle_js_webapis.UnderlyingSinkCloseCallback;
+export const UnderlyingSinkStartCallback: __mle_js_webapis.UnderlyingSinkStartCallback;
+type UnderlyingSinkStartCallback = __mle_js_webapis.UnderlyingSinkStartCallback;
+export type UnderlyingSinkWriteCallback<W> = __mle_js_webapis.UnderlyingSinkWriteCallback<W>;
+export const WritableStreamDefaultController: __mle_js_webapis.WritableStreamDefaultController;
+type WritableStreamDefaultController = __mle_js_webapis.WritableStreamDefaultController;
+export type QueuingStrategy<T> = __mle_js_webapis.QueuingStrategy<T>;
+export type QueuingStrategySize<T> = __mle_js_webapis.QueuingStrategySize<T>;
+export type ReadableStreamReadDoneResult<T> = __mle_js_webapis.ReadableStreamReadDoneResult<T>;
+export type ReadableStreamReadValueResult<T> = __mle_js_webapis.ReadableStreamReadValueResult<T>;
+export const ReadableStreamGetReaderOptions: __mle_js_webapis.ReadableStreamGetReaderOptions;
+type ReadableStreamGetReaderOptions = __mle_js_webapis.ReadableStreamGetReaderOptions;
+export const ReadableStreamIteratorOptions: __mle_js_webapis.ReadableStreamIteratorOptions;
+type ReadableStreamIteratorOptions = __mle_js_webapis.ReadableStreamIteratorOptions;
+export const StreamPipeOptions: __mle_js_webapis.StreamPipeOptions;
+type StreamPipeOptions = __mle_js_webapis.StreamPipeOptions;
+export type ReadableWritablePair<R, W> = __mle_js_webapis.ReadableWritablePair<R, W>;
+export const GenericTransformStream: __mle_js_webapis.GenericTransformStream;
+type GenericTransformStream = __mle_js_webapis.GenericTransformStream;
+export type TransformStreamDefaultController<O> = __mle_js_webapis.TransformStreamDefaultController<O>;
+export type Transformer<I, O> = __mle_js_webapis.Transformer<I, O>;
+export type TransformerFlushCallback<O> = __mle_js_webapis.TransformerFlushCallback<O>;
+export type TransformerStartCallback<O> = __mle_js_webapis.TransformerStartCallback<O>;
+export type TransformerTransformCallback<I, O> = __mle_js_webapis.TransformerTransformCallback<I, O>;
+export type ReadableStreamController<T> = __mle_js_webapis.ReadableStreamController<T>;
+export type ReadableStreamReadResult<T> = __mle_js_webapis.ReadableStreamReadResult<T>;
+export type ReadableStreamReader<T> = __mle_js_webapis.ReadableStreamReader<T>;
+export const ReadableStreamReaderMode: __mle_js_webapis.ReadableStreamReaderMode;
+type ReadableStreamReaderMode = __mle_js_webapis.ReadableStreamReaderMode;
+export const ReadableStreamType: __mle_js_webapis.ReadableStreamType;
+type ReadableStreamType = __mle_js_webapis.ReadableStreamType;
+export const CompressionFormat: __mle_js_webapis.CompressionFormat;
+type CompressionFormat = __mle_js_webapis.CompressionFormat;
+export const BufferSource: __mle_js_webapis.BufferSource;
+type BufferSource = __mle_js_webapis.BufferSource;
+export const DecompressionStream: __mle_js_webapis.DecompressionStream;
+type DecompressionStream = __mle_js_webapis.DecompressionStream;
+export const CompressionStream: __mle_js_webapis.CompressionStream;
+type CompressionStream = __mle_js_webapis.CompressionStream;
+export const EventTarget: __mle_js_webapis.EventTarget;
+type EventTarget = __mle_js_webapis.EventTarget;
+export const Event: __mle_js_webapis.Event;
+type Event = __mle_js_webapis.Event;
+export const EventInit: __mle_js_webapis.EventInit;
+type EventInit = __mle_js_webapis.EventInit;
+export const EventListenerOptions: __mle_js_webapis.EventListenerOptions;
+type EventListenerOptions = __mle_js_webapis.EventListenerOptions;
+export const AddEventListenerOptions: __mle_js_webapis.AddEventListenerOptions;
+type AddEventListenerOptions = __mle_js_webapis.AddEventListenerOptions;
+export const EventListener: __mle_js_webapis.EventListener;
+type EventListener = __mle_js_webapis.EventListener;
+export const EventListenerObject: __mle_js_webapis.EventListenerObject;
+type EventListenerObject = __mle_js_webapis.EventListenerObject;
+export const AbortSignal: __mle_js_webapis.AbortSignal;
+type AbortSignal = __mle_js_webapis.AbortSignal;
+export const AbortSignalEventMap: __mle_js_webapis.AbortSignalEventMap;
+type AbortSignalEventMap = __mle_js_webapis.AbortSignalEventMap;
+export const AbortController: __mle_js_webapis.AbortController;
+type AbortController = __mle_js_webapis.AbortController;
+export const EventListenerOrEventListenerObject: __mle_js_webapis.EventListenerOrEventListenerObject;
+type EventListenerOrEventListenerObject = __mle_js_webapis.EventListenerOrEventListenerObject;
+export const DOMHighResTimeStamp: __mle_js_webapis.DOMHighResTimeStamp;
+type DOMHighResTimeStamp = __mle_js_webapis.DOMHighResTimeStamp;
+export const DOMException: __mle_js_webapis.DOMException;
+type DOMException = __mle_js_webapis.DOMException;
+export const Performance: __mle_js_webapis.Performance;
+type Performance = __mle_js_webapis.Performance;
+export const Blob: __mle_js_webapis.Blob;
+type Blob = __mle_js_webapis.Blob;
+export const BlobPropertyBag: __mle_js_webapis.BlobPropertyBag;
+type BlobPropertyBag = __mle_js_webapis.BlobPropertyBag;
+export const EndingType: __mle_js_webapis.EndingType;
+type EndingType = __mle_js_webapis.EndingType;
+export const BlobPart: __mle_js_webapis.BlobPart;
+type BlobPart = __mle_js_webapis.BlobPart;
 }
 
 
@@ -4352,6 +4916,33 @@ interface IConsole {
 }
 declare const console: IConsole;
 
+/**
+ * MLE enables the stack trace extensions of V8 in GraalJS.
+ * 
+ * @see https://v8.dev/docs/stack-trace-api
+ */
+interface ErrorConstructor {
+    captureStackTrace(targetObject: object, constructorOpt?: Function): void;
+    prepareStackTrace?: ((err: Error, stackTraces: CallSite[]) => any) | undefined;
+    stackTraceLimit: number;
+}
+
+interface CallSite {
+    getThis(): unknown;
+    getTypeName(): string | null;
+    getFunction(): Function | undefined;
+    getFunctionName(): string | null;
+    getMethodName(): string | null;
+    getFileName(): string | undefined;
+    getLineNumber(): number | null;
+    getColumnNumber(): number | null;
+    getEvalOrigin(): string | undefined;
+    isToplevel(): boolean;
+    isEval(): boolean;
+    isNative(): boolean;
+    isConstructor(): boolean;
+}
+
 
 
 /*
@@ -4364,53 +4955,156 @@ declare const oracledb: __mle_js_oracledb.OracleDb;
 declare const session: __mle_js_oracledb.IConnection;
 declare const soda: __mle_js_oracledb.ISodaDatabase;
 declare const OracleNumber: typeof __mle_js_plsqltypes.OracleNumber;
-type OracleNumber = __mle_js_plsqltypes.OracleNumber;
+declare type OracleNumber = __mle_js_plsqltypes.OracleNumber;
 declare const OracleBlob: typeof __mle_js_plsqltypes.OracleBlob;
-type OracleBlob = __mle_js_plsqltypes.OracleBlob;
+declare type OracleBlob = __mle_js_plsqltypes.OracleBlob;
 declare const OracleClob: typeof __mle_js_plsqltypes.IOracleClob;
-type OracleClob = __mle_js_plsqltypes.IOracleClob;
+declare type OracleClob = __mle_js_plsqltypes.IOracleClob;
 declare const OracleDate: typeof __mle_js_plsqltypes.IOracleDate;
-type OracleDate = __mle_js_plsqltypes.IOracleDate;
+declare type OracleDate = __mle_js_plsqltypes.IOracleDate;
 declare const OracleTimestampTZ: typeof __mle_js_plsqltypes.IOracleTimestampTZ;
-type OracleTimestampTZ = __mle_js_plsqltypes.IOracleTimestampTZ;
+declare type OracleTimestampTZ = __mle_js_plsqltypes.IOracleTimestampTZ;
 declare const OracleTimestamp: typeof __mle_js_plsqltypes.IOracleTimestamp;
-type OracleTimestamp = __mle_js_plsqltypes.IOracleTimestamp;
+declare type OracleTimestamp = __mle_js_plsqltypes.IOracleTimestamp;
 
 /* only after importing "mle-js-fetch" */
 declare const Headers: typeof __mle_js_fetch.Headers;
-type Headers = __mle_js_fetch.Headers;
+declare type Headers = __mle_js_fetch.Headers;
 declare const Request: typeof __mle_js_fetch.Request;
-type Request = __mle_js_fetch.Request;
+declare type Request = __mle_js_fetch.Request;
 declare const Response: typeof __mle_js_fetch.Response;
-type Response = __mle_js_fetch.Response;
+declare type Response = __mle_js_fetch.Response;
 declare const fetch: typeof __mle_js_fetch.fetch;
 
 /* @since Oracle 23.3 */
 declare const OracleIntervalDayToSecond: typeof __mle_js_plsqltypes.IOracleIntervalDayToSecond;
-type OracleIntervalDayToSecond = __mle_js_plsqltypes.IOracleIntervalDayToSecond;
+declare type OracleIntervalDayToSecond = __mle_js_plsqltypes.IOracleIntervalDayToSecond;
 declare const OracleIntervalYearToMonth: typeof __mle_js_plsqltypes.IOracleIntervalYearToMonth;
-type OracleIntervalYearToMonth = __mle_js_plsqltypes.IOracleIntervalYearToMonth;
+declare type OracleIntervalYearToMonth = __mle_js_plsqltypes.IOracleIntervalYearToMonth;
 
 /* @since Oracle 23.4 */
 declare const TextEncoder: typeof __mle_js_encodings.TextEncoder;
-type TextEncoder = __mle_js_encodings.TextEncoder;
+declare type TextEncoder = __mle_js_encodings.TextEncoder;
 declare const TextDecoder: typeof __mle_js_encodings.TextDecoder;
-type TextDecoder = __mle_js_encodings.TextDecoder;
+declare type TextDecoder = __mle_js_encodings.TextDecoder;
+declare type TextEncoderCommon = __mle_js_encodings.TextEncoderCommon;
+declare type TextEncoderEncodeIntoResult = __mle_js_encodings.TextEncoderEncodeIntoResult;
+declare type TextDecoderCommon = __mle_js_encodings.TextDecoderCommon;
+declare type TextDecoderOptions = __mle_js_encodings.TextDecoderOptions;
+declare type TextDecodeOptions = __mle_js_encodings.TextDecodeOptions;
+declare type AllowSharedBufferSource = __mle_js_encodings.AllowSharedBufferSource;
 
 /* @since Oracle 23.5 */
 declare const JsonId: typeof __mle_js_plsqltypes.JsonId;
-type JsonId = __mle_js_plsqltypes.JsonId;
+declare type JsonId = __mle_js_plsqltypes.JsonId;
 
 /* @since Oracle 23.7 */
 declare const plsffi: {
-    arg: typeof __mle_js_plsql_ffi.arg;
-    argOf: typeof __mle_js_plsql_ffi.argOf;
-    CallError: typeof __mle_js_plsql_ffi.CallError;
-    resolvePackage: typeof __mle_js_plsql_ffi.resolvePackage;
-    resolveFunction: typeof __mle_js_plsql_ffi.resolveFunction;
-    resolveProcedure: typeof __mle_js_plsql_ffi.resolveProcedure;
+    arg: typeof __mle_js_plsql_ffi.arg,
+    argOf: typeof __mle_js_plsql_ffi.argOf,
+    CallError: typeof __mle_js_plsql_ffi.CallError,
+    resolvePackage: typeof __mle_js_plsql_ffi.resolvePackage,
+    resolveFunction: typeof __mle_js_plsql_ffi.resolveFunction,
+    resolveProcedure: typeof __mle_js_plsql_ffi.resolveProcedure,
 };
 
 /* @since Oracle 23.26.0 */
 declare const SparseVector: typeof __mle_js_plsqltypes.SparseVector;
-type SparseVector = __mle_js_plsqltypes.SparseVector;
+declare type SparseVector = __mle_js_plsqltypes.SparseVector;
+
+/* @since Oracle 23.26.1 */
+declare const navigator: __mle_js_webapis.Navigator;
+declare const performance: __mle_js_webapis.Performance;
+
+/* @since Oracle 23.26.1 */
+declare const structuredClone: typeof __mle_js_webapis.structuredClone;
+declare const queueMicrotask: typeof __mle_js_webapis.queueMicrotask;
+declare const atob: typeof __mle_js_webapis.atob;
+declare const btoa: typeof __mle_js_webapis.btoa;
+
+/* @since Oracle 23.26.1 */
+declare const TextEncoderStream: typeof __mle_js_encodings.TextEncoderStream;
+declare type TextEncoderStream = __mle_js_encodings.TextEncoderStream;
+declare const TextDecoderStream: typeof __mle_js_encodings.TextDecoderStream;
+declare type TextDecoderStream = __mle_js_encodings.TextDecoderStream;
+declare const URL: typeof __mle_js_webapis.URL;
+declare type URL = __mle_js_webapis.URL;
+declare const URLSearchParams: typeof __mle_js_webapis.URLSearchParams;
+declare type URLSearchParams = __mle_js_webapis.URLSearchParams;
+declare const ReadableStream: typeof __mle_js_webapis.ReadableStream;
+declare type ReadableStream<R = any> = __mle_js_webapis.ReadableStream<R>;
+declare const ReadableStreamBYOBReader: typeof __mle_js_webapis.ReadableStreamBYOBReader;
+declare type ReadableStreamBYOBReader = __mle_js_webapis.ReadableStreamBYOBReader;
+declare const ReadableStreamDefaultReader: typeof __mle_js_webapis.ReadableStreamDefaultReader;
+declare type ReadableStreamDefaultReader<R = any> = __mle_js_webapis.ReadableStreamDefaultReader<R>;
+declare const WritableStream: typeof __mle_js_webapis.WritableStream;
+declare type WritableStream<W = any> = __mle_js_webapis.WritableStream<W>;
+declare const WritableStreamDefaultWriter: typeof __mle_js_webapis.WritableStreamDefaultWriter;
+declare type WritableStreamDefaultWriter<W = any> = __mle_js_webapis.WritableStreamDefaultWriter<W>;
+declare const TransformStream: typeof __mle_js_webapis.TransformStream;
+declare type TransformStream<I = any, O = any> = __mle_js_webapis.TransformStream<I, O>;
+declare const CompressionStream: typeof __mle_js_webapis.CompressionStream;
+declare type CompressionStream = __mle_js_webapis.CompressionStream;
+declare const DecompressionStream: typeof __mle_js_webapis.DecompressionStream;
+declare type DecompressionStream = __mle_js_webapis.DecompressionStream;
+declare const Event: typeof __mle_js_webapis.Event;
+declare type Event = __mle_js_webapis.Event;
+declare const EventTarget: typeof __mle_js_webapis.EventTarget;
+declare type EventTarget = __mle_js_webapis.EventTarget;
+declare const AbortController: typeof __mle_js_webapis.AbortController;
+declare type AbortController = __mle_js_webapis.AbortController;
+declare const AbortSignal: typeof __mle_js_webapis.AbortSignal;
+declare type AbortSignal = __mle_js_webapis.AbortSignal;
+declare const DOMException: typeof __mle_js_webapis.DOMException;
+declare type DOMException = __mle_js_webapis.DOMException;
+declare const Blob: typeof __mle_js_webapis.Blob;
+declare type Blob = __mle_js_webapis.Blob;
+
+/* @since Oracle 23.26.1 */
+declare type ReadableStreamDefaultController<R> = __mle_js_webapis.ReadableStreamDefaultController<R>;
+declare type ReadableByteStreamController = __mle_js_webapis.ReadableByteStreamController;
+declare type ReadableStreamBYOBRequest = __mle_js_webapis.ReadableStreamBYOBRequest;
+declare type UnderlyingByteSource = __mle_js_webapis.UnderlyingByteSource;
+declare type UnderlyingDefaultSource = __mle_js_webapis.UnderlyingDefaultSource;
+declare type UnderlyingSource = __mle_js_webapis.UnderlyingSource;
+declare type UnderlyingSourceCancelCallback = __mle_js_webapis.UnderlyingSourceCancelCallback;
+declare type UnderlyingSourcePullCallback<R> = __mle_js_webapis.UnderlyingSourcePullCallback<R>;
+declare type UnderlyingSourceStartCallback<R> = __mle_js_webapis.UnderlyingSourceStartCallback<R>;
+declare type UnderlyingSink<W> = __mle_js_webapis.UnderlyingSink<W>; 
+declare type UnderlyingSinkAbortCallback = __mle_js_webapis.UnderlyingSinkAbortCallback;
+declare type UnderlyingSinkCloseCallback = __mle_js_webapis.UnderlyingSinkCloseCallback;
+declare type UnderlyingSinkStartCallback = __mle_js_webapis.UnderlyingSinkStartCallback;
+declare type UnderlyingSinkWriteCallback<W> = __mle_js_webapis.UnderlyingSinkWriteCallback<W>;
+declare type WritableStreamDefaultController = __mle_js_webapis.WritableStreamDefaultController;
+declare type QueuingStrategy<T> = __mle_js_webapis.QueuingStrategy<T>;
+declare type QueuingStrategySize<T> = __mle_js_webapis.QueuingStrategySize<T>;
+declare type ReadableStreamReadDoneResult<T> = __mle_js_webapis.ReadableStreamReadDoneResult<T>;
+declare type ReadableStreamReadValueResult<T> = __mle_js_webapis.ReadableStreamReadValueResult<T>;
+declare type ReadableStreamGetReaderOptions = __mle_js_webapis.ReadableStreamGetReaderOptions;
+declare type ReadableStreamIteratorOptions = __mle_js_webapis.ReadableStreamIteratorOptions;
+declare type StreamPipeOptions = __mle_js_webapis.StreamPipeOptions;
+declare type ReadableWritablePair<R, W> = __mle_js_webapis.ReadableWritablePair<R, W>;
+declare type GenericTransformStream = __mle_js_webapis.GenericTransformStream;  
+declare type TransformStreamDefaultController<O> = __mle_js_webapis.TransformStreamDefaultController<O>;
+declare type Transformer<I, O> = __mle_js_webapis.Transformer<I, O>; 
+declare type TransformerFlushCallback<O> = __mle_js_webapis.TransformerFlushCallback<O>;
+declare type TransformerStartCallback<O> = __mle_js_webapis.TransformerStartCallback<O>;
+declare type TransformerTransformCallback<I, O> = __mle_js_webapis.TransformerTransformCallback<I, O>;
+declare type ReadableStreamController<T> = __mle_js_webapis.ReadableStreamController<T>;
+declare type ReadableStreamReadResult<T> = __mle_js_webapis.ReadableStreamReadResult<T>;
+declare type ReadableStreamReader<T> = __mle_js_webapis.ReadableStreamReader<T>;
+declare type ReadableStreamReaderMode = __mle_js_webapis.ReadableStreamReaderMode;
+declare type ReadableStreamType = __mle_js_webapis.ReadableStreamType;
+declare type CompressionFormat = __mle_js_webapis.CompressionFormat;
+declare type BufferSource = __mle_js_webapis.BufferSource;
+declare type EventInit = __mle_js_webapis.EventInit;
+declare type EventListenerOptions = __mle_js_webapis.EventListenerOptions;
+declare type AddEventListenerOptions = __mle_js_webapis.AddEventListenerOptions;
+declare type EventListener = __mle_js_webapis.EventListener;
+declare type EventListenerObject = __mle_js_webapis.EventListenerObject;
+declare type AbortSignalEventMap = __mle_js_webapis.AbortSignalEventMap;
+declare type EventListenerOrEventListenerObject = __mle_js_webapis.EventListenerOrEventListenerObject;
+declare type DOMHighResTimeStamp = __mle_js_webapis.DOMHighResTimeStamp;
+declare type BlobPropertyBag = __mle_js_webapis.BlobPropertyBag;
+declare type EndingType = __mle_js_webapis.EndingType;
+declare type BlobPart = __mle_js_webapis.BlobPart;

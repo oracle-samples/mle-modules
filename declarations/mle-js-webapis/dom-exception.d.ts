@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2022, 2023, Oracle and/or its affiliates.
+Copyright (c) 2025, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -35,36 +35,37 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-import { Body, BodyType } from './body';
-import { Headers, HeadersInit } from './headers';
-export type RequestInfo = Request | string;
-export interface RequestInit {
-    method?: string;
-    body?: BodyType;
-    headers?: HeadersInit;
-    credentials?: string;
-    signal?: AbortSignal;
-    duplex?: 'half' | 'full';
-}
-/**
- * Configures the way a resource is retrieved.
- */
-export declare class Request extends Body {
-    readonly method: string;
-    readonly url: string | null;
-    readonly headers: Headers;
-    readonly duplex: 'full' | 'half';
-    readonly signal: AbortSignal | undefined;
-    credentials: string;
+export declare class DOMException extends Error {
+    constructor(message?: string, name?: string);
     /**
-     * Create a new retrieval request.
-     *
-     * @param input a path to the resource to retrieve or a {@link Request} object to copy
-     * @param init additional configuration of the retrieval
+     * @deprecated
      */
-    constructor(input: RequestInfo, init?: RequestInit);
-    /**
-     * Create a deep copy of this request.
-     */
-    clone(): Request;
+    readonly code: number;
+    readonly message: string;
+    readonly name: string;
+    static INDEX_SIZE_ERR: 1;
+    static DOMSTRING_SIZE_ERR: 2;
+    static HIERARCHY_REQUEST_ERR: 3;
+    static WRONG_DOCUMENT_ERR: 4;
+    static INVALID_CHARACTER_ERR: 5;
+    static NO_DATA_ALLOWED_ERR: 6;
+    static NO_MODIFICATION_ALLOWED_ERR: 7;
+    static NOT_FOUND_ERR: 8;
+    static NOT_SUPPORTED_ERR: 9;
+    static INUSE_ATTRIBUTE_ERR: 10;
+    static INVALID_STATE_ERR: 11;
+    static SYNTAX_ERR: 12;
+    static INVALID_MODIFICATION_ERR: 13;
+    static NAMESPACE_ERR: 14;
+    static INVALID_ACCESS_ERR: 15;
+    static VALIDATION_ERR: 16;
+    static TYPE_MISMATCH_ERR: 17;
+    static SECURITY_ERR: 18;
+    static NETWORK_ERR: 19;
+    static ABORT_ERR: 20;
+    static URL_MISMATCH_ERR: 21;
+    static QUOTA_EXCEEDED_ERR: 22;
+    static TIMEOUT_ERR: 23;
+    static INVALID_NODE_TYPE_ERR: 24;
+    static DATA_CLONE_ERR: 25;
 }

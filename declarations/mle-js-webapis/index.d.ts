@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2022, 2023, Oracle and/or its affiliates.
+Copyright (c) 2025, Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -35,36 +35,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-import { Body, BodyType } from './body';
-import { Headers, HeadersInit } from './headers';
-export type RequestInfo = Request | string;
-export interface RequestInit {
-    method?: string;
-    body?: BodyType;
-    headers?: HeadersInit;
-    credentials?: string;
-    signal?: AbortSignal;
-    duplex?: 'half' | 'full';
-}
-/**
- * Configures the way a resource is retrieved.
- */
-export declare class Request extends Body {
-    readonly method: string;
-    readonly url: string | null;
-    readonly headers: Headers;
-    readonly duplex: 'full' | 'half';
-    readonly signal: AbortSignal | undefined;
-    credentials: string;
-    /**
-     * Create a new retrieval request.
-     *
-     * @param input a path to the resource to retrieve or a {@link Request} object to copy
-     * @param init additional configuration of the retrieval
-     */
-    constructor(input: RequestInfo, init?: RequestInit);
-    /**
-     * Create a deep copy of this request.
-     */
-    clone(): Request;
-}
+export { queueMicrotask, structuredClone } from './html-webappapis';
+export type * from './html-webappapis';
+export type * from './url';
+export type * from './streams';
+export type * from './compression';
+export type * from './dom';
+export type * from './dom-exception';
+export type * from './performance';
+export type * from './blob';
