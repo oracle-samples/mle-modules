@@ -36,5 +36,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 import { TextEncoder } from './encoder';
+import { TextEncoderStream } from './encoder-stream';
 import { TextDecoder } from './decoder';
-export { TextEncoder, TextDecoder };
+import { TextDecoderStream } from './decoder-stream';
+export { TextEncoder, TextEncoderStream, TextDecoder, TextDecoderStream };
+export type * from './decoder';
+export type * from './encoder';

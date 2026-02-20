@@ -41,7 +41,7 @@ import { IBufferWrapper } from './common';
  *
  * @since Oracle 23.3
  */
-export type BodyType = IBufferWrapper | ArrayBuffer | string | null;
+export type BodyType = Blob | ReadableStream<Uint8Array> | IBufferWrapper | ArrayBufferView | ArrayBufferLike | string | null;
 export declare class Body {
     #private;
     /**
@@ -51,8 +51,8 @@ export declare class Body {
     /**
      * Retrieve the contents of the body.
      */
-    get body(): BodyType;
-    constructor(body?: BodyType | Body);
+    get body(): ReadableStream<Uint8Array>;
+    protected setType(type: string): void;
     /**
      * Consume the contents of the body as JSON.
      */
@@ -61,11 +61,18 @@ export declare class Body {
      * Consume the contents of the body as text.
      */
     text(): Promise<string>;
-    arrayBuffer(): Promise<ArrayBuffer>;
     /**
-     * Unsupported operation (keep protected until implemented)
+     * Consume the body as ArrayBuffer.
      */
-    protected blob(): void;
+    arrayBuffer(): Promise<ArrayBufferLike>;
+    /**
+     * Consume the contents of the body as Uint8Array.
+     */
+    bytes(): Promise<Uint8Array>;
+    /**
+     * Consume the contents of the body as a Blob.
+     */
+    blob(): Promise<Blob>;
     /**
      * Unsupported operation (keep protected until implemented)
      */

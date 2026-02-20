@@ -35,7 +35,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-interface TextDecoderCommon {
+export interface TextDecoderCommon {
     readonly encoding: string;
     readonly fatal: boolean;
     readonly ignoreBOM: boolean;
@@ -105,4 +105,3 @@ export declare class TextDecoder implements TextDecoderCommon {
      */
     decode(input?: AllowSharedBufferSource, options?: TextDecodeOptions): string;
 }
-export {};

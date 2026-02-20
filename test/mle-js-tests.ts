@@ -355,6 +355,135 @@ function testSparseVector() {
     return JSON.stringify(v1.toJSON()) + JSON.stringify(v2.toJSON());
 }
 
+function testWebApp(): void {
+    queueMicrotask(() => console.log("microtask queued"));
+    const original = { message: "hello" };
+    const clone = structuredClone(original);
+    console.log(clone.message);
+}
+
+function testUrlAndSearchParams(): string {
+    const url = new URL("https://example.com/path");
+    url.searchParams.append("foo", "bar");
+    const params = new URLSearchParams(url.searchParams);
+    params.set("baz", "qux");
+    return params.toString();
+}
+
+function testBlobAndPerformance(): Blob {
+    const blobParts: BlobPart[] = [new Uint8Array([1, 2, 3]), "text"];
+    const blob = new Blob(blobParts, { type: "application/octet-stream" });
+    console.log(blob.size, performance.now());
+    return blob;
+}
+
+function testAbortAndEventTarget(): AbortSignal {
+    const controller = new AbortController();
+    controller.signal.addEventListener("abort", (event: Event) => {
+        console.log(event.type);
+    }, { once: true });
+    controller.abort();
+    return controller.signal;
+}
+
+function testStreamsApis(): Promise<void> {
+    const readable = new ReadableStream<string>({
+        type: undefined,
+        start(controller: ReadableStreamDefaultController<string>) {
+            controller.enqueue("hello");
+            controller.enqueue("world");
+            controller.close();
+        },
+    });
+    const reader: ReadableStreamDefaultReader<string> = readable.getReader();
+
+    const transform = new TransformStream<string, number>({
+        transform(chunk: string, controller: TransformStreamDefaultController<number>) {
+            controller.enqueue(chunk.length);
+        },
+    });
+    const transformReader: ReadableStreamDefaultReader<number> = transform.readable.getReader();
+    const transformWriter: WritableStreamDefaultWriter<string> = transform.writable.getWriter();
+
+    const writer: WritableStreamDefaultWriter<number> = new WritableStream<number>({
+        write(chunk: number, controller: WritableStreamDefaultController) {
+            console.log(`chunk length: ${chunk}`);
+            controller.error?.(undefined);
+        },
+    }).getWriter();
+
+    const pipeline = readable.pipeThrough(transform);
+    const pipelinePromise = pipeline.getReader().read().then((result: ReadableStreamReadResult<number>) => {
+        if (!result.done) {
+            writer.write(result.value);
+        }
+        writer.releaseLock();
+    });
+
+    const readableDefault: ReadableStream = new ReadableStream({
+        type: undefined,
+        start(controller: ReadableStreamDefaultController<any>) {
+            controller.close();
+        },
+    });
+
+    const readableNumbers: ReadableStream<number> = new ReadableStream<number>({
+        type: undefined,
+        start(controller: ReadableStreamDefaultController<number>) {
+            controller.enqueue(1);
+            controller.close();
+        },
+    });
+
+    const readerDefault: ReadableStreamDefaultReader = readableDefault.getReader();
+    readerDefault.read().then((result: ReadableStreamReadResult<unknown>) => console.log(result.done));
+
+    const readerNumbers: ReadableStreamDefaultReader<number> = readableNumbers.getReader();
+    readerNumbers.read().then((result: ReadableStreamReadResult<number>) => {
+        if (!result.done) {
+            console.log(result.value + 1);
+        }
+    });
+
+    const writerDefault: WritableStreamDefaultWriter = new WritableStream({
+        write(_chunk: unknown, controller: WritableStreamDefaultController) {
+            controller.error?.();
+        },
+    }).getWriter();
+
+    const writerNumbers: WritableStreamDefaultWriter<number> = new WritableStream<number>({
+        write(chunk: number) {
+            console.log(chunk.toFixed());
+        },
+    }).getWriter();
+
+    const genericTransform: TransformStream<string, number> = new TransformStream<string, number>({
+        transform(chunk: string, controller: TransformStreamDefaultController<number>) {
+            controller.enqueue(chunk.length);
+        },
+    });
+
+    const pair: ReadableWritablePair<number, string> = { readable: genericTransform.readable, writable: genericTransform.writable };
+    console.log(pair.readable, pair.writable, writerDefault.desiredSize);
+
+    const done: ReadableStreamReadDoneResult<number> = { done: true };
+    const value: ReadableStreamReadValueResult<number> = { done: false, value: 5 };
+    console.log(done.done, value.value + 1);
+
+    void reader;
+    void transformReader;
+    void transformWriter;
+    void writerNumbers;
+
+    return pipelinePromise;
+}
+
+function testCompressionStreams(): ReadableStream<Uint8Array> {
+    const compressor = new CompressionStream("gzip");
+    const decompressor = new DecompressionStream("gzip");
+    return compressor.readable.pipeThrough(decompressor);
+}
+
 async function mainTest() {
     oracleDBTest();
     sessionTest();
@@ -377,6 +506,12 @@ async function mainTest() {
     testSqlDriverDocs();
     testFetchTypeHandler();
     testSparseVector();
+    testWebApp();
+    testUrlAndSearchParams();
+    testBlobAndPerformance();
+    testAbortAndEventTarget();
+    testStreamsApis();
+    testCompressionStreams();
 }
 
 mainTest();

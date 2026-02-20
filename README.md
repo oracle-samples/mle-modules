@@ -28,7 +28,7 @@ The following sections describe how to use the Typescript declarations with your
 
 You can install all relevant module declarations including the declarations of all global symbols (`Polyglot`, `console`, `session`, `soda`, `oracledb`, `OracleNumber`, etc.) in one bundle named `@types/mle-js` by using Node Package Manager (NPM) or a comparable tool:
 ```sh
-npm install --saveDev "https://github.com/oracle-samples/mle-modules#main"
+npm install --save-dev "https://github.com/oracle-samples/mle-modules#main"
 ```
 
 ### Installing Individual Modules
@@ -36,13 +36,13 @@ npm install --saveDev "https://github.com/oracle-samples/mle-modules#main"
 If you only need declarations of a particular module, you may also install declarations individually:
 
 ```sh
-npm --saveDev install mle-js-oracledb
-npm --saveDev install mle-js-bindings
-npm --saveDev install mle-js-plsqltypes
-npm --saveDev install mle-js-fetch
-npm --saveDev install mle-encode-base64
-npm --saveDev install mle-js-encodings
-npm --saveDev install mle-js-plsql-ffi
+npm --save-dev install mle-js-oracledb
+npm --save-dev install mle-js-bindings
+npm --save-dev install mle-js-plsqltypes
+npm --save-dev install mle-js-fetch
+npm --save-dev install mle-encode-base64
+npm --save-dev install mle-js-encodings
+npm --save-dev install mle-js-plsql-ffi
 ```
 
 ## Documentation

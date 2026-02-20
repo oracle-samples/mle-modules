@@ -3,7 +3,7 @@
   "description": "TypeScript definitions for Bundle of all declarations of pre-defined JavaScript modules that ship with Oracle Database",
   "types": "index.d.ts",
   "author": "Oracle",
-  "version": "23.26.0",
+  "version": "23.26.1",
   "license": "UPL-1.0",
   "homepage": "https://oracle-samples.github.io/mle-modules",
   "repository": {
@@ -12,9 +12,9 @@
   },
   "bugs": "https://github.com/oracle-samples/mle-modules/issues",
   "devDependencies": {
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.3"
   },
   "scripts": {
-    "test": "./node_modules/typescript/bin/tsc"
+    "test": "npx tsc"
   }
 }
